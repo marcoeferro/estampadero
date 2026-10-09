@@ -11,6 +11,7 @@ import {
   protectedProcedure,
   staffProcedure,
 } from "elestampadero/server/api/trpc";
+import { clubCanSellWhere } from "elestampadero/server/modules/catalog";
 import { hashPassword } from "elestampadero/server/modules/identity-access/application/verify-credentials";
 
 import { getClubBySlug } from "../application/use-cases/get-club-by-slug";
@@ -128,6 +129,7 @@ export const clubsRouter = createTRPCRouter({
             products: {
               where: {
                 status: "PUBLISHED",
+                club: clubCanSellWhere,
                 OR: [
                   { variants: { some: { stock: { gt: 0 } } } },
                   { showStock: false, variants: { some: { stock: null } } },
@@ -166,6 +168,7 @@ export const clubsRouter = createTRPCRouter({
               products: {
                 where: {
                   status: "PUBLISHED",
+                  club: clubCanSellWhere,
                   OR: [
                     { variants: { some: { stock: { gt: 0 } } } },
                     { showStock: false, variants: { some: { stock: null } } },
@@ -540,7 +543,6 @@ export const clubsRouter = createTRPCRouter({
       return { success: true };
     }),
 
-
   myClubs: protectedProcedure.query(async ({ ctx }) => {
     if (ADMIN_ROLES.has(ctx.session.user.role)) {
       return prismaClubsRepository.listClubs();
@@ -609,8 +611,8 @@ export const clubsRouter = createTRPCRouter({
             users: {
               orderBy: { user: { name: "asc" } },
               select: {
-            user: {
-              select: {
+                user: {
+                  select: {
                     id: true,
                     name: true,
                     email: true,

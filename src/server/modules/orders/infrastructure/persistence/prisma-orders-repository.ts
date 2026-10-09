@@ -65,6 +65,8 @@ function toDto(order: {
     lineTotalInCents: number;
     clubId: string | null;
     clubNameSnapshot: string | null;
+    clubAgreementId: string | null;
+    clubSharePercentage: number | null;
   }[];
 }): OrderDetailDto {
   return {
@@ -107,6 +109,8 @@ function toDto(order: {
       lineTotalInCents: item.lineTotalInCents,
       clubId: item.clubId,
       clubNameSnapshot: item.clubNameSnapshot,
+      clubAgreementId: item.clubAgreementId,
+      clubSharePercentage: item.clubSharePercentage,
     })),
   };
 }
@@ -320,6 +324,8 @@ export const prismaOrdersRepository: OrdersRepository = {
                 stockReserved: reservedVariantIds.has(item.variantId),
                 clubId: item.clubId,
                 clubNameSnapshot: item.clubNameSnapshot,
+                clubAgreementId: item.clubAgreementId ?? null,
+                clubSharePercentage: item.clubSharePercentage ?? null,
               })),
             },
             statusHistory: {

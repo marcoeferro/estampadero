@@ -10,6 +10,7 @@ import type {
 } from "../../application/ports/catalog-repository";
 import type { ProductDetailDto } from "../../application/dto/product-detail";
 import type { ProductSummaryDto } from "../../application/dto/product-summary";
+import { sellableProductWhere } from "./sellable-products";
 import type { VariantForPricingDto } from "../../application/dto/variant-pricing";
 
 const summaryInclude = {
@@ -93,8 +94,7 @@ export const prismaCatalogRepository: CatalogRepository = {
   async listPublishedProducts(
     filters: ListProductsFilters,
   ): Promise<ProductSummaryDto[]> {
-    const where: Prisma.ProductWhereInput = {
-      status: "PUBLISHED",
+    const filtersWhere: Prisma.ProductWhereInput = {
       ...(filters.categorySlug
         ? { category: { slug: filters.categorySlug } }
         : {}),
@@ -125,6 +125,9 @@ export const prismaCatalogRepository: CatalogRepository = {
             ],
           }
         : {}),
+    };
+    const where: Prisma.ProductWhereInput = {
+      AND: [sellableProductWhere, filtersWhere],
     };
 
     const products = await db.product.findMany({
@@ -166,7 +169,7 @@ export const prismaCatalogRepository: CatalogRepository = {
     slug: string,
   ): Promise<ProductDetailDto | null> {
     const product = await db.product.findFirst({
-      where: { slug, status: "PUBLISHED" },
+      where: { AND: [sellableProductWhere, { slug }] },
       include: {
         images: { orderBy: { position: "asc" } },
         variants: true,
@@ -217,7 +220,7 @@ export const prismaCatalogRepository: CatalogRepository = {
     if (variantIds.length === 0) return [];
 
     const variants = await db.productVariant.findMany({
-      where: { id: { in: variantIds }, product: { status: "PUBLISHED" } },
+      where: { id: { in: variantIds }, product: sellableProductWhere },
       include: {
         product: {
           include: {

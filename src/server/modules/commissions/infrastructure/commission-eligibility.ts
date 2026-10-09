@@ -2,6 +2,8 @@ import "server-only";
 
 import { db } from "elestampadero/server/db";
 
+import { refundAdjustmentSchedule } from "../application/refund-adjustment-schedule";
+
 const DAY_MS = 24 * 60 * 60_000;
 const MUTABLE_STATUSES = [
   "ACCRUED",
@@ -93,12 +95,6 @@ export async function matureCommissionEntries(now = new Date()): Promise<void> {
   }
 }
 
-
-
-
-
-
-
 async function syncProviderRefundAdjustments(
   paymentId: string,
   now: Date,
@@ -146,8 +142,11 @@ async function syncProviderRefundAdjustments(
           : Math.round((delta * sale.baseAmountInCents) / totalCommissionBase);
       allocated += baseAdjustment;
       if (baseAdjustment <= 0) continue;
-      const frozen = ["IN_SETTLEMENT", "SETTLED"].includes(sale.status);
-      const distributedByMobbex = payment.provider === "MOBBEX";
+      const schedule = refundAdjustmentSchedule({
+        provider: payment.provider,
+        sale,
+        now,
+      });
       await tx.commissionEntry.upsert({
         where: {
           sourceKey: `provider-refund:${paymentId}:${payment.amountRefundedInCents}:${sale.id}`,
@@ -168,18 +167,10 @@ async function syncProviderRefundAdjustments(
           amountInCents: -Math.round(
             (baseAdjustment * sale.percentageApplied) / 100,
           ),
-          status: distributedByMobbex
-            ? "SETTLED"
-            : frozen
-              ? "AVAILABLE"
-              : sale.status,
-          releasedAt: distributedByMobbex ? now : sale.releasedAt,
+          status: schedule.status,
+          releasedAt: schedule.releasedAt,
           returnWindowEndsAt: sale.returnWindowEndsAt,
-          availableAt: distributedByMobbex
-            ? null
-            : frozen
-              ? now
-              : sale.availableAt,
+          availableAt: schedule.availableAt,
         },
       });
     }

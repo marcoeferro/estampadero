@@ -13,12 +13,6 @@ import type {
 export interface RefundPaymentCommand {
   paymentId: string;
 
-
-
-
-
-
-
   amountInCents?: number;
 }
 
@@ -34,12 +28,6 @@ interface RefundPaymentDeps {
 
   provider: PaymentProviderValue;
 }
-
-
-
-
-
-
 
 const REFUNDABLE_STATUSES = new Set(["APPROVED", "PARTIALLY_REFUNDED"]);
 
@@ -98,9 +86,9 @@ export function refundPayment(deps: RefundPaymentDeps) {
       });
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : "Payway rechazó la operación.";
-
-
+        err instanceof Error
+          ? err.message
+          : "El medio de pago rechazó la devolución.";
 
       throw new TRPCError({ code: "CONFLICT", message });
     }

@@ -5,17 +5,16 @@ import { generateCommissionEntriesForOrder } from "./application/use-cases/gener
 import { prismaCommissionsRepository } from "./infrastructure/persistence/prisma-commissions-repository";
 
 export { commissionsRouter } from "./presentation/router";
-export type { ClubBalanceDto, CommissionEntryDto } from "./application/dto/commission";
+export type {
+  ClubBalanceDto,
+  CommissionEntryDto,
+} from "./application/dto/commission";
+export { refundAdjustmentSchedule } from "./application/refund-adjustment-schedule";
 export {
   matureCommissionEntries,
   syncCommissionEligibilityForOrder,
   syncCommissionEligibilityForPayment,
 } from "./infrastructure/commission-eligibility";
-
-
-
-
-
 
 export const generateCommissionEntriesForOrderUseCase =
   generateCommissionEntriesForOrder({

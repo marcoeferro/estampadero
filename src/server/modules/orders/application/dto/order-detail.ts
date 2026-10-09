@@ -11,6 +11,8 @@ export interface OrderItemDto {
   lineTotalInCents: number;
   clubId: string | null;
   clubNameSnapshot: string | null;
+  clubAgreementId: string | null;
+  clubSharePercentage: number | null;
 }
 
 export interface OrderDetailDto {

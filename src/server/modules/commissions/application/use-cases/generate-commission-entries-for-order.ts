@@ -13,12 +13,6 @@ interface GenerateCommissionEntriesDeps {
   getReturnWindowDays?: () => Promise<number>;
 }
 
-
-
-
-
-
-
 export function generateCommissionEntriesForOrder(
   deps: GenerateCommissionEntriesDeps,
 ) {
@@ -49,10 +43,14 @@ export function generateCommissionEntriesForOrder(
     );
 
     for (const item of clubItems) {
-      const rate = await deps.resolveRateForProduct(
-        item.clubId,
-        item.productId,
-      );
+      // El porcentaje guardado en el pedido es el mismo que usó el split.
+      const rate =
+        item.clubAgreementId && item.clubSharePercentage !== null
+          ? {
+              agreementId: item.clubAgreementId,
+              percentage: item.clubSharePercentage,
+            }
+          : await deps.resolveRateForProduct(item.clubId, item.productId);
       if (!rate) continue;
 
       const amountInCents = Math.round(
