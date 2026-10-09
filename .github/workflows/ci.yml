@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Lint, tipos, tests y build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Valores ficticios: el build no se conecta a la base ni a Mobbex.
+      SKIP_ENV_VALIDATION: "1"
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+      AUTH_SECRET: ci-auth-secret-no-real
+      CRON_SECRET: ci-cron-secret-no-real
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Validar schema de Prisma
+        run: npx prisma validate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tipos
+        run: npm run typecheck
+
+      - name: Tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build
