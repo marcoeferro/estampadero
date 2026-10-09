@@ -1,0 +1,112 @@
+/* Carga masiva de productos desde Excel. */
+.admin-import {
+  display: grid;
+  gap: 18px;
+}
+.admin-import__steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.admin-import__steps li {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  border: 1px solid #dfdae4;
+  border-radius: 10px;
+  padding: 16px;
+  background: #fff;
+}
+.admin-import__steps strong {
+  color: #342a3d;
+  font-size: 15px;
+}
+.admin-import__steps p {
+  margin: 0;
+  color: #6b6472;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.admin-import__steps .admin-btn {
+  justify-self: start;
+  text-decoration: none;
+}
+.admin-import__file {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px dashed #b89ad3;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbf8fd;
+  color: #552282;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.admin-import__file input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.admin-import__status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5b5163;
+}
+.admin-import__preview {
+  display: grid;
+  gap: 14px;
+}
+.admin-import__preview h3 {
+  margin: 6px 0 0;
+  color: #342a3d;
+  font-size: 15px;
+}
+.admin-import__summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+.admin-import__summary > div {
+  display: grid;
+  gap: 2px;
+  border: 1px solid #dfdae4;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #fff;
+}
+.admin-import__summary b {
+  color: #552282;
+  font-size: 24px;
+}
+.admin-import__summary span {
+  color: #6b6472;
+  font-size: 13px;
+}
+.admin-import__summary > .is-error b {
+  color: #a32f27;
+}
+.admin-import__table td,
+.admin-import__table th {
+  font-size: 13px;
+}
+.admin-import__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.admin-import__actions a {
+  text-decoration: none;
+}
+@media (max-width: 860px) {
+  .admin-import__steps {
+    grid-template-columns: 1fr;
+  }
+}

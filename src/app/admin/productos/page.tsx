@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { AdminPage, AdminPanel } from "elestampadero/shared/ui/admin";
 import { api } from "elestampadero/trpc/server";
 import { AdminProductsManager } from "elestampadero/views/admin-products";
@@ -20,6 +22,11 @@ export default async function AdminProductsPage({
     <AdminPage
       module="Módulo de Productos"
       title="Gestión de productos"
+      description={
+        <Link href="/admin/productos/carga-masiva">
+          Carga masiva desde Excel →
+        </Link>
+      }
       className="admin-products-page"
     >
       <AdminPanel className="admin-panel-pad admin-products-panel">
