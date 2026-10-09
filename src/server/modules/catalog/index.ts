@@ -8,10 +8,10 @@ export type {
   ProductVariantDto,
 } from "./application/dto/product-detail";
 export type { VariantForPricingDto } from "./application/dto/variant-pricing";
-
-
-
-
+export {
+  clubCanSellWhere,
+  sellableProductWhere,
+} from "./infrastructure/persistence/sellable-products";
 
 export const getVariantsForPricingUseCase = getVariantsForPricing(
   prismaCatalogRepository,

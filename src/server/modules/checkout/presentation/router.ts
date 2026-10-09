@@ -6,6 +6,7 @@ import {
 } from "elestampadero/server/api/trpc";
 import { createOrderUseCase } from "elestampadero/server/modules/orders";
 import { getVariantsForPricingUseCase } from "elestampadero/server/modules/catalog";
+import { resolveRateForProductUseCase } from "elestampadero/server/modules/agreements";
 
 import { checkCartAvailability } from "../application/use-cases/check-cart-availability";
 import { submitCheckout } from "../application/use-cases/submit-checkout";
@@ -20,6 +21,7 @@ const checkCartAvailabilityUseCase = checkCartAvailability({
 const submitCheckoutUseCase = submitCheckout({
   getVariantsForPricing: getVariantsForPricingUseCase,
   createOrder: createOrderUseCase,
+  resolveClubRate: resolveRateForProductUseCase,
 });
 
 export const checkoutRouter = createTRPCRouter({

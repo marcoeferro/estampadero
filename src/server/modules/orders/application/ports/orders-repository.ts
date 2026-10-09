@@ -15,6 +15,8 @@ export interface CreateOrderItemInput {
   stockControlled: boolean;
   clubId: string | null;
   clubNameSnapshot: string | null;
+  clubAgreementId?: string | null;
+  clubSharePercentage?: number | null;
 }
 
 export interface CreateOrderInput {

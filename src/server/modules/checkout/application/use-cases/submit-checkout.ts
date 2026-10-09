@@ -35,6 +35,10 @@ interface SubmitCheckoutDeps {
     variantIds: string[],
   ) => Promise<VariantForPricingDto[]>;
   createOrder: (input: CreateOrderInput) => Promise<OrderDetailDto>;
+  resolveClubRate: (
+    clubId: string,
+    productId: string,
+  ) => Promise<{ agreementId: string; percentage: number } | null>;
 }
 
 export function submitCheckout(deps: SubmitCheckoutDeps) {
@@ -60,7 +64,7 @@ export function submitCheckout(deps: SubmitCheckoutDeps) {
       variants.map((variant) => [variant.variantId, variant]),
     );
 
-    const items = input.lines.map((line) => {
+    const lines = input.lines.map((line) => {
       const variant = variantById.get(line.variantId);
       if (!variant) {
         throw new TRPCError({
@@ -84,7 +88,22 @@ export function submitCheckout(deps: SubmitCheckoutDeps) {
         });
       }
 
-      return {
+      return { line, variant };
+    });
+
+    const items: CreateOrderInput["items"] = [];
+    for (const { line, variant } of lines) {
+      const rate = variant.clubId
+        ? await deps.resolveClubRate(variant.clubId, variant.productId)
+        : null;
+      if (variant.clubId && !rate) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: `${variant.productName} no está disponible para la venta en este momento.`,
+        });
+      }
+
+      items.push({
         productId: variant.productId,
         productName: variant.productName,
         productSlug: variant.productSlug,
@@ -98,8 +117,10 @@ export function submitCheckout(deps: SubmitCheckoutDeps) {
         stockControlled: variant.showStock && variant.stock !== null,
         clubId: variant.clubId,
         clubNameSnapshot: variant.clubName,
-      };
-    });
+        clubAgreementId: rate?.agreementId ?? null,
+        clubSharePercentage: rate?.percentage ?? null,
+      });
+    }
 
     const subtotalInCents = items.reduce(
       (sum, item) => sum + item.lineTotalInCents,

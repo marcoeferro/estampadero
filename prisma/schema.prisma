@@ -370,8 +370,12 @@ model OrderItem {
   lineTotalInCents     Int
   stockReserved        Boolean @default(false)
 
-  clubId           String?
-  clubNameSnapshot String?
+  clubId              String?
+  clubNameSnapshot    String?
+  // Convenio y porcentaje del club vigentes al crear el pedido. El split y la
+  // comisión usan estos valores para que no cambien si se edita el convenio.
+  clubAgreementId     String?
+  clubSharePercentage Int?
 
   productionStatus      ProductionItemStatus @default(WAITING)
   productionScheduledAt DateTime?

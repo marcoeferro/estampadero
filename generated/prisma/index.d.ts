@@ -21615,12 +21615,14 @@ export namespace Prisma {
     priceInCentsSnapshot: number | null
     quantity: number | null
     lineTotalInCents: number | null
+    clubSharePercentage: number | null
   }
 
   export type OrderItemSumAggregateOutputType = {
     priceInCentsSnapshot: number | null
     quantity: number | null
     lineTotalInCents: number | null
+    clubSharePercentage: number | null
   }
 
   export type OrderItemMinAggregateOutputType = {
@@ -21639,6 +21641,8 @@ export namespace Prisma {
     stockReserved: boolean | null
     clubId: string | null
     clubNameSnapshot: string | null
+    clubAgreementId: string | null
+    clubSharePercentage: number | null
     productionStatus: $Enums.ProductionItemStatus | null
     productionScheduledAt: Date | null
     productionStartedAt: Date | null
@@ -21663,6 +21667,8 @@ export namespace Prisma {
     stockReserved: boolean | null
     clubId: string | null
     clubNameSnapshot: string | null
+    clubAgreementId: string | null
+    clubSharePercentage: number | null
     productionStatus: $Enums.ProductionItemStatus | null
     productionScheduledAt: Date | null
     productionStartedAt: Date | null
@@ -21687,6 +21693,8 @@ export namespace Prisma {
     stockReserved: number
     clubId: number
     clubNameSnapshot: number
+    clubAgreementId: number
+    clubSharePercentage: number
     productionStatus: number
     productionScheduledAt: number
     productionStartedAt: number
@@ -21701,12 +21709,14 @@ export namespace Prisma {
     priceInCentsSnapshot?: true
     quantity?: true
     lineTotalInCents?: true
+    clubSharePercentage?: true
   }
 
   export type OrderItemSumAggregateInputType = {
     priceInCentsSnapshot?: true
     quantity?: true
     lineTotalInCents?: true
+    clubSharePercentage?: true
   }
 
   export type OrderItemMinAggregateInputType = {
@@ -21725,6 +21735,8 @@ export namespace Prisma {
     stockReserved?: true
     clubId?: true
     clubNameSnapshot?: true
+    clubAgreementId?: true
+    clubSharePercentage?: true
     productionStatus?: true
     productionScheduledAt?: true
     productionStartedAt?: true
@@ -21749,6 +21761,8 @@ export namespace Prisma {
     stockReserved?: true
     clubId?: true
     clubNameSnapshot?: true
+    clubAgreementId?: true
+    clubSharePercentage?: true
     productionStatus?: true
     productionScheduledAt?: true
     productionStartedAt?: true
@@ -21773,6 +21787,8 @@ export namespace Prisma {
     stockReserved?: true
     clubId?: true
     clubNameSnapshot?: true
+    clubAgreementId?: true
+    clubSharePercentage?: true
     productionStatus?: true
     productionScheduledAt?: true
     productionStartedAt?: true
@@ -21884,6 +21900,8 @@ export namespace Prisma {
     stockReserved: boolean
     clubId: string | null
     clubNameSnapshot: string | null
+    clubAgreementId: string | null
+    clubSharePercentage: number | null
     productionStatus: $Enums.ProductionItemStatus
     productionScheduledAt: Date | null
     productionStartedAt: Date | null
@@ -21927,6 +21945,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: boolean
     clubNameSnapshot?: boolean
+    clubAgreementId?: boolean
+    clubSharePercentage?: boolean
     productionStatus?: boolean
     productionScheduledAt?: boolean
     productionStartedAt?: boolean
@@ -21955,6 +21975,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: boolean
     clubNameSnapshot?: boolean
+    clubAgreementId?: boolean
+    clubSharePercentage?: boolean
     productionStatus?: boolean
     productionScheduledAt?: boolean
     productionStartedAt?: boolean
@@ -21980,6 +22002,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: boolean
     clubNameSnapshot?: boolean
+    clubAgreementId?: boolean
+    clubSharePercentage?: boolean
     productionStatus?: boolean
     productionScheduledAt?: boolean
     productionStartedAt?: boolean
@@ -22005,6 +22029,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: boolean
     clubNameSnapshot?: boolean
+    clubAgreementId?: boolean
+    clubSharePercentage?: boolean
     productionStatus?: boolean
     productionScheduledAt?: boolean
     productionStartedAt?: boolean
@@ -22013,7 +22039,7 @@ export namespace Prisma {
     productionDeliveredAt?: boolean
   }
 
-  export type OrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "productId" | "productName" | "productSlug" | "variantId" | "size" | "color" | "imageUrl" | "priceInCentsSnapshot" | "quantity" | "lineTotalInCents" | "stockReserved" | "clubId" | "clubNameSnapshot" | "productionStatus" | "productionScheduledAt" | "productionStartedAt" | "productionReadyAt" | "productionShippedAt" | "productionDeliveredAt", ExtArgs["result"]["orderItem"]>
+  export type OrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "productId" | "productName" | "productSlug" | "variantId" | "size" | "color" | "imageUrl" | "priceInCentsSnapshot" | "quantity" | "lineTotalInCents" | "stockReserved" | "clubId" | "clubNameSnapshot" | "clubAgreementId" | "clubSharePercentage" | "productionStatus" | "productionScheduledAt" | "productionStartedAt" | "productionReadyAt" | "productionShippedAt" | "productionDeliveredAt", ExtArgs["result"]["orderItem"]>
   export type OrderItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | OrderDefaultArgs<ExtArgs>
     commissionEntries?: boolean | OrderItem$commissionEntriesArgs<ExtArgs>
@@ -22050,6 +22076,8 @@ export namespace Prisma {
       stockReserved: boolean
       clubId: string | null
       clubNameSnapshot: string | null
+      clubAgreementId: string | null
+      clubSharePercentage: number | null
       productionStatus: $Enums.ProductionItemStatus
       productionScheduledAt: Date | null
       productionStartedAt: Date | null
@@ -22497,6 +22525,8 @@ export namespace Prisma {
     readonly stockReserved: FieldRef<"OrderItem", 'Boolean'>
     readonly clubId: FieldRef<"OrderItem", 'String'>
     readonly clubNameSnapshot: FieldRef<"OrderItem", 'String'>
+    readonly clubAgreementId: FieldRef<"OrderItem", 'String'>
+    readonly clubSharePercentage: FieldRef<"OrderItem", 'Int'>
     readonly productionStatus: FieldRef<"OrderItem", 'ProductionItemStatus'>
     readonly productionScheduledAt: FieldRef<"OrderItem", 'DateTime'>
     readonly productionStartedAt: FieldRef<"OrderItem", 'DateTime'>
@@ -49595,6 +49625,8 @@ export namespace Prisma {
     stockReserved: 'stockReserved',
     clubId: 'clubId',
     clubNameSnapshot: 'clubNameSnapshot',
+    clubAgreementId: 'clubAgreementId',
+    clubSharePercentage: 'clubSharePercentage',
     productionStatus: 'productionStatus',
     productionScheduledAt: 'productionScheduledAt',
     productionStartedAt: 'productionStartedAt',
@@ -51623,6 +51655,8 @@ export namespace Prisma {
     stockReserved?: BoolFilter<"OrderItem"> | boolean
     clubId?: StringNullableFilter<"OrderItem"> | string | null
     clubNameSnapshot?: StringNullableFilter<"OrderItem"> | string | null
+    clubAgreementId?: StringNullableFilter<"OrderItem"> | string | null
+    clubSharePercentage?: IntNullableFilter<"OrderItem"> | number | null
     productionStatus?: EnumProductionItemStatusFilter<"OrderItem"> | $Enums.ProductionItemStatus
     productionScheduledAt?: DateTimeNullableFilter<"OrderItem"> | Date | string | null
     productionStartedAt?: DateTimeNullableFilter<"OrderItem"> | Date | string | null
@@ -51650,6 +51684,8 @@ export namespace Prisma {
     stockReserved?: SortOrder
     clubId?: SortOrderInput | SortOrder
     clubNameSnapshot?: SortOrderInput | SortOrder
+    clubAgreementId?: SortOrderInput | SortOrder
+    clubSharePercentage?: SortOrderInput | SortOrder
     productionStatus?: SortOrder
     productionScheduledAt?: SortOrderInput | SortOrder
     productionStartedAt?: SortOrderInput | SortOrder
@@ -51680,6 +51716,8 @@ export namespace Prisma {
     stockReserved?: BoolFilter<"OrderItem"> | boolean
     clubId?: StringNullableFilter<"OrderItem"> | string | null
     clubNameSnapshot?: StringNullableFilter<"OrderItem"> | string | null
+    clubAgreementId?: StringNullableFilter<"OrderItem"> | string | null
+    clubSharePercentage?: IntNullableFilter<"OrderItem"> | number | null
     productionStatus?: EnumProductionItemStatusFilter<"OrderItem"> | $Enums.ProductionItemStatus
     productionScheduledAt?: DateTimeNullableFilter<"OrderItem"> | Date | string | null
     productionStartedAt?: DateTimeNullableFilter<"OrderItem"> | Date | string | null
@@ -51707,6 +51745,8 @@ export namespace Prisma {
     stockReserved?: SortOrder
     clubId?: SortOrderInput | SortOrder
     clubNameSnapshot?: SortOrderInput | SortOrder
+    clubAgreementId?: SortOrderInput | SortOrder
+    clubSharePercentage?: SortOrderInput | SortOrder
     productionStatus?: SortOrder
     productionScheduledAt?: SortOrderInput | SortOrder
     productionStartedAt?: SortOrderInput | SortOrder
@@ -51739,6 +51779,8 @@ export namespace Prisma {
     stockReserved?: BoolWithAggregatesFilter<"OrderItem"> | boolean
     clubId?: StringNullableWithAggregatesFilter<"OrderItem"> | string | null
     clubNameSnapshot?: StringNullableWithAggregatesFilter<"OrderItem"> | string | null
+    clubAgreementId?: StringNullableWithAggregatesFilter<"OrderItem"> | string | null
+    clubSharePercentage?: IntNullableWithAggregatesFilter<"OrderItem"> | number | null
     productionStatus?: EnumProductionItemStatusWithAggregatesFilter<"OrderItem"> | $Enums.ProductionItemStatus
     productionScheduledAt?: DateTimeNullableWithAggregatesFilter<"OrderItem"> | Date | string | null
     productionStartedAt?: DateTimeNullableWithAggregatesFilter<"OrderItem"> | Date | string | null
@@ -54992,6 +55034,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: string | null
     clubNameSnapshot?: string | null
+    clubAgreementId?: string | null
+    clubSharePercentage?: number | null
     productionStatus?: $Enums.ProductionItemStatus
     productionScheduledAt?: Date | string | null
     productionStartedAt?: Date | string | null
@@ -55019,6 +55063,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: string | null
     clubNameSnapshot?: string | null
+    clubAgreementId?: string | null
+    clubSharePercentage?: number | null
     productionStatus?: $Enums.ProductionItemStatus
     productionScheduledAt?: Date | string | null
     productionStartedAt?: Date | string | null
@@ -55044,6 +55090,8 @@ export namespace Prisma {
     stockReserved?: BoolFieldUpdateOperationsInput | boolean
     clubId?: NullableStringFieldUpdateOperationsInput | string | null
     clubNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    clubAgreementId?: NullableStringFieldUpdateOperationsInput | string | null
+    clubSharePercentage?: NullableIntFieldUpdateOperationsInput | number | null
     productionStatus?: EnumProductionItemStatusFieldUpdateOperationsInput | $Enums.ProductionItemStatus
     productionScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     productionStartedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -55071,6 +55119,8 @@ export namespace Prisma {
     stockReserved?: BoolFieldUpdateOperationsInput | boolean
     clubId?: NullableStringFieldUpdateOperationsInput | string | null
     clubNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    clubAgreementId?: NullableStringFieldUpdateOperationsInput | string | null
+    clubSharePercentage?: NullableIntFieldUpdateOperationsInput | number | null
     productionStatus?: EnumProductionItemStatusFieldUpdateOperationsInput | $Enums.ProductionItemStatus
     productionScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     productionStartedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -55097,6 +55147,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: string | null
     clubNameSnapshot?: string | null
+    clubAgreementId?: string | null
+    clubSharePercentage?: number | null
     productionStatus?: $Enums.ProductionItemStatus
     productionScheduledAt?: Date | string | null
     productionStartedAt?: Date | string | null
@@ -55120,6 +55172,8 @@ export namespace Prisma {
     stockReserved?: BoolFieldUpdateOperationsInput | boolean
     clubId?: NullableStringFieldUpdateOperationsInput | string | null
     clubNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    clubAgreementId?: NullableStringFieldUpdateOperationsInput | string | null
+    clubSharePercentage?: NullableIntFieldUpdateOperationsInput | number | null
     productionStatus?: EnumProductionItemStatusFieldUpdateOperationsInput | $Enums.ProductionItemStatus
     productionScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     productionStartedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -55144,6 +55198,8 @@ export namespace Prisma {
     stockReserved?: BoolFieldUpdateOperationsInput | boolean
     clubId?: NullableStringFieldUpdateOperationsInput | string | null
     clubNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    clubAgreementId?: NullableStringFieldUpdateOperationsInput | string | null
+    clubSharePercentage?: NullableIntFieldUpdateOperationsInput | number | null
     productionStatus?: EnumProductionItemStatusFieldUpdateOperationsInput | $Enums.ProductionItemStatus
     productionScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     productionStartedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58416,6 +58472,8 @@ export namespace Prisma {
     stockReserved?: SortOrder
     clubId?: SortOrder
     clubNameSnapshot?: SortOrder
+    clubAgreementId?: SortOrder
+    clubSharePercentage?: SortOrder
     productionStatus?: SortOrder
     productionScheduledAt?: SortOrder
     productionStartedAt?: SortOrder
@@ -58428,6 +58486,7 @@ export namespace Prisma {
     priceInCentsSnapshot?: SortOrder
     quantity?: SortOrder
     lineTotalInCents?: SortOrder
+    clubSharePercentage?: SortOrder
   }
 
   export type OrderItemMaxOrderByAggregateInput = {
@@ -58446,6 +58505,8 @@ export namespace Prisma {
     stockReserved?: SortOrder
     clubId?: SortOrder
     clubNameSnapshot?: SortOrder
+    clubAgreementId?: SortOrder
+    clubSharePercentage?: SortOrder
     productionStatus?: SortOrder
     productionScheduledAt?: SortOrder
     productionStartedAt?: SortOrder
@@ -58470,6 +58531,8 @@ export namespace Prisma {
     stockReserved?: SortOrder
     clubId?: SortOrder
     clubNameSnapshot?: SortOrder
+    clubAgreementId?: SortOrder
+    clubSharePercentage?: SortOrder
     productionStatus?: SortOrder
     productionScheduledAt?: SortOrder
     productionStartedAt?: SortOrder
@@ -58482,6 +58545,7 @@ export namespace Prisma {
     priceInCentsSnapshot?: SortOrder
     quantity?: SortOrder
     lineTotalInCents?: SortOrder
+    clubSharePercentage?: SortOrder
   }
 
   export type OrderStatusHistoryCountOrderByAggregateInput = {
@@ -64707,6 +64771,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: string | null
     clubNameSnapshot?: string | null
+    clubAgreementId?: string | null
+    clubSharePercentage?: number | null
     productionStatus?: $Enums.ProductionItemStatus
     productionScheduledAt?: Date | string | null
     productionStartedAt?: Date | string | null
@@ -64732,6 +64798,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: string | null
     clubNameSnapshot?: string | null
+    clubAgreementId?: string | null
+    clubSharePercentage?: number | null
     productionStatus?: $Enums.ProductionItemStatus
     productionScheduledAt?: Date | string | null
     productionStartedAt?: Date | string | null
@@ -65071,6 +65139,8 @@ export namespace Prisma {
     stockReserved?: BoolFilter<"OrderItem"> | boolean
     clubId?: StringNullableFilter<"OrderItem"> | string | null
     clubNameSnapshot?: StringNullableFilter<"OrderItem"> | string | null
+    clubAgreementId?: StringNullableFilter<"OrderItem"> | string | null
+    clubSharePercentage?: IntNullableFilter<"OrderItem"> | number | null
     productionStatus?: EnumProductionItemStatusFilter<"OrderItem"> | $Enums.ProductionItemStatus
     productionScheduledAt?: DateTimeNullableFilter<"OrderItem"> | Date | string | null
     productionStartedAt?: DateTimeNullableFilter<"OrderItem"> | Date | string | null
@@ -66583,6 +66653,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: string | null
     clubNameSnapshot?: string | null
+    clubAgreementId?: string | null
+    clubSharePercentage?: number | null
     productionStatus?: $Enums.ProductionItemStatus
     productionScheduledAt?: Date | string | null
     productionStartedAt?: Date | string | null
@@ -66609,6 +66681,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: string | null
     clubNameSnapshot?: string | null
+    clubAgreementId?: string | null
+    clubSharePercentage?: number | null
     productionStatus?: $Enums.ProductionItemStatus
     productionScheduledAt?: Date | string | null
     productionStartedAt?: Date | string | null
@@ -66958,6 +67032,8 @@ export namespace Prisma {
     stockReserved?: BoolFieldUpdateOperationsInput | boolean
     clubId?: NullableStringFieldUpdateOperationsInput | string | null
     clubNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    clubAgreementId?: NullableStringFieldUpdateOperationsInput | string | null
+    clubSharePercentage?: NullableIntFieldUpdateOperationsInput | number | null
     productionStatus?: EnumProductionItemStatusFieldUpdateOperationsInput | $Enums.ProductionItemStatus
     productionScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     productionStartedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -66984,6 +67060,8 @@ export namespace Prisma {
     stockReserved?: BoolFieldUpdateOperationsInput | boolean
     clubId?: NullableStringFieldUpdateOperationsInput | string | null
     clubNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    clubAgreementId?: NullableStringFieldUpdateOperationsInput | string | null
+    clubSharePercentage?: NullableIntFieldUpdateOperationsInput | number | null
     productionStatus?: EnumProductionItemStatusFieldUpdateOperationsInput | $Enums.ProductionItemStatus
     productionScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     productionStartedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -67513,6 +67591,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: string | null
     clubNameSnapshot?: string | null
+    clubAgreementId?: string | null
+    clubSharePercentage?: number | null
     productionStatus?: $Enums.ProductionItemStatus
     productionScheduledAt?: Date | string | null
     productionStartedAt?: Date | string | null
@@ -67539,6 +67619,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: string | null
     clubNameSnapshot?: string | null
+    clubAgreementId?: string | null
+    clubSharePercentage?: number | null
     productionStatus?: $Enums.ProductionItemStatus
     productionScheduledAt?: Date | string | null
     productionStartedAt?: Date | string | null
@@ -67638,6 +67720,8 @@ export namespace Prisma {
     stockReserved?: BoolFieldUpdateOperationsInput | boolean
     clubId?: NullableStringFieldUpdateOperationsInput | string | null
     clubNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    clubAgreementId?: NullableStringFieldUpdateOperationsInput | string | null
+    clubSharePercentage?: NullableIntFieldUpdateOperationsInput | number | null
     productionStatus?: EnumProductionItemStatusFieldUpdateOperationsInput | $Enums.ProductionItemStatus
     productionScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     productionStartedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -67664,6 +67748,8 @@ export namespace Prisma {
     stockReserved?: BoolFieldUpdateOperationsInput | boolean
     clubId?: NullableStringFieldUpdateOperationsInput | string | null
     clubNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    clubAgreementId?: NullableStringFieldUpdateOperationsInput | string | null
+    clubSharePercentage?: NullableIntFieldUpdateOperationsInput | number | null
     productionStatus?: EnumProductionItemStatusFieldUpdateOperationsInput | $Enums.ProductionItemStatus
     productionScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     productionStartedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -69842,6 +69928,8 @@ export namespace Prisma {
     stockReserved?: boolean
     clubId?: string | null
     clubNameSnapshot?: string | null
+    clubAgreementId?: string | null
+    clubSharePercentage?: number | null
     productionStatus?: $Enums.ProductionItemStatus
     productionScheduledAt?: Date | string | null
     productionStartedAt?: Date | string | null
@@ -69947,6 +70035,8 @@ export namespace Prisma {
     stockReserved?: BoolFieldUpdateOperationsInput | boolean
     clubId?: NullableStringFieldUpdateOperationsInput | string | null
     clubNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    clubAgreementId?: NullableStringFieldUpdateOperationsInput | string | null
+    clubSharePercentage?: NullableIntFieldUpdateOperationsInput | number | null
     productionStatus?: EnumProductionItemStatusFieldUpdateOperationsInput | $Enums.ProductionItemStatus
     productionScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     productionStartedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -69972,6 +70062,8 @@ export namespace Prisma {
     stockReserved?: BoolFieldUpdateOperationsInput | boolean
     clubId?: NullableStringFieldUpdateOperationsInput | string | null
     clubNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    clubAgreementId?: NullableStringFieldUpdateOperationsInput | string | null
+    clubSharePercentage?: NullableIntFieldUpdateOperationsInput | number | null
     productionStatus?: EnumProductionItemStatusFieldUpdateOperationsInput | $Enums.ProductionItemStatus
     productionScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     productionStartedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -69997,6 +70089,8 @@ export namespace Prisma {
     stockReserved?: BoolFieldUpdateOperationsInput | boolean
     clubId?: NullableStringFieldUpdateOperationsInput | string | null
     clubNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    clubAgreementId?: NullableStringFieldUpdateOperationsInput | string | null
+    clubSharePercentage?: NullableIntFieldUpdateOperationsInput | number | null
     productionStatus?: EnumProductionItemStatusFieldUpdateOperationsInput | $Enums.ProductionItemStatus
     productionScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     productionStartedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

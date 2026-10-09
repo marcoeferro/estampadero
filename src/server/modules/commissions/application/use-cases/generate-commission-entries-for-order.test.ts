@@ -19,6 +19,8 @@ function makeItem(overrides: Partial<OrderItemDto> = {}): OrderItemDto {
     lineTotalInCents: 10_000,
     clubId: null,
     clubNameSnapshot: null,
+    clubAgreementId: null,
+    clubSharePercentage: null,
     ...overrides,
   };
 }
@@ -136,6 +138,33 @@ describe("generateCommissionEntriesForOrder", () => {
     );
     expect(repository.createEntryIfNotExists).toHaveBeenCalledWith(
       expect.objectContaining({ orderItemId: "item-2", amountInCents: 1_000 }),
+    );
+  });
+
+  it("uses the rate stored on the order item instead of the current agreement", async () => {
+    const repository = makeRepository();
+    const resolveRateForProduct = vi.fn(async () => ({
+      agreementId: "agreement-new",
+      percentage: 30,
+    }));
+    const order = makeOrder([
+      makeItem({
+        clubId: "club-1",
+        lineTotalInCents: 10_000,
+        clubAgreementId: "agreement-old",
+        clubSharePercentage: 20,
+      }),
+    ]);
+
+    await generateCommissionEntriesForOrder({ repository, resolveRateForProduct })(order);
+
+    expect(resolveRateForProduct).not.toHaveBeenCalled();
+    expect(repository.createEntryIfNotExists).toHaveBeenCalledWith(
+      expect.objectContaining({
+        agreementId: "agreement-old",
+        percentageApplied: 20,
+        amountInCents: 2_000,
+      }),
     );
   });
 });

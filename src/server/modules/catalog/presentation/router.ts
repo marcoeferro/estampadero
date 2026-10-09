@@ -12,6 +12,7 @@ import { getProductBySlug } from "../application/use-cases/get-product-by-slug";
 import { listCategories } from "../application/use-cases/list-categories";
 import { listProducts } from "../application/use-cases/list-products";
 import { prismaCatalogRepository } from "../infrastructure/persistence/prisma-catalog-repository";
+import { clubCanSellWhere } from "../infrastructure/persistence/sellable-products";
 import {
   createAdminProductInputSchema,
   createCatalogLineInputSchema,
@@ -25,6 +26,20 @@ import {
 const listProductsUseCase = listProducts(prismaCatalogRepository);
 const getProductBySlugUseCase = getProductBySlug(prismaCatalogRepository);
 const listCategoriesUseCase = listCategories(prismaCatalogRepository);
+
+const CLUB_CANNOT_SELL_MESSAGE =
+  "El club todavía no tiene los cobros activos en Mobbex. Guardá el producto como borrador y publicalo cuando se activen.";
+
+async function clubCanSell(
+  db: Pick<Prisma.TransactionClient, "club">,
+  clubId: string,
+): Promise<boolean> {
+  const club = await db.club.findFirst({
+    where: { id: clubId, ...clubCanSellWhere },
+    select: { id: true },
+  });
+  return club !== null;
+}
 
 const adminProductInclude = {
   images: { orderBy: { position: "asc" as const } },
@@ -222,6 +237,7 @@ export const catalogRouter = createTRPCRouter({
           });
         }
 
+        const canSell = await clubCanSell(tx, design.clubId);
         const uniqueSuffix = Date.now().toString(36).toUpperCase();
         const code = `CONV-${slugify(design.title).slice(0, 24).toUpperCase()}-${uniqueSuffix}`;
         const product = await tx.product.create({
@@ -231,7 +247,7 @@ export const catalogRouter = createTRPCRouter({
             code,
             priceInCents: input.priceInCents,
             line: "CLUB",
-            status: "PUBLISHED",
+            status: canSell ? "PUBLISHED" : "DRAFT",
             clubId: design.clubId,
             showStock: input.stock !== null,
             images: {
@@ -275,6 +291,15 @@ export const catalogRouter = createTRPCRouter({
             code: "BAD_REQUEST",
             message:
               "La organización seleccionada no tiene un convenio activo.",
+          });
+        }
+        if (
+          input.status === "PUBLISHED" &&
+          !(await clubCanSell(ctx.db, input.clubId))
+        ) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: CLUB_CANNOT_SELL_MESSAGE,
           });
         }
       }
@@ -360,6 +385,15 @@ export const catalogRouter = createTRPCRouter({
               code: "BAD_REQUEST",
               message:
                 "La organización seleccionada no tiene un convenio activo.",
+            });
+          }
+          if (
+            input.status === "PUBLISHED" &&
+            !(await clubCanSell(tx, input.clubId))
+          ) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: CLUB_CANNOT_SELL_MESSAGE,
             });
           }
         }

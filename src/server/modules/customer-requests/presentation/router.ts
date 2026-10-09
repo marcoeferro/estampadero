@@ -12,6 +12,7 @@ import {
   rateLimit,
 } from "elestampadero/server/api/trpc";
 import { db } from "elestampadero/server/db";
+import { refundAdjustmentSchedule } from "elestampadero/server/modules/commissions";
 import { mercadoPagoGateway } from "elestampadero/server/modules/payments/infrastructure/providers/mercado-pago-gateway";
 import { modoGateway } from "elestampadero/server/modules/payments/infrastructure/providers/modo-gateway";
 import { mobbexGateway } from "elestampadero/server/modules/payments/infrastructure/providers/mobbex-gateway";
@@ -364,6 +365,7 @@ export const customerRequestsRouter = createTRPCRouter({
       }
 
       const ratio = input.amountInCents / request.requestedRefundInCents;
+      const now = new Date();
       await db.$transaction(async (tx) => {
         for (const item of request.items) {
           const sale = await tx.commissionEntry.findFirst({
@@ -374,6 +376,11 @@ export const customerRequestsRouter = createTRPCRouter({
           const adjustment = -Math.round(
             (itemRefund * sale.percentageApplied) / 100,
           );
+          const schedule = refundAdjustmentSchedule({
+            provider: payment.provider,
+            sale,
+            now,
+          });
           await tx.commissionEntry.upsert({
             where: { sourceKey: `refund:${request.id}:${item.id}` },
             update: {},
@@ -390,11 +397,10 @@ export const customerRequestsRouter = createTRPCRouter({
               baseAmountInCents: -itemRefund,
               percentageApplied: sale.percentageApplied,
               amountInCents: adjustment,
-              status: sale.status === "SETTLED" ? "AVAILABLE" : sale.status,
-              releasedAt: sale.releasedAt,
+              status: schedule.status,
+              releasedAt: schedule.releasedAt,
               returnWindowEndsAt: sale.returnWindowEndsAt,
-              availableAt:
-                sale.status === "SETTLED" ? new Date() : sale.availableAt,
+              availableAt: schedule.availableAt,
             },
           });
         }

@@ -319,6 +319,8 @@ exports.Prisma.OrderItemScalarFieldEnum = {
   stockReserved: 'stockReserved',
   clubId: 'clubId',
   clubNameSnapshot: 'clubNameSnapshot',
+  clubAgreementId: 'clubAgreementId',
+  clubSharePercentage: 'clubSharePercentage',
   productionStatus: 'productionStatus',
   productionScheduledAt: 'productionScheduledAt',
   productionStartedAt: 'productionStartedAt',
