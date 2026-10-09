@@ -1,17 +1,5 @@
 {
   "app": {
-    "[project]/src/app/catalogo/[slug]/page": [
-      "static/media/Archivo_Variable-s.p.bfd5c76b.ttf",
-      "static/media/Barlow_Regular-s.p.ccb6d966.ttf",
-      "static/media/Barlow_Medium-s.p.15015fa0.ttf",
-      "static/media/Barlow_SemiBold-s.p.8a0da6cb.ttf",
-      "static/media/Barlow_Bold-s.p.3f60925a.ttf",
-      "static/media/IBMPlexMono_Medium-s.p.462f461c.ttf",
-      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2",
-      "static/media/VCR_OSD_MONO-s.p.621bdcb2.ttf",
-      "static/media/dc0d9adbac686440-s.p.3b382e45.woff2",
-      "static/media/8d05cfa5faa8406c-s.p.4adea45d.woff2"
-    ],
     "[project]/src/app/page": [
       "static/media/Archivo_Variable-s.p.bfd5c76b.ttf",
       "static/media/Barlow_Regular-s.p.ccb6d966.ttf",

@@ -44,3 +44,6 @@ yarn-error.log*
 .codex-restore-clean-files.mjs
 
 .idea
+
+*.rar
+*.zip
