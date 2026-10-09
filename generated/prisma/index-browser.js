@@ -266,6 +266,9 @@ exports.Prisma.OrderScalarFieldEnum = {
   status: 'status',
   contactName: 'contactName',
   customerDocument: 'customerDocument',
+  customerTaxId: 'customerTaxId',
+  customerLegalName: 'customerLegalName',
+  customerTaxCondition: 'customerTaxCondition',
   contactEmail: 'contactEmail',
   contactPhone: 'contactPhone',
   deliveryMethod: 'deliveryMethod',
@@ -621,6 +624,37 @@ exports.Prisma.RateLimitBucketScalarFieldEnum = {
   expiresAt: 'expiresAt'
 };
 
+exports.Prisma.FiscalVoucherScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  kind: 'kind',
+  voucherType: 'voucherType',
+  idempotencyKey: 'idempotencyKey',
+  status: 'status',
+  amountInCents: 'amountInCents',
+  netAmountInCents: 'netAmountInCents',
+  vatAmountInCents: 'vatAmountInCents',
+  buyerDocType: 'buyerDocType',
+  buyerDocNumber: 'buyerDocNumber',
+  buyerName: 'buyerName',
+  buyerTaxCondition: 'buyerTaxCondition',
+  provider: 'provider',
+  providerVoucherId: 'providerVoucherId',
+  pointOfSale: 'pointOfSale',
+  number: 'number',
+  cae: 'cae',
+  caeExpiresAt: 'caeExpiresAt',
+  pdfUrl: 'pdfUrl',
+  issuedAt: 'issuedAt',
+  emailSentAt: 'emailSentAt',
+  attempts: 'attempts',
+  nextAttemptAt: 'nextAttemptAt',
+  errorMessage: 'errorMessage',
+  relatedVoucherId: 'relatedVoucherId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -686,6 +720,13 @@ exports.OrderStatus = exports.$Enums.OrderStatus = {
   SHIPPED: 'SHIPPED',
   DELIVERED: 'DELIVERED',
   CANCELLED: 'CANCELLED'
+};
+
+exports.TaxCondition = exports.$Enums.TaxCondition = {
+  CONSUMIDOR_FINAL: 'CONSUMIDOR_FINAL',
+  RESPONSABLE_INSCRIPTO: 'RESPONSABLE_INSCRIPTO',
+  MONOTRIBUTO: 'MONOTRIBUTO',
+  EXENTO: 'EXENTO'
 };
 
 exports.DeliveryMethod = exports.$Enums.DeliveryMethod = {
@@ -809,6 +850,19 @@ exports.SpecialRequestStatus = exports.$Enums.SpecialRequestStatus = {
   DECLINED: 'DECLINED'
 };
 
+exports.FiscalVoucherKind = exports.$Enums.FiscalVoucherKind = {
+  INVOICE: 'INVOICE',
+  CREDIT_NOTE: 'CREDIT_NOTE'
+};
+
+exports.FiscalVoucherStatus = exports.$Enums.FiscalVoucherStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  AWAITING_AUTHORIZATION: 'AWAITING_AUTHORIZATION',
+  ISSUED: 'ISSUED',
+  FAILED: 'FAILED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Account: 'Account',
@@ -847,7 +901,8 @@ exports.Prisma.ModelName = {
   SiteContentSetting: 'SiteContentSetting',
   SpecialRequest: 'SpecialRequest',
   RateLimitHit: 'RateLimitHit',
-  RateLimitBucket: 'RateLimitBucket'
+  RateLimitBucket: 'RateLimitBucket',
+  FiscalVoucher: 'FiscalVoucher'
 };
 
 /**

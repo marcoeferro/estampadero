@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import { cartSubtotalCents, useCartStore } from "elestampadero/entities/cart";
 import { routes } from "elestampadero/shared/config/routes";
 import { formatCents } from "elestampadero/shared/lib/money";
+import { isValidCuit } from "elestampadero/shared/lib/cuit";
 import { BackLink, Button, Container } from "elestampadero/shared/ui";
 import { StoreHeader } from "elestampadero/widgets/store-header";
 import { api } from "elestampadero/trpc/react";
@@ -24,12 +25,19 @@ type CheckoutField =
   | "contactPhone"
   | "shippingAddress"
   | "shippingCity"
-  | "shippingPostalCode";
+  | "shippingPostalCode"
+  | "customerTaxId"
+  | "customerLegalName"
+  | "customerTaxCondition";
 
 type CheckoutFieldErrors = Partial<Record<CheckoutField, string>>;
 
 const CHECKOUT_FIELDS: CheckoutField[] = [
   "contactName",
+  "customerDocument",
+  "customerTaxId",
+  "customerLegalName",
+  "customerTaxCondition",
   "contactEmail",
   "contactPhone",
   "shippingAddress",
@@ -47,6 +55,12 @@ export function CheckoutView() {
   const [customerDocument, setCustomerDocument] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [requiresInvoiceA, setRequiresInvoiceA] = useState(false);
+  const [customerTaxId, setCustomerTaxId] = useState("");
+  const [customerLegalName, setCustomerLegalName] = useState("");
+  const [customerTaxCondition, setCustomerTaxCondition] = useState<
+    "" | "RESPONSABLE_INSCRIPTO" | "MONOTRIBUTO" | "EXENTO"
+  >("");
   const [deliveryMethod, setDeliveryMethod] = useState<"SHIPPING" | "PICKUP">(
     "SHIPPING",
   );
@@ -110,6 +124,18 @@ export function CheckoutView() {
       errors.contactPhone = "El teléfono debe tener entre 6 y 15 números.";
     }
 
+    if (requiresInvoiceA) {
+      if (!isValidCuit(customerTaxId)) {
+        errors.customerTaxId = "Ingresá un CUIT válido de 11 números.";
+      }
+      if (customerLegalName.trim().length < 2) {
+        errors.customerLegalName = "Ingresá la razón social.";
+      }
+      if (!customerTaxCondition) {
+        errors.customerTaxCondition = "Elegí la condición frente al IVA.";
+      }
+    }
+
     if (deliveryMethod === "SHIPPING") {
       if (shippingAddress.trim().length < 5) {
         errors.shippingAddress =
@@ -147,6 +173,14 @@ export function CheckoutView() {
       customerDocument,
       contactEmail,
       contactPhone,
+      ...(requiresInvoiceA
+        ? {
+            requiresInvoiceA: true,
+            customerTaxId,
+            customerLegalName,
+            customerTaxCondition: customerTaxCondition || undefined,
+          }
+        : { requiresInvoiceA: false }),
       deliveryMethod,
       shippingAddress:
         deliveryMethod === "SHIPPING" ? shippingAddress : undefined,
@@ -316,6 +350,81 @@ export function CheckoutView() {
                     ) : null}
                   </div>
                 </div>
+                <label className="mt-4 flex items-center gap-2 text-sm font-medium">
+                  <input
+                    type="checkbox"
+                    checked={requiresInvoiceA}
+                    onChange={(event) => setRequiresInvoiceA(event.target.checked)}
+                    className="h-4 w-4"
+                  />
+                  Necesito factura A (con CUIT)
+                </label>
+                {requiresInvoiceA ? (
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <input
+                        inputMode="numeric"
+                        maxLength={13}
+                        aria-invalid={Boolean(fieldErrors.customerTaxId)}
+                        placeholder="CUIT (11 números)"
+                        value={customerTaxId}
+                        onChange={(event) => {
+                          setCustomerTaxId(event.target.value.replace(/[^\d-]/g, ""));
+                          clearFieldError("customerTaxId");
+                        }}
+                        className={`${CHECKOUT_INPUT_CLASSES} ${fieldErrors.customerTaxId ? INVALID_INPUT_CLASSES : ""}`}
+                      />
+                      {fieldErrors.customerTaxId ? (
+                        <p className="mt-1 text-xs font-medium text-red-600">
+                          {fieldErrors.customerTaxId}
+                        </p>
+                      ) : null}
+                    </div>
+                    <div>
+                      <select
+                        aria-label="Condición frente al IVA"
+                        aria-invalid={Boolean(fieldErrors.customerTaxCondition)}
+                        value={customerTaxCondition}
+                        onChange={(event) => {
+                          setCustomerTaxCondition(
+                            event.target.value as typeof customerTaxCondition,
+                          );
+                          clearFieldError("customerTaxCondition");
+                        }}
+                        className={`${CHECKOUT_INPUT_CLASSES} ${fieldErrors.customerTaxCondition ? INVALID_INPUT_CLASSES : ""}`}
+                      >
+                        <option value="">Condición frente al IVA</option>
+                        <option value="RESPONSABLE_INSCRIPTO">
+                          Responsable inscripto
+                        </option>
+                        <option value="MONOTRIBUTO">Monotributo</option>
+                        <option value="EXENTO">Exento</option>
+                      </select>
+                      {fieldErrors.customerTaxCondition ? (
+                        <p className="mt-1 text-xs font-medium text-red-600">
+                          {fieldErrors.customerTaxCondition}
+                        </p>
+                      ) : null}
+                    </div>
+                    <div className="sm:col-span-2">
+                      <input
+                        aria-invalid={Boolean(fieldErrors.customerLegalName)}
+                        placeholder="Razón social"
+                        value={customerLegalName}
+                        onChange={(event) => {
+                          setCustomerLegalName(event.target.value);
+                          clearFieldError("customerLegalName");
+                        }}
+                        className={`${CHECKOUT_INPUT_CLASSES} ${fieldErrors.customerLegalName ? INVALID_INPUT_CLASSES : ""}`}
+                      />
+                      {fieldErrors.customerLegalName ? (
+                        <p className="mt-1 text-xs font-medium text-red-600">
+                          {fieldErrors.customerLegalName}
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : null}
               </fieldset>
 
               <fieldset className="rounded-lg bg-white p-4 md:p-5">

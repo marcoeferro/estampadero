@@ -1,6 +1,7 @@
 import "server-only";
 
 import { TRPCError } from "@trpc/server";
+import { after } from "next/server";
 import { z } from "zod";
 
 import {
@@ -13,6 +14,7 @@ import {
 } from "elestampadero/server/api/trpc";
 import { db } from "elestampadero/server/db";
 import { refundAdjustmentSchedule } from "elestampadero/server/modules/commissions";
+import { invoicingService } from "elestampadero/server/modules/invoicing";
 import { mercadoPagoGateway } from "elestampadero/server/modules/payments/infrastructure/providers/mercado-pago-gateway";
 import { modoGateway } from "elestampadero/server/modules/payments/infrastructure/providers/modo-gateway";
 import { mobbexGateway } from "elestampadero/server/modules/payments/infrastructure/providers/mobbex-gateway";
@@ -426,6 +428,14 @@ export const customerRequestsRouter = createTRPCRouter({
             refundedAt: new Date(),
           },
         });
+      });
+
+      after(async () => {
+        try {
+          await invoicingService.syncCreditNotes(request.orderId);
+        } catch (error) {
+          console.error(`[invoicing] credit note failed for ${request.id}`, error);
+        }
       });
 
       return db.customerRequest.findUnique({

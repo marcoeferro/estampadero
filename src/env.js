@@ -70,6 +70,23 @@ export const env = createEnv({
     MODO_MERCHANT_NAME: z.string().min(1).max(100).optional(),
 
 
+    // Facturación electrónica. "disabled" no emite comprobantes; "simulated"
+    // emite comprobantes de prueba sin validez fiscal.
+    INVOICING_PROVIDER: z
+      .enum(["disabled", "simulated", "facturante"])
+      .default("disabled"),
+    INVOICING_ISSUER_TAX_CONDITION: z
+      .enum(["MONOTRIBUTO", "RESPONSABLE_INSCRIPTO"])
+      .default("MONOTRIBUTO"),
+    INVOICING_POINT_OF_SALE: z.coerce.number().int().min(1).max(99998).optional(),
+    INVOICING_CLUB_ITEMS_MODE: z.enum(["TOTAL", "STORE_SHARE"]).default("TOTAL"),
+    INVOICING_VAT_RATE: z.coerce.number().min(0).max(100).default(21),
+    FACTURANTE_ENVIRONMENT: z.enum(["testing", "production"]).default("testing"),
+    FACTURANTE_USER: z.string().min(1).optional(),
+    FACTURANTE_PASSWORD: z.string().min(1).optional(),
+    FACTURANTE_COMPANY_ID: z.string().min(1).optional(),
+    FACTURANTE_WEBHOOK_SECRET: z.string().min(16).optional(),
+
     CRON_SECRET:
       process.env.NODE_ENV === "production"
         ? z.string().min(16)
@@ -122,6 +139,16 @@ export const env = createEnv({
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RECEIPT_EMAIL_FROM: process.env.RECEIPT_EMAIL_FROM,
     CRON_SECRET: process.env.CRON_SECRET,
+    INVOICING_PROVIDER: process.env.INVOICING_PROVIDER,
+    INVOICING_ISSUER_TAX_CONDITION: process.env.INVOICING_ISSUER_TAX_CONDITION,
+    INVOICING_POINT_OF_SALE: process.env.INVOICING_POINT_OF_SALE,
+    INVOICING_CLUB_ITEMS_MODE: process.env.INVOICING_CLUB_ITEMS_MODE,
+    INVOICING_VAT_RATE: process.env.INVOICING_VAT_RATE,
+    FACTURANTE_ENVIRONMENT: process.env.FACTURANTE_ENVIRONMENT,
+    FACTURANTE_USER: process.env.FACTURANTE_USER,
+    FACTURANTE_PASSWORD: process.env.FACTURANTE_PASSWORD,
+    FACTURANTE_COMPANY_ID: process.env.FACTURANTE_COMPANY_ID,
+    FACTURANTE_WEBHOOK_SECRET: process.env.FACTURANTE_WEBHOOK_SECRET,
     MODO_ENVIRONMENT: process.env.MODO_ENVIRONMENT,
     MODO_USERNAME: process.env.MODO_USERNAME,
     MODO_PASSWORD: process.env.MODO_PASSWORD,

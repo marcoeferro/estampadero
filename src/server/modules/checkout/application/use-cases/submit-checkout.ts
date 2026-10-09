@@ -21,6 +21,12 @@ export interface SubmitCheckoutInput {
   userId: string | null;
   contactName: string;
   customerDocument: string | null;
+  /** Solo cuando el comprador pide factura A. */
+  invoiceA: {
+    taxId: string;
+    legalName: string;
+    taxCondition: "RESPONSABLE_INSCRIPTO" | "MONOTRIBUTO" | "EXENTO";
+  } | null;
   contactEmail: string;
   contactPhone: string;
   deliveryMethod: "SHIPPING" | "PICKUP";
@@ -134,6 +140,9 @@ export function submitCheckout(deps: SubmitCheckoutDeps) {
       userId: input.userId,
       contactName: input.contactName,
       customerDocument: input.customerDocument,
+      customerTaxId: input.invoiceA?.taxId ?? null,
+      customerLegalName: input.invoiceA?.legalName ?? null,
+      customerTaxCondition: input.invoiceA?.taxCondition ?? null,
       contactEmail: input.contactEmail,
       contactPhone: input.contactPhone,
       deliveryMethod: input.deliveryMethod,

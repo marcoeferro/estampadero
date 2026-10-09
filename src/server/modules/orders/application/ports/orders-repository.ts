@@ -24,6 +24,14 @@ export interface CreateOrderInput {
   userId: string | null;
   contactName: string;
   customerDocument?: string | null;
+  customerTaxId?: string | null;
+  customerLegalName?: string | null;
+  customerTaxCondition?:
+    | "CONSUMIDOR_FINAL"
+    | "RESPONSABLE_INSCRIPTO"
+    | "MONOTRIBUTO"
+    | "EXENTO"
+    | null;
   contactEmail: string;
   contactPhone: string;
   deliveryMethod: "SHIPPING" | "PICKUP";

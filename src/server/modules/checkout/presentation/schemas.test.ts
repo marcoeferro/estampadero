@@ -81,4 +81,42 @@ describe("submitCheckoutInputSchema", () => {
       result.error.flatten().fieldErrors.customerDocument?.[0],
     ).toBeDefined();
   });
+
+  it("pide CUIT válido, razón social y condición para la factura A", () => {
+    const base = {
+      ...validInput,
+      checkoutRequestId: "8b9f8d4e-3c1a-4f7e-9b2d-1a2b3c4d5e6f",
+    };
+    expect(submitCheckoutInputSchema.safeParse(base).success).toBe(true);
+
+    const missing = submitCheckoutInputSchema.safeParse({
+      ...base,
+      requiresInvoiceA: true,
+    });
+    expect(missing.success).toBe(false);
+    if (missing.success) return;
+    expect(Object.keys(missing.error.flatten().fieldErrors).sort()).toEqual([
+      "customerLegalName",
+      "customerTaxCondition",
+      "customerTaxId",
+    ]);
+
+    const invalidCuit = submitCheckoutInputSchema.safeParse({
+      ...base,
+      requiresInvoiceA: true,
+      customerTaxId: "20-30111222-1",
+      customerLegalName: "Ana SRL",
+      customerTaxCondition: "MONOTRIBUTO",
+    });
+    expect(invalidCuit.success).toBe(false);
+
+    const valid = submitCheckoutInputSchema.parse({
+      ...base,
+      requiresInvoiceA: true,
+      customerTaxId: "20-30111222-0",
+      customerLegalName: "Ana SRL",
+      customerTaxCondition: "MONOTRIBUTO",
+    });
+    expect(valid.customerTaxId).toBe("20301112220");
+  });
 });

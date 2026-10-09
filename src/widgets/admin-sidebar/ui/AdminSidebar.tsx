@@ -27,6 +27,7 @@ const NAV_ITEMS: { label: string; href: string; icon: IconName }[] = [
   { label: "Socios y convenios", href: "/admin/clubes", icon: "clubs" },
   { label: "Diseños", href: "/admin/disenos", icon: "designs" },
   { label: "Liquidaciones", href: "/admin/liquidaciones", icon: "payments" },
+  { label: "Comprobantes", href: "/admin/comprobantes", icon: "payments" },
   { label: "Devoluciones", href: "/admin/devoluciones", icon: "orders" },
   { label: "Producción", href: "/admin/produccion", icon: "production" },
   { label: "Contenidos WEB", href: "/admin/contenidos", icon: "content" },

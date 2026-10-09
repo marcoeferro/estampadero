@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { env } from "elestampadero/env";
+import { invoicingService } from "elestampadero/server/modules/invoicing";
 import { reconcileAllPayments } from "elestampadero/server/modules/payments";
 import { expireUnpaidOrdersUseCase } from "elestampadero/server/modules/orders";
 
@@ -34,5 +35,12 @@ export async function GET(request: NextRequest): Promise<Response> {
     );
   }
 
-  return NextResponse.json({ ...result, expiredOrders });
+  // Respaldo de la facturación: pendientes, autorizaciones diferidas de ARCA
+  // y notas de crédito por reintegros.
+  const invoicing = await invoicingService.runQueue().catch((error: unknown) => {
+    console.error("[invoicing] queue failed", error);
+    return null;
+  });
+
+  return NextResponse.json({ ...result, expiredOrders, invoicing });
 }

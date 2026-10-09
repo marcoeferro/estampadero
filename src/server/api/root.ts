@@ -17,6 +17,7 @@ import { productionRouter } from "elestampadero/server/modules/production";
 import { settlementsRouter } from "elestampadero/server/modules/settlements";
 import { specialRequestsRouter } from "elestampadero/server/modules/special-requests";
 import { customerRequestsRouter } from "elestampadero/server/modules/customer-requests";
+import { invoicingRouter } from "elestampadero/server/modules/invoicing";
 
 
 
@@ -40,6 +41,7 @@ export const appRouter = createTRPCRouter({
   production: productionRouter,
   specialRequests: specialRequestsRouter,
   customerRequests: customerRequestsRouter,
+  invoicing: invoicingRouter,
 });
 
 

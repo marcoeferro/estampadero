@@ -203,6 +203,11 @@ export type RateLimitHit = $Result.DefaultSelection<Prisma.$RateLimitHitPayload>
  * 
  */
 export type RateLimitBucket = $Result.DefaultSelection<Prisma.$RateLimitBucketPayload>
+/**
+ * Model FiscalVoucher
+ * 
+ */
+export type FiscalVoucher = $Result.DefaultSelection<Prisma.$FiscalVoucherPayload>
 
 /**
  * Enums
@@ -436,6 +441,35 @@ export const SpecialRequestStatus: {
 
 export type SpecialRequestStatus = (typeof SpecialRequestStatus)[keyof typeof SpecialRequestStatus]
 
+
+export const TaxCondition: {
+  CONSUMIDOR_FINAL: 'CONSUMIDOR_FINAL',
+  RESPONSABLE_INSCRIPTO: 'RESPONSABLE_INSCRIPTO',
+  MONOTRIBUTO: 'MONOTRIBUTO',
+  EXENTO: 'EXENTO'
+};
+
+export type TaxCondition = (typeof TaxCondition)[keyof typeof TaxCondition]
+
+
+export const FiscalVoucherKind: {
+  INVOICE: 'INVOICE',
+  CREDIT_NOTE: 'CREDIT_NOTE'
+};
+
+export type FiscalVoucherKind = (typeof FiscalVoucherKind)[keyof typeof FiscalVoucherKind]
+
+
+export const FiscalVoucherStatus: {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  AWAITING_AUTHORIZATION: 'AWAITING_AUTHORIZATION',
+  ISSUED: 'ISSUED',
+  FAILED: 'FAILED'
+};
+
+export type FiscalVoucherStatus = (typeof FiscalVoucherStatus)[keyof typeof FiscalVoucherStatus]
+
 }
 
 export type UserRole = $Enums.UserRole
@@ -525,6 +559,18 @@ export const ProductionBatchStatus: typeof $Enums.ProductionBatchStatus
 export type SpecialRequestStatus = $Enums.SpecialRequestStatus
 
 export const SpecialRequestStatus: typeof $Enums.SpecialRequestStatus
+
+export type TaxCondition = $Enums.TaxCondition
+
+export const TaxCondition: typeof $Enums.TaxCondition
+
+export type FiscalVoucherKind = $Enums.FiscalVoucherKind
+
+export const FiscalVoucherKind: typeof $Enums.FiscalVoucherKind
+
+export type FiscalVoucherStatus = $Enums.FiscalVoucherStatus
+
+export const FiscalVoucherStatus: typeof $Enums.FiscalVoucherStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1023,6 +1069,16 @@ export class PrismaClient<
     * ```
     */
   get rateLimitBucket(): Prisma.RateLimitBucketDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fiscalVoucher`: Exposes CRUD operations for the **FiscalVoucher** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FiscalVouchers
+    * const fiscalVouchers = await prisma.fiscalVoucher.findMany()
+    * ```
+    */
+  get fiscalVoucher(): Prisma.FiscalVoucherDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1501,7 +1557,8 @@ export namespace Prisma {
     SiteContentSetting: 'SiteContentSetting',
     SpecialRequest: 'SpecialRequest',
     RateLimitHit: 'RateLimitHit',
-    RateLimitBucket: 'RateLimitBucket'
+    RateLimitBucket: 'RateLimitBucket',
+    FiscalVoucher: 'FiscalVoucher'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1520,7 +1577,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verificationToken" | "club" | "clubUser" | "category" | "catalogLine" | "product" | "productImage" | "productVariant" | "uploadedImage" | "order" | "manualProductionItem" | "orderItem" | "orderStatusHistory" | "payment" | "paymentWebhookEvent" | "agreement" | "agreementChange" | "agreementProductRate" | "commissionEntry" | "customerRequest" | "customerRequestItem" | "settlement" | "settlementEvent" | "uploadedDocument" | "design" | "designVersion" | "designVersionImage" | "designComment" | "productDesign" | "productionBatch" | "homeContentPiece" | "siteContentSetting" | "specialRequest" | "rateLimitHit" | "rateLimitBucket"
+      modelProps: "user" | "account" | "session" | "verificationToken" | "club" | "clubUser" | "category" | "catalogLine" | "product" | "productImage" | "productVariant" | "uploadedImage" | "order" | "manualProductionItem" | "orderItem" | "orderStatusHistory" | "payment" | "paymentWebhookEvent" | "agreement" | "agreementChange" | "agreementProductRate" | "commissionEntry" | "customerRequest" | "customerRequestItem" | "settlement" | "settlementEvent" | "uploadedDocument" | "design" | "designVersion" | "designVersionImage" | "designComment" | "productDesign" | "productionBatch" | "homeContentPiece" | "siteContentSetting" | "specialRequest" | "rateLimitHit" | "rateLimitBucket" | "fiscalVoucher"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4336,6 +4393,80 @@ export namespace Prisma {
           }
         }
       }
+      FiscalVoucher: {
+        payload: Prisma.$FiscalVoucherPayload<ExtArgs>
+        fields: Prisma.FiscalVoucherFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FiscalVoucherFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FiscalVoucherPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FiscalVoucherFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FiscalVoucherPayload>
+          }
+          findFirst: {
+            args: Prisma.FiscalVoucherFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FiscalVoucherPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FiscalVoucherFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FiscalVoucherPayload>
+          }
+          findMany: {
+            args: Prisma.FiscalVoucherFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FiscalVoucherPayload>[]
+          }
+          create: {
+            args: Prisma.FiscalVoucherCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FiscalVoucherPayload>
+          }
+          createMany: {
+            args: Prisma.FiscalVoucherCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FiscalVoucherCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FiscalVoucherPayload>[]
+          }
+          delete: {
+            args: Prisma.FiscalVoucherDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FiscalVoucherPayload>
+          }
+          update: {
+            args: Prisma.FiscalVoucherUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FiscalVoucherPayload>
+          }
+          deleteMany: {
+            args: Prisma.FiscalVoucherDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FiscalVoucherUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FiscalVoucherUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FiscalVoucherPayload>[]
+          }
+          upsert: {
+            args: Prisma.FiscalVoucherUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FiscalVoucherPayload>
+          }
+          aggregate: {
+            args: Prisma.FiscalVoucherAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFiscalVoucher>
+          }
+          groupBy: {
+            args: Prisma.FiscalVoucherGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FiscalVoucherGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FiscalVoucherCountArgs<ExtArgs>
+            result: $Utils.Optional<FiscalVoucherCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4470,6 +4601,7 @@ export namespace Prisma {
     specialRequest?: SpecialRequestOmit
     rateLimitHit?: RateLimitHitOmit
     rateLimitBucket?: RateLimitBucketOmit
+    fiscalVoucher?: FiscalVoucherOmit
   }
 
   /* Types for Logging */
@@ -4800,6 +4932,7 @@ export namespace Prisma {
     payments: number
     commissionEntries: number
     customerRequests: number
+    fiscalVouchers: number
   }
 
   export type OrderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4808,6 +4941,7 @@ export namespace Prisma {
     payments?: boolean | OrderCountOutputTypeCountPaymentsArgs
     commissionEntries?: boolean | OrderCountOutputTypeCountCommissionEntriesArgs
     customerRequests?: boolean | OrderCountOutputTypeCountCustomerRequestsArgs
+    fiscalVouchers?: boolean | OrderCountOutputTypeCountFiscalVouchersArgs
   }
 
   // Custom InputTypes
@@ -4854,6 +4988,13 @@ export namespace Prisma {
    */
   export type OrderCountOutputTypeCountCustomerRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CustomerRequestWhereInput
+  }
+
+  /**
+   * OrderCountOutputType without action
+   */
+  export type OrderCountOutputTypeCountFiscalVouchersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FiscalVoucherWhereInput
   }
 
 
@@ -5174,6 +5315,37 @@ export namespace Prisma {
    */
   export type ProductionBatchCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OrderWhereInput
+  }
+
+
+  /**
+   * Count Type FiscalVoucherCountOutputType
+   */
+
+  export type FiscalVoucherCountOutputType = {
+    creditNotes: number
+  }
+
+  export type FiscalVoucherCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creditNotes?: boolean | FiscalVoucherCountOutputTypeCountCreditNotesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FiscalVoucherCountOutputType without action
+   */
+  export type FiscalVoucherCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucherCountOutputType
+     */
+    select?: FiscalVoucherCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FiscalVoucherCountOutputType without action
+   */
+  export type FiscalVoucherCountOutputTypeCountCreditNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FiscalVoucherWhereInput
   }
 
 
@@ -18947,6 +19119,9 @@ export namespace Prisma {
     status: $Enums.OrderStatus | null
     contactName: string | null
     customerDocument: string | null
+    customerTaxId: string | null
+    customerLegalName: string | null
+    customerTaxCondition: $Enums.TaxCondition | null
     contactEmail: string | null
     contactPhone: string | null
     deliveryMethod: $Enums.DeliveryMethod | null
@@ -18974,6 +19149,9 @@ export namespace Prisma {
     status: $Enums.OrderStatus | null
     contactName: string | null
     customerDocument: string | null
+    customerTaxId: string | null
+    customerLegalName: string | null
+    customerTaxCondition: $Enums.TaxCondition | null
     contactEmail: string | null
     contactPhone: string | null
     deliveryMethod: $Enums.DeliveryMethod | null
@@ -19001,6 +19179,9 @@ export namespace Prisma {
     status: number
     contactName: number
     customerDocument: number
+    customerTaxId: number
+    customerLegalName: number
+    customerTaxCondition: number
     contactEmail: number
     contactPhone: number
     deliveryMethod: number
@@ -19044,6 +19225,9 @@ export namespace Prisma {
     status?: true
     contactName?: true
     customerDocument?: true
+    customerTaxId?: true
+    customerLegalName?: true
+    customerTaxCondition?: true
     contactEmail?: true
     contactPhone?: true
     deliveryMethod?: true
@@ -19071,6 +19255,9 @@ export namespace Prisma {
     status?: true
     contactName?: true
     customerDocument?: true
+    customerTaxId?: true
+    customerLegalName?: true
+    customerTaxCondition?: true
     contactEmail?: true
     contactPhone?: true
     deliveryMethod?: true
@@ -19098,6 +19285,9 @@ export namespace Prisma {
     status?: true
     contactName?: true
     customerDocument?: true
+    customerTaxId?: true
+    customerLegalName?: true
+    customerTaxCondition?: true
     contactEmail?: true
     contactPhone?: true
     deliveryMethod?: true
@@ -19212,6 +19402,9 @@ export namespace Prisma {
     status: $Enums.OrderStatus
     contactName: string
     customerDocument: string | null
+    customerTaxId: string | null
+    customerLegalName: string | null
+    customerTaxCondition: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -19258,6 +19451,9 @@ export namespace Prisma {
     status?: boolean
     contactName?: boolean
     customerDocument?: boolean
+    customerTaxId?: boolean
+    customerLegalName?: boolean
+    customerTaxCondition?: boolean
     contactEmail?: boolean
     contactPhone?: boolean
     deliveryMethod?: boolean
@@ -19283,6 +19479,7 @@ export namespace Prisma {
     payments?: boolean | Order$paymentsArgs<ExtArgs>
     commissionEntries?: boolean | Order$commissionEntriesArgs<ExtArgs>
     customerRequests?: boolean | Order$customerRequestsArgs<ExtArgs>
+    fiscalVouchers?: boolean | Order$fiscalVouchersArgs<ExtArgs>
     _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["order"]>
 
@@ -19293,6 +19490,9 @@ export namespace Prisma {
     status?: boolean
     contactName?: boolean
     customerDocument?: boolean
+    customerTaxId?: boolean
+    customerLegalName?: boolean
+    customerTaxCondition?: boolean
     contactEmail?: boolean
     contactPhone?: boolean
     deliveryMethod?: boolean
@@ -19322,6 +19522,9 @@ export namespace Prisma {
     status?: boolean
     contactName?: boolean
     customerDocument?: boolean
+    customerTaxId?: boolean
+    customerLegalName?: boolean
+    customerTaxCondition?: boolean
     contactEmail?: boolean
     contactPhone?: boolean
     deliveryMethod?: boolean
@@ -19351,6 +19554,9 @@ export namespace Prisma {
     status?: boolean
     contactName?: boolean
     customerDocument?: boolean
+    customerTaxId?: boolean
+    customerLegalName?: boolean
+    customerTaxCondition?: boolean
     contactEmail?: boolean
     contactPhone?: boolean
     deliveryMethod?: boolean
@@ -19371,7 +19577,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "checkoutRequestId" | "orderNumber" | "status" | "contactName" | "customerDocument" | "contactEmail" | "contactPhone" | "deliveryMethod" | "shippingAddress" | "shippingCity" | "shippingPostalCode" | "subtotalInCents" | "shippingInCents" | "totalInCents" | "receiptEmailSentAt" | "receiptEmailProviderId" | "stockReleasedAt" | "deliveredAt" | "userId" | "productionBatchId" | "productionRemovedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "checkoutRequestId" | "orderNumber" | "status" | "contactName" | "customerDocument" | "customerTaxId" | "customerLegalName" | "customerTaxCondition" | "contactEmail" | "contactPhone" | "deliveryMethod" | "shippingAddress" | "shippingCity" | "shippingPostalCode" | "subtotalInCents" | "shippingInCents" | "totalInCents" | "receiptEmailSentAt" | "receiptEmailProviderId" | "stockReleasedAt" | "deliveredAt" | "userId" | "productionBatchId" | "productionRemovedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Order$userArgs<ExtArgs>
     productionBatch?: boolean | Order$productionBatchArgs<ExtArgs>
@@ -19380,6 +19586,7 @@ export namespace Prisma {
     payments?: boolean | Order$paymentsArgs<ExtArgs>
     commissionEntries?: boolean | Order$commissionEntriesArgs<ExtArgs>
     customerRequests?: boolean | Order$customerRequestsArgs<ExtArgs>
+    fiscalVouchers?: boolean | Order$fiscalVouchersArgs<ExtArgs>
     _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19401,6 +19608,7 @@ export namespace Prisma {
       payments: Prisma.$PaymentPayload<ExtArgs>[]
       commissionEntries: Prisma.$CommissionEntryPayload<ExtArgs>[]
       customerRequests: Prisma.$CustomerRequestPayload<ExtArgs>[]
+      fiscalVouchers: Prisma.$FiscalVoucherPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19409,6 +19617,9 @@ export namespace Prisma {
       status: $Enums.OrderStatus
       contactName: string
       customerDocument: string | null
+      customerTaxId: string | null
+      customerLegalName: string | null
+      customerTaxCondition: $Enums.TaxCondition | null
       contactEmail: string
       contactPhone: string
       deliveryMethod: $Enums.DeliveryMethod
@@ -19828,6 +20039,7 @@ export namespace Prisma {
     payments<T extends Order$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Order$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     commissionEntries<T extends Order$commissionEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Order$commissionEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommissionEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     customerRequests<T extends Order$customerRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Order$customerRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CustomerRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fiscalVouchers<T extends Order$fiscalVouchersArgs<ExtArgs> = {}>(args?: Subset<T, Order$fiscalVouchersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19863,6 +20075,9 @@ export namespace Prisma {
     readonly status: FieldRef<"Order", 'OrderStatus'>
     readonly contactName: FieldRef<"Order", 'String'>
     readonly customerDocument: FieldRef<"Order", 'String'>
+    readonly customerTaxId: FieldRef<"Order", 'String'>
+    readonly customerLegalName: FieldRef<"Order", 'String'>
+    readonly customerTaxCondition: FieldRef<"Order", 'TaxCondition'>
     readonly contactEmail: FieldRef<"Order", 'String'>
     readonly contactPhone: FieldRef<"Order", 'String'>
     readonly deliveryMethod: FieldRef<"Order", 'DeliveryMethod'>
@@ -20432,6 +20647,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CustomerRequestScalarFieldEnum | CustomerRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Order.fiscalVouchers
+   */
+  export type Order$fiscalVouchersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+    where?: FiscalVoucherWhereInput
+    orderBy?: FiscalVoucherOrderByWithRelationInput | FiscalVoucherOrderByWithRelationInput[]
+    cursor?: FiscalVoucherWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FiscalVoucherScalarFieldEnum | FiscalVoucherScalarFieldEnum[]
   }
 
   /**
@@ -49372,6 +49611,1474 @@ export namespace Prisma {
 
 
   /**
+   * Model FiscalVoucher
+   */
+
+  export type AggregateFiscalVoucher = {
+    _count: FiscalVoucherCountAggregateOutputType | null
+    _avg: FiscalVoucherAvgAggregateOutputType | null
+    _sum: FiscalVoucherSumAggregateOutputType | null
+    _min: FiscalVoucherMinAggregateOutputType | null
+    _max: FiscalVoucherMaxAggregateOutputType | null
+  }
+
+  export type FiscalVoucherAvgAggregateOutputType = {
+    amountInCents: number | null
+    netAmountInCents: number | null
+    vatAmountInCents: number | null
+    pointOfSale: number | null
+    number: number | null
+    attempts: number | null
+  }
+
+  export type FiscalVoucherSumAggregateOutputType = {
+    amountInCents: number | null
+    netAmountInCents: number | null
+    vatAmountInCents: number | null
+    pointOfSale: number | null
+    number: number | null
+    attempts: number | null
+  }
+
+  export type FiscalVoucherMinAggregateOutputType = {
+    id: string | null
+    orderId: string | null
+    kind: $Enums.FiscalVoucherKind | null
+    voucherType: string | null
+    idempotencyKey: string | null
+    status: $Enums.FiscalVoucherStatus | null
+    amountInCents: number | null
+    netAmountInCents: number | null
+    vatAmountInCents: number | null
+    buyerDocType: string | null
+    buyerDocNumber: string | null
+    buyerName: string | null
+    buyerTaxCondition: $Enums.TaxCondition | null
+    provider: string | null
+    providerVoucherId: string | null
+    pointOfSale: number | null
+    number: number | null
+    cae: string | null
+    caeExpiresAt: Date | null
+    pdfUrl: string | null
+    issuedAt: Date | null
+    emailSentAt: Date | null
+    attempts: number | null
+    nextAttemptAt: Date | null
+    errorMessage: string | null
+    relatedVoucherId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FiscalVoucherMaxAggregateOutputType = {
+    id: string | null
+    orderId: string | null
+    kind: $Enums.FiscalVoucherKind | null
+    voucherType: string | null
+    idempotencyKey: string | null
+    status: $Enums.FiscalVoucherStatus | null
+    amountInCents: number | null
+    netAmountInCents: number | null
+    vatAmountInCents: number | null
+    buyerDocType: string | null
+    buyerDocNumber: string | null
+    buyerName: string | null
+    buyerTaxCondition: $Enums.TaxCondition | null
+    provider: string | null
+    providerVoucherId: string | null
+    pointOfSale: number | null
+    number: number | null
+    cae: string | null
+    caeExpiresAt: Date | null
+    pdfUrl: string | null
+    issuedAt: Date | null
+    emailSentAt: Date | null
+    attempts: number | null
+    nextAttemptAt: Date | null
+    errorMessage: string | null
+    relatedVoucherId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FiscalVoucherCountAggregateOutputType = {
+    id: number
+    orderId: number
+    kind: number
+    voucherType: number
+    idempotencyKey: number
+    status: number
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: number
+    buyerDocNumber: number
+    buyerName: number
+    buyerTaxCondition: number
+    provider: number
+    providerVoucherId: number
+    pointOfSale: number
+    number: number
+    cae: number
+    caeExpiresAt: number
+    pdfUrl: number
+    issuedAt: number
+    emailSentAt: number
+    attempts: number
+    nextAttemptAt: number
+    errorMessage: number
+    relatedVoucherId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FiscalVoucherAvgAggregateInputType = {
+    amountInCents?: true
+    netAmountInCents?: true
+    vatAmountInCents?: true
+    pointOfSale?: true
+    number?: true
+    attempts?: true
+  }
+
+  export type FiscalVoucherSumAggregateInputType = {
+    amountInCents?: true
+    netAmountInCents?: true
+    vatAmountInCents?: true
+    pointOfSale?: true
+    number?: true
+    attempts?: true
+  }
+
+  export type FiscalVoucherMinAggregateInputType = {
+    id?: true
+    orderId?: true
+    kind?: true
+    voucherType?: true
+    idempotencyKey?: true
+    status?: true
+    amountInCents?: true
+    netAmountInCents?: true
+    vatAmountInCents?: true
+    buyerDocType?: true
+    buyerDocNumber?: true
+    buyerName?: true
+    buyerTaxCondition?: true
+    provider?: true
+    providerVoucherId?: true
+    pointOfSale?: true
+    number?: true
+    cae?: true
+    caeExpiresAt?: true
+    pdfUrl?: true
+    issuedAt?: true
+    emailSentAt?: true
+    attempts?: true
+    nextAttemptAt?: true
+    errorMessage?: true
+    relatedVoucherId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FiscalVoucherMaxAggregateInputType = {
+    id?: true
+    orderId?: true
+    kind?: true
+    voucherType?: true
+    idempotencyKey?: true
+    status?: true
+    amountInCents?: true
+    netAmountInCents?: true
+    vatAmountInCents?: true
+    buyerDocType?: true
+    buyerDocNumber?: true
+    buyerName?: true
+    buyerTaxCondition?: true
+    provider?: true
+    providerVoucherId?: true
+    pointOfSale?: true
+    number?: true
+    cae?: true
+    caeExpiresAt?: true
+    pdfUrl?: true
+    issuedAt?: true
+    emailSentAt?: true
+    attempts?: true
+    nextAttemptAt?: true
+    errorMessage?: true
+    relatedVoucherId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FiscalVoucherCountAggregateInputType = {
+    id?: true
+    orderId?: true
+    kind?: true
+    voucherType?: true
+    idempotencyKey?: true
+    status?: true
+    amountInCents?: true
+    netAmountInCents?: true
+    vatAmountInCents?: true
+    buyerDocType?: true
+    buyerDocNumber?: true
+    buyerName?: true
+    buyerTaxCondition?: true
+    provider?: true
+    providerVoucherId?: true
+    pointOfSale?: true
+    number?: true
+    cae?: true
+    caeExpiresAt?: true
+    pdfUrl?: true
+    issuedAt?: true
+    emailSentAt?: true
+    attempts?: true
+    nextAttemptAt?: true
+    errorMessage?: true
+    relatedVoucherId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FiscalVoucherAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FiscalVoucher to aggregate.
+     */
+    where?: FiscalVoucherWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FiscalVouchers to fetch.
+     */
+    orderBy?: FiscalVoucherOrderByWithRelationInput | FiscalVoucherOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FiscalVoucherWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FiscalVouchers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FiscalVouchers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FiscalVouchers
+    **/
+    _count?: true | FiscalVoucherCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FiscalVoucherAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FiscalVoucherSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FiscalVoucherMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FiscalVoucherMaxAggregateInputType
+  }
+
+  export type GetFiscalVoucherAggregateType<T extends FiscalVoucherAggregateArgs> = {
+        [P in keyof T & keyof AggregateFiscalVoucher]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFiscalVoucher[P]>
+      : GetScalarType<T[P], AggregateFiscalVoucher[P]>
+  }
+
+
+
+
+  export type FiscalVoucherGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FiscalVoucherWhereInput
+    orderBy?: FiscalVoucherOrderByWithAggregationInput | FiscalVoucherOrderByWithAggregationInput[]
+    by: FiscalVoucherScalarFieldEnum[] | FiscalVoucherScalarFieldEnum
+    having?: FiscalVoucherScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FiscalVoucherCountAggregateInputType | true
+    _avg?: FiscalVoucherAvgAggregateInputType
+    _sum?: FiscalVoucherSumAggregateInputType
+    _min?: FiscalVoucherMinAggregateInputType
+    _max?: FiscalVoucherMaxAggregateInputType
+  }
+
+  export type FiscalVoucherGroupByOutputType = {
+    id: string
+    orderId: string
+    kind: $Enums.FiscalVoucherKind
+    voucherType: string
+    idempotencyKey: string
+    status: $Enums.FiscalVoucherStatus
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: string
+    buyerDocNumber: string
+    buyerName: string
+    buyerTaxCondition: $Enums.TaxCondition
+    provider: string
+    providerVoucherId: string | null
+    pointOfSale: number | null
+    number: number | null
+    cae: string | null
+    caeExpiresAt: Date | null
+    pdfUrl: string | null
+    issuedAt: Date | null
+    emailSentAt: Date | null
+    attempts: number
+    nextAttemptAt: Date
+    errorMessage: string | null
+    relatedVoucherId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: FiscalVoucherCountAggregateOutputType | null
+    _avg: FiscalVoucherAvgAggregateOutputType | null
+    _sum: FiscalVoucherSumAggregateOutputType | null
+    _min: FiscalVoucherMinAggregateOutputType | null
+    _max: FiscalVoucherMaxAggregateOutputType | null
+  }
+
+  type GetFiscalVoucherGroupByPayload<T extends FiscalVoucherGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FiscalVoucherGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FiscalVoucherGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FiscalVoucherGroupByOutputType[P]>
+            : GetScalarType<T[P], FiscalVoucherGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FiscalVoucherSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    orderId?: boolean
+    kind?: boolean
+    voucherType?: boolean
+    idempotencyKey?: boolean
+    status?: boolean
+    amountInCents?: boolean
+    netAmountInCents?: boolean
+    vatAmountInCents?: boolean
+    buyerDocType?: boolean
+    buyerDocNumber?: boolean
+    buyerName?: boolean
+    buyerTaxCondition?: boolean
+    provider?: boolean
+    providerVoucherId?: boolean
+    pointOfSale?: boolean
+    number?: boolean
+    cae?: boolean
+    caeExpiresAt?: boolean
+    pdfUrl?: boolean
+    issuedAt?: boolean
+    emailSentAt?: boolean
+    attempts?: boolean
+    nextAttemptAt?: boolean
+    errorMessage?: boolean
+    relatedVoucherId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+    relatedVoucher?: boolean | FiscalVoucher$relatedVoucherArgs<ExtArgs>
+    creditNotes?: boolean | FiscalVoucher$creditNotesArgs<ExtArgs>
+    _count?: boolean | FiscalVoucherCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fiscalVoucher"]>
+
+  export type FiscalVoucherSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    orderId?: boolean
+    kind?: boolean
+    voucherType?: boolean
+    idempotencyKey?: boolean
+    status?: boolean
+    amountInCents?: boolean
+    netAmountInCents?: boolean
+    vatAmountInCents?: boolean
+    buyerDocType?: boolean
+    buyerDocNumber?: boolean
+    buyerName?: boolean
+    buyerTaxCondition?: boolean
+    provider?: boolean
+    providerVoucherId?: boolean
+    pointOfSale?: boolean
+    number?: boolean
+    cae?: boolean
+    caeExpiresAt?: boolean
+    pdfUrl?: boolean
+    issuedAt?: boolean
+    emailSentAt?: boolean
+    attempts?: boolean
+    nextAttemptAt?: boolean
+    errorMessage?: boolean
+    relatedVoucherId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+    relatedVoucher?: boolean | FiscalVoucher$relatedVoucherArgs<ExtArgs>
+  }, ExtArgs["result"]["fiscalVoucher"]>
+
+  export type FiscalVoucherSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    orderId?: boolean
+    kind?: boolean
+    voucherType?: boolean
+    idempotencyKey?: boolean
+    status?: boolean
+    amountInCents?: boolean
+    netAmountInCents?: boolean
+    vatAmountInCents?: boolean
+    buyerDocType?: boolean
+    buyerDocNumber?: boolean
+    buyerName?: boolean
+    buyerTaxCondition?: boolean
+    provider?: boolean
+    providerVoucherId?: boolean
+    pointOfSale?: boolean
+    number?: boolean
+    cae?: boolean
+    caeExpiresAt?: boolean
+    pdfUrl?: boolean
+    issuedAt?: boolean
+    emailSentAt?: boolean
+    attempts?: boolean
+    nextAttemptAt?: boolean
+    errorMessage?: boolean
+    relatedVoucherId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+    relatedVoucher?: boolean | FiscalVoucher$relatedVoucherArgs<ExtArgs>
+  }, ExtArgs["result"]["fiscalVoucher"]>
+
+  export type FiscalVoucherSelectScalar = {
+    id?: boolean
+    orderId?: boolean
+    kind?: boolean
+    voucherType?: boolean
+    idempotencyKey?: boolean
+    status?: boolean
+    amountInCents?: boolean
+    netAmountInCents?: boolean
+    vatAmountInCents?: boolean
+    buyerDocType?: boolean
+    buyerDocNumber?: boolean
+    buyerName?: boolean
+    buyerTaxCondition?: boolean
+    provider?: boolean
+    providerVoucherId?: boolean
+    pointOfSale?: boolean
+    number?: boolean
+    cae?: boolean
+    caeExpiresAt?: boolean
+    pdfUrl?: boolean
+    issuedAt?: boolean
+    emailSentAt?: boolean
+    attempts?: boolean
+    nextAttemptAt?: boolean
+    errorMessage?: boolean
+    relatedVoucherId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FiscalVoucherOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "kind" | "voucherType" | "idempotencyKey" | "status" | "amountInCents" | "netAmountInCents" | "vatAmountInCents" | "buyerDocType" | "buyerDocNumber" | "buyerName" | "buyerTaxCondition" | "provider" | "providerVoucherId" | "pointOfSale" | "number" | "cae" | "caeExpiresAt" | "pdfUrl" | "issuedAt" | "emailSentAt" | "attempts" | "nextAttemptAt" | "errorMessage" | "relatedVoucherId" | "createdAt" | "updatedAt", ExtArgs["result"]["fiscalVoucher"]>
+  export type FiscalVoucherInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+    relatedVoucher?: boolean | FiscalVoucher$relatedVoucherArgs<ExtArgs>
+    creditNotes?: boolean | FiscalVoucher$creditNotesArgs<ExtArgs>
+    _count?: boolean | FiscalVoucherCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FiscalVoucherIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+    relatedVoucher?: boolean | FiscalVoucher$relatedVoucherArgs<ExtArgs>
+  }
+  export type FiscalVoucherIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    order?: boolean | OrderDefaultArgs<ExtArgs>
+    relatedVoucher?: boolean | FiscalVoucher$relatedVoucherArgs<ExtArgs>
+  }
+
+  export type $FiscalVoucherPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FiscalVoucher"
+    objects: {
+      order: Prisma.$OrderPayload<ExtArgs>
+      relatedVoucher: Prisma.$FiscalVoucherPayload<ExtArgs> | null
+      creditNotes: Prisma.$FiscalVoucherPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      orderId: string
+      kind: $Enums.FiscalVoucherKind
+      voucherType: string
+      idempotencyKey: string
+      status: $Enums.FiscalVoucherStatus
+      amountInCents: number
+      netAmountInCents: number
+      vatAmountInCents: number
+      buyerDocType: string
+      buyerDocNumber: string
+      buyerName: string
+      buyerTaxCondition: $Enums.TaxCondition
+      provider: string
+      providerVoucherId: string | null
+      pointOfSale: number | null
+      number: number | null
+      cae: string | null
+      caeExpiresAt: Date | null
+      pdfUrl: string | null
+      issuedAt: Date | null
+      emailSentAt: Date | null
+      attempts: number
+      nextAttemptAt: Date
+      errorMessage: string | null
+      relatedVoucherId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["fiscalVoucher"]>
+    composites: {}
+  }
+
+  type FiscalVoucherGetPayload<S extends boolean | null | undefined | FiscalVoucherDefaultArgs> = $Result.GetResult<Prisma.$FiscalVoucherPayload, S>
+
+  type FiscalVoucherCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FiscalVoucherFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FiscalVoucherCountAggregateInputType | true
+    }
+
+  export interface FiscalVoucherDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FiscalVoucher'], meta: { name: 'FiscalVoucher' } }
+    /**
+     * Find zero or one FiscalVoucher that matches the filter.
+     * @param {FiscalVoucherFindUniqueArgs} args - Arguments to find a FiscalVoucher
+     * @example
+     * // Get one FiscalVoucher
+     * const fiscalVoucher = await prisma.fiscalVoucher.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FiscalVoucherFindUniqueArgs>(args: SelectSubset<T, FiscalVoucherFindUniqueArgs<ExtArgs>>): Prisma__FiscalVoucherClient<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FiscalVoucher that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FiscalVoucherFindUniqueOrThrowArgs} args - Arguments to find a FiscalVoucher
+     * @example
+     * // Get one FiscalVoucher
+     * const fiscalVoucher = await prisma.fiscalVoucher.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FiscalVoucherFindUniqueOrThrowArgs>(args: SelectSubset<T, FiscalVoucherFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FiscalVoucherClient<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FiscalVoucher that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FiscalVoucherFindFirstArgs} args - Arguments to find a FiscalVoucher
+     * @example
+     * // Get one FiscalVoucher
+     * const fiscalVoucher = await prisma.fiscalVoucher.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FiscalVoucherFindFirstArgs>(args?: SelectSubset<T, FiscalVoucherFindFirstArgs<ExtArgs>>): Prisma__FiscalVoucherClient<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FiscalVoucher that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FiscalVoucherFindFirstOrThrowArgs} args - Arguments to find a FiscalVoucher
+     * @example
+     * // Get one FiscalVoucher
+     * const fiscalVoucher = await prisma.fiscalVoucher.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FiscalVoucherFindFirstOrThrowArgs>(args?: SelectSubset<T, FiscalVoucherFindFirstOrThrowArgs<ExtArgs>>): Prisma__FiscalVoucherClient<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FiscalVouchers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FiscalVoucherFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FiscalVouchers
+     * const fiscalVouchers = await prisma.fiscalVoucher.findMany()
+     * 
+     * // Get first 10 FiscalVouchers
+     * const fiscalVouchers = await prisma.fiscalVoucher.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fiscalVoucherWithIdOnly = await prisma.fiscalVoucher.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FiscalVoucherFindManyArgs>(args?: SelectSubset<T, FiscalVoucherFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FiscalVoucher.
+     * @param {FiscalVoucherCreateArgs} args - Arguments to create a FiscalVoucher.
+     * @example
+     * // Create one FiscalVoucher
+     * const FiscalVoucher = await prisma.fiscalVoucher.create({
+     *   data: {
+     *     // ... data to create a FiscalVoucher
+     *   }
+     * })
+     * 
+     */
+    create<T extends FiscalVoucherCreateArgs>(args: SelectSubset<T, FiscalVoucherCreateArgs<ExtArgs>>): Prisma__FiscalVoucherClient<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FiscalVouchers.
+     * @param {FiscalVoucherCreateManyArgs} args - Arguments to create many FiscalVouchers.
+     * @example
+     * // Create many FiscalVouchers
+     * const fiscalVoucher = await prisma.fiscalVoucher.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FiscalVoucherCreateManyArgs>(args?: SelectSubset<T, FiscalVoucherCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FiscalVouchers and returns the data saved in the database.
+     * @param {FiscalVoucherCreateManyAndReturnArgs} args - Arguments to create many FiscalVouchers.
+     * @example
+     * // Create many FiscalVouchers
+     * const fiscalVoucher = await prisma.fiscalVoucher.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FiscalVouchers and only return the `id`
+     * const fiscalVoucherWithIdOnly = await prisma.fiscalVoucher.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FiscalVoucherCreateManyAndReturnArgs>(args?: SelectSubset<T, FiscalVoucherCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FiscalVoucher.
+     * @param {FiscalVoucherDeleteArgs} args - Arguments to delete one FiscalVoucher.
+     * @example
+     * // Delete one FiscalVoucher
+     * const FiscalVoucher = await prisma.fiscalVoucher.delete({
+     *   where: {
+     *     // ... filter to delete one FiscalVoucher
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FiscalVoucherDeleteArgs>(args: SelectSubset<T, FiscalVoucherDeleteArgs<ExtArgs>>): Prisma__FiscalVoucherClient<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FiscalVoucher.
+     * @param {FiscalVoucherUpdateArgs} args - Arguments to update one FiscalVoucher.
+     * @example
+     * // Update one FiscalVoucher
+     * const fiscalVoucher = await prisma.fiscalVoucher.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FiscalVoucherUpdateArgs>(args: SelectSubset<T, FiscalVoucherUpdateArgs<ExtArgs>>): Prisma__FiscalVoucherClient<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FiscalVouchers.
+     * @param {FiscalVoucherDeleteManyArgs} args - Arguments to filter FiscalVouchers to delete.
+     * @example
+     * // Delete a few FiscalVouchers
+     * const { count } = await prisma.fiscalVoucher.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FiscalVoucherDeleteManyArgs>(args?: SelectSubset<T, FiscalVoucherDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FiscalVouchers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FiscalVoucherUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FiscalVouchers
+     * const fiscalVoucher = await prisma.fiscalVoucher.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FiscalVoucherUpdateManyArgs>(args: SelectSubset<T, FiscalVoucherUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FiscalVouchers and returns the data updated in the database.
+     * @param {FiscalVoucherUpdateManyAndReturnArgs} args - Arguments to update many FiscalVouchers.
+     * @example
+     * // Update many FiscalVouchers
+     * const fiscalVoucher = await prisma.fiscalVoucher.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FiscalVouchers and only return the `id`
+     * const fiscalVoucherWithIdOnly = await prisma.fiscalVoucher.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FiscalVoucherUpdateManyAndReturnArgs>(args: SelectSubset<T, FiscalVoucherUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FiscalVoucher.
+     * @param {FiscalVoucherUpsertArgs} args - Arguments to update or create a FiscalVoucher.
+     * @example
+     * // Update or create a FiscalVoucher
+     * const fiscalVoucher = await prisma.fiscalVoucher.upsert({
+     *   create: {
+     *     // ... data to create a FiscalVoucher
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FiscalVoucher we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FiscalVoucherUpsertArgs>(args: SelectSubset<T, FiscalVoucherUpsertArgs<ExtArgs>>): Prisma__FiscalVoucherClient<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FiscalVouchers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FiscalVoucherCountArgs} args - Arguments to filter FiscalVouchers to count.
+     * @example
+     * // Count the number of FiscalVouchers
+     * const count = await prisma.fiscalVoucher.count({
+     *   where: {
+     *     // ... the filter for the FiscalVouchers we want to count
+     *   }
+     * })
+    **/
+    count<T extends FiscalVoucherCountArgs>(
+      args?: Subset<T, FiscalVoucherCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FiscalVoucherCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FiscalVoucher.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FiscalVoucherAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FiscalVoucherAggregateArgs>(args: Subset<T, FiscalVoucherAggregateArgs>): Prisma.PrismaPromise<GetFiscalVoucherAggregateType<T>>
+
+    /**
+     * Group by FiscalVoucher.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FiscalVoucherGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FiscalVoucherGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FiscalVoucherGroupByArgs['orderBy'] }
+        : { orderBy?: FiscalVoucherGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FiscalVoucherGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFiscalVoucherGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FiscalVoucher model
+   */
+  readonly fields: FiscalVoucherFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FiscalVoucher.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FiscalVoucherClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    order<T extends OrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrderDefaultArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    relatedVoucher<T extends FiscalVoucher$relatedVoucherArgs<ExtArgs> = {}>(args?: Subset<T, FiscalVoucher$relatedVoucherArgs<ExtArgs>>): Prisma__FiscalVoucherClient<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    creditNotes<T extends FiscalVoucher$creditNotesArgs<ExtArgs> = {}>(args?: Subset<T, FiscalVoucher$creditNotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FiscalVoucherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FiscalVoucher model
+   */
+  interface FiscalVoucherFieldRefs {
+    readonly id: FieldRef<"FiscalVoucher", 'String'>
+    readonly orderId: FieldRef<"FiscalVoucher", 'String'>
+    readonly kind: FieldRef<"FiscalVoucher", 'FiscalVoucherKind'>
+    readonly voucherType: FieldRef<"FiscalVoucher", 'String'>
+    readonly idempotencyKey: FieldRef<"FiscalVoucher", 'String'>
+    readonly status: FieldRef<"FiscalVoucher", 'FiscalVoucherStatus'>
+    readonly amountInCents: FieldRef<"FiscalVoucher", 'Int'>
+    readonly netAmountInCents: FieldRef<"FiscalVoucher", 'Int'>
+    readonly vatAmountInCents: FieldRef<"FiscalVoucher", 'Int'>
+    readonly buyerDocType: FieldRef<"FiscalVoucher", 'String'>
+    readonly buyerDocNumber: FieldRef<"FiscalVoucher", 'String'>
+    readonly buyerName: FieldRef<"FiscalVoucher", 'String'>
+    readonly buyerTaxCondition: FieldRef<"FiscalVoucher", 'TaxCondition'>
+    readonly provider: FieldRef<"FiscalVoucher", 'String'>
+    readonly providerVoucherId: FieldRef<"FiscalVoucher", 'String'>
+    readonly pointOfSale: FieldRef<"FiscalVoucher", 'Int'>
+    readonly number: FieldRef<"FiscalVoucher", 'Int'>
+    readonly cae: FieldRef<"FiscalVoucher", 'String'>
+    readonly caeExpiresAt: FieldRef<"FiscalVoucher", 'DateTime'>
+    readonly pdfUrl: FieldRef<"FiscalVoucher", 'String'>
+    readonly issuedAt: FieldRef<"FiscalVoucher", 'DateTime'>
+    readonly emailSentAt: FieldRef<"FiscalVoucher", 'DateTime'>
+    readonly attempts: FieldRef<"FiscalVoucher", 'Int'>
+    readonly nextAttemptAt: FieldRef<"FiscalVoucher", 'DateTime'>
+    readonly errorMessage: FieldRef<"FiscalVoucher", 'String'>
+    readonly relatedVoucherId: FieldRef<"FiscalVoucher", 'String'>
+    readonly createdAt: FieldRef<"FiscalVoucher", 'DateTime'>
+    readonly updatedAt: FieldRef<"FiscalVoucher", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FiscalVoucher findUnique
+   */
+  export type FiscalVoucherFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+    /**
+     * Filter, which FiscalVoucher to fetch.
+     */
+    where: FiscalVoucherWhereUniqueInput
+  }
+
+  /**
+   * FiscalVoucher findUniqueOrThrow
+   */
+  export type FiscalVoucherFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+    /**
+     * Filter, which FiscalVoucher to fetch.
+     */
+    where: FiscalVoucherWhereUniqueInput
+  }
+
+  /**
+   * FiscalVoucher findFirst
+   */
+  export type FiscalVoucherFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+    /**
+     * Filter, which FiscalVoucher to fetch.
+     */
+    where?: FiscalVoucherWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FiscalVouchers to fetch.
+     */
+    orderBy?: FiscalVoucherOrderByWithRelationInput | FiscalVoucherOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FiscalVouchers.
+     */
+    cursor?: FiscalVoucherWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FiscalVouchers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FiscalVouchers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FiscalVouchers.
+     */
+    distinct?: FiscalVoucherScalarFieldEnum | FiscalVoucherScalarFieldEnum[]
+  }
+
+  /**
+   * FiscalVoucher findFirstOrThrow
+   */
+  export type FiscalVoucherFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+    /**
+     * Filter, which FiscalVoucher to fetch.
+     */
+    where?: FiscalVoucherWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FiscalVouchers to fetch.
+     */
+    orderBy?: FiscalVoucherOrderByWithRelationInput | FiscalVoucherOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FiscalVouchers.
+     */
+    cursor?: FiscalVoucherWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FiscalVouchers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FiscalVouchers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FiscalVouchers.
+     */
+    distinct?: FiscalVoucherScalarFieldEnum | FiscalVoucherScalarFieldEnum[]
+  }
+
+  /**
+   * FiscalVoucher findMany
+   */
+  export type FiscalVoucherFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+    /**
+     * Filter, which FiscalVouchers to fetch.
+     */
+    where?: FiscalVoucherWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FiscalVouchers to fetch.
+     */
+    orderBy?: FiscalVoucherOrderByWithRelationInput | FiscalVoucherOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FiscalVouchers.
+     */
+    cursor?: FiscalVoucherWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FiscalVouchers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FiscalVouchers.
+     */
+    skip?: number
+    distinct?: FiscalVoucherScalarFieldEnum | FiscalVoucherScalarFieldEnum[]
+  }
+
+  /**
+   * FiscalVoucher create
+   */
+  export type FiscalVoucherCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FiscalVoucher.
+     */
+    data: XOR<FiscalVoucherCreateInput, FiscalVoucherUncheckedCreateInput>
+  }
+
+  /**
+   * FiscalVoucher createMany
+   */
+  export type FiscalVoucherCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FiscalVouchers.
+     */
+    data: FiscalVoucherCreateManyInput | FiscalVoucherCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FiscalVoucher createManyAndReturn
+   */
+  export type FiscalVoucherCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * The data used to create many FiscalVouchers.
+     */
+    data: FiscalVoucherCreateManyInput | FiscalVoucherCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FiscalVoucher update
+   */
+  export type FiscalVoucherUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FiscalVoucher.
+     */
+    data: XOR<FiscalVoucherUpdateInput, FiscalVoucherUncheckedUpdateInput>
+    /**
+     * Choose, which FiscalVoucher to update.
+     */
+    where: FiscalVoucherWhereUniqueInput
+  }
+
+  /**
+   * FiscalVoucher updateMany
+   */
+  export type FiscalVoucherUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FiscalVouchers.
+     */
+    data: XOR<FiscalVoucherUpdateManyMutationInput, FiscalVoucherUncheckedUpdateManyInput>
+    /**
+     * Filter which FiscalVouchers to update
+     */
+    where?: FiscalVoucherWhereInput
+    /**
+     * Limit how many FiscalVouchers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FiscalVoucher updateManyAndReturn
+   */
+  export type FiscalVoucherUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * The data used to update FiscalVouchers.
+     */
+    data: XOR<FiscalVoucherUpdateManyMutationInput, FiscalVoucherUncheckedUpdateManyInput>
+    /**
+     * Filter which FiscalVouchers to update
+     */
+    where?: FiscalVoucherWhereInput
+    /**
+     * Limit how many FiscalVouchers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FiscalVoucher upsert
+   */
+  export type FiscalVoucherUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FiscalVoucher to update in case it exists.
+     */
+    where: FiscalVoucherWhereUniqueInput
+    /**
+     * In case the FiscalVoucher found by the `where` argument doesn't exist, create a new FiscalVoucher with this data.
+     */
+    create: XOR<FiscalVoucherCreateInput, FiscalVoucherUncheckedCreateInput>
+    /**
+     * In case the FiscalVoucher was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FiscalVoucherUpdateInput, FiscalVoucherUncheckedUpdateInput>
+  }
+
+  /**
+   * FiscalVoucher delete
+   */
+  export type FiscalVoucherDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+    /**
+     * Filter which FiscalVoucher to delete.
+     */
+    where: FiscalVoucherWhereUniqueInput
+  }
+
+  /**
+   * FiscalVoucher deleteMany
+   */
+  export type FiscalVoucherDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FiscalVouchers to delete
+     */
+    where?: FiscalVoucherWhereInput
+    /**
+     * Limit how many FiscalVouchers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FiscalVoucher.relatedVoucher
+   */
+  export type FiscalVoucher$relatedVoucherArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+    where?: FiscalVoucherWhereInput
+  }
+
+  /**
+   * FiscalVoucher.creditNotes
+   */
+  export type FiscalVoucher$creditNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+    where?: FiscalVoucherWhereInput
+    orderBy?: FiscalVoucherOrderByWithRelationInput | FiscalVoucherOrderByWithRelationInput[]
+    cursor?: FiscalVoucherWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FiscalVoucherScalarFieldEnum | FiscalVoucherScalarFieldEnum[]
+  }
+
+  /**
+   * FiscalVoucher without action
+   */
+  export type FiscalVoucherDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FiscalVoucher
+     */
+    select?: FiscalVoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FiscalVoucher
+     */
+    omit?: FiscalVoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FiscalVoucherInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -49566,6 +51273,9 @@ export namespace Prisma {
     status: 'status',
     contactName: 'contactName',
     customerDocument: 'customerDocument',
+    customerTaxId: 'customerTaxId',
+    customerLegalName: 'customerLegalName',
+    customerTaxCondition: 'customerTaxCondition',
     contactEmail: 'contactEmail',
     contactPhone: 'contactPhone',
     deliveryMethod: 'deliveryMethod',
@@ -49999,6 +51709,40 @@ export namespace Prisma {
   export type RateLimitBucketScalarFieldEnum = (typeof RateLimitBucketScalarFieldEnum)[keyof typeof RateLimitBucketScalarFieldEnum]
 
 
+  export const FiscalVoucherScalarFieldEnum: {
+    id: 'id',
+    orderId: 'orderId',
+    kind: 'kind',
+    voucherType: 'voucherType',
+    idempotencyKey: 'idempotencyKey',
+    status: 'status',
+    amountInCents: 'amountInCents',
+    netAmountInCents: 'netAmountInCents',
+    vatAmountInCents: 'vatAmountInCents',
+    buyerDocType: 'buyerDocType',
+    buyerDocNumber: 'buyerDocNumber',
+    buyerName: 'buyerName',
+    buyerTaxCondition: 'buyerTaxCondition',
+    provider: 'provider',
+    providerVoucherId: 'providerVoucherId',
+    pointOfSale: 'pointOfSale',
+    number: 'number',
+    cae: 'cae',
+    caeExpiresAt: 'caeExpiresAt',
+    pdfUrl: 'pdfUrl',
+    issuedAt: 'issuedAt',
+    emailSentAt: 'emailSentAt',
+    attempts: 'attempts',
+    nextAttemptAt: 'nextAttemptAt',
+    errorMessage: 'errorMessage',
+    relatedVoucherId: 'relatedVoucherId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FiscalVoucherScalarFieldEnum = (typeof FiscalVoucherScalarFieldEnum)[keyof typeof FiscalVoucherScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -50175,6 +51919,20 @@ export namespace Prisma {
    * Reference to a field of type 'OrderStatus[]'
    */
   export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TaxCondition'
+   */
+  export type EnumTaxConditionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaxCondition'>
+    
+
+
+  /**
+   * Reference to a field of type 'TaxCondition[]'
+   */
+  export type ListEnumTaxConditionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaxCondition[]'>
     
 
 
@@ -50427,6 +52185,34 @@ export namespace Prisma {
    * Reference to a field of type 'SpecialRequestStatus[]'
    */
   export type ListEnumSpecialRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpecialRequestStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'FiscalVoucherKind'
+   */
+  export type EnumFiscalVoucherKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FiscalVoucherKind'>
+    
+
+
+  /**
+   * Reference to a field of type 'FiscalVoucherKind[]'
+   */
+  export type ListEnumFiscalVoucherKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FiscalVoucherKind[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'FiscalVoucherStatus'
+   */
+  export type EnumFiscalVoucherStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FiscalVoucherStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'FiscalVoucherStatus[]'
+   */
+  export type ListEnumFiscalVoucherStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FiscalVoucherStatus[]'>
     
 
 
@@ -51377,6 +53163,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     contactName?: StringFilter<"Order"> | string
     customerDocument?: StringNullableFilter<"Order"> | string | null
+    customerTaxId?: StringNullableFilter<"Order"> | string | null
+    customerLegalName?: StringNullableFilter<"Order"> | string | null
+    customerTaxCondition?: EnumTaxConditionNullableFilter<"Order"> | $Enums.TaxCondition | null
     contactEmail?: StringFilter<"Order"> | string
     contactPhone?: StringFilter<"Order"> | string
     deliveryMethod?: EnumDeliveryMethodFilter<"Order"> | $Enums.DeliveryMethod
@@ -51402,6 +53191,7 @@ export namespace Prisma {
     payments?: PaymentListRelationFilter
     commissionEntries?: CommissionEntryListRelationFilter
     customerRequests?: CustomerRequestListRelationFilter
+    fiscalVouchers?: FiscalVoucherListRelationFilter
   }
 
   export type OrderOrderByWithRelationInput = {
@@ -51411,6 +53201,9 @@ export namespace Prisma {
     status?: SortOrder
     contactName?: SortOrder
     customerDocument?: SortOrderInput | SortOrder
+    customerTaxId?: SortOrderInput | SortOrder
+    customerLegalName?: SortOrderInput | SortOrder
+    customerTaxCondition?: SortOrderInput | SortOrder
     contactEmail?: SortOrder
     contactPhone?: SortOrder
     deliveryMethod?: SortOrder
@@ -51436,6 +53229,7 @@ export namespace Prisma {
     payments?: PaymentOrderByRelationAggregateInput
     commissionEntries?: CommissionEntryOrderByRelationAggregateInput
     customerRequests?: CustomerRequestOrderByRelationAggregateInput
+    fiscalVouchers?: FiscalVoucherOrderByRelationAggregateInput
   }
 
   export type OrderWhereUniqueInput = Prisma.AtLeast<{
@@ -51448,6 +53242,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     contactName?: StringFilter<"Order"> | string
     customerDocument?: StringNullableFilter<"Order"> | string | null
+    customerTaxId?: StringNullableFilter<"Order"> | string | null
+    customerLegalName?: StringNullableFilter<"Order"> | string | null
+    customerTaxCondition?: EnumTaxConditionNullableFilter<"Order"> | $Enums.TaxCondition | null
     contactEmail?: StringFilter<"Order"> | string
     contactPhone?: StringFilter<"Order"> | string
     deliveryMethod?: EnumDeliveryMethodFilter<"Order"> | $Enums.DeliveryMethod
@@ -51473,6 +53270,7 @@ export namespace Prisma {
     payments?: PaymentListRelationFilter
     commissionEntries?: CommissionEntryListRelationFilter
     customerRequests?: CustomerRequestListRelationFilter
+    fiscalVouchers?: FiscalVoucherListRelationFilter
   }, "id" | "checkoutRequestId">
 
   export type OrderOrderByWithAggregationInput = {
@@ -51482,6 +53280,9 @@ export namespace Prisma {
     status?: SortOrder
     contactName?: SortOrder
     customerDocument?: SortOrderInput | SortOrder
+    customerTaxId?: SortOrderInput | SortOrder
+    customerLegalName?: SortOrderInput | SortOrder
+    customerTaxCondition?: SortOrderInput | SortOrder
     contactEmail?: SortOrder
     contactPhone?: SortOrder
     deliveryMethod?: SortOrder
@@ -51517,6 +53318,9 @@ export namespace Prisma {
     status?: EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
     contactName?: StringWithAggregatesFilter<"Order"> | string
     customerDocument?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    customerTaxId?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    customerLegalName?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    customerTaxCondition?: EnumTaxConditionNullableWithAggregatesFilter<"Order"> | $Enums.TaxCondition | null
     contactEmail?: StringWithAggregatesFilter<"Order"> | string
     contactPhone?: StringWithAggregatesFilter<"Order"> | string
     deliveryMethod?: EnumDeliveryMethodWithAggregatesFilter<"Order"> | $Enums.DeliveryMethod
@@ -53676,6 +55480,184 @@ export namespace Prisma {
     expiresAt?: DateTimeWithAggregatesFilter<"RateLimitBucket"> | Date | string
   }
 
+  export type FiscalVoucherWhereInput = {
+    AND?: FiscalVoucherWhereInput | FiscalVoucherWhereInput[]
+    OR?: FiscalVoucherWhereInput[]
+    NOT?: FiscalVoucherWhereInput | FiscalVoucherWhereInput[]
+    id?: StringFilter<"FiscalVoucher"> | string
+    orderId?: StringFilter<"FiscalVoucher"> | string
+    kind?: EnumFiscalVoucherKindFilter<"FiscalVoucher"> | $Enums.FiscalVoucherKind
+    voucherType?: StringFilter<"FiscalVoucher"> | string
+    idempotencyKey?: StringFilter<"FiscalVoucher"> | string
+    status?: EnumFiscalVoucherStatusFilter<"FiscalVoucher"> | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFilter<"FiscalVoucher"> | number
+    netAmountInCents?: IntFilter<"FiscalVoucher"> | number
+    vatAmountInCents?: IntFilter<"FiscalVoucher"> | number
+    buyerDocType?: StringFilter<"FiscalVoucher"> | string
+    buyerDocNumber?: StringFilter<"FiscalVoucher"> | string
+    buyerName?: StringFilter<"FiscalVoucher"> | string
+    buyerTaxCondition?: EnumTaxConditionFilter<"FiscalVoucher"> | $Enums.TaxCondition
+    provider?: StringFilter<"FiscalVoucher"> | string
+    providerVoucherId?: StringNullableFilter<"FiscalVoucher"> | string | null
+    pointOfSale?: IntNullableFilter<"FiscalVoucher"> | number | null
+    number?: IntNullableFilter<"FiscalVoucher"> | number | null
+    cae?: StringNullableFilter<"FiscalVoucher"> | string | null
+    caeExpiresAt?: DateTimeNullableFilter<"FiscalVoucher"> | Date | string | null
+    pdfUrl?: StringNullableFilter<"FiscalVoucher"> | string | null
+    issuedAt?: DateTimeNullableFilter<"FiscalVoucher"> | Date | string | null
+    emailSentAt?: DateTimeNullableFilter<"FiscalVoucher"> | Date | string | null
+    attempts?: IntFilter<"FiscalVoucher"> | number
+    nextAttemptAt?: DateTimeFilter<"FiscalVoucher"> | Date | string
+    errorMessage?: StringNullableFilter<"FiscalVoucher"> | string | null
+    relatedVoucherId?: StringNullableFilter<"FiscalVoucher"> | string | null
+    createdAt?: DateTimeFilter<"FiscalVoucher"> | Date | string
+    updatedAt?: DateTimeFilter<"FiscalVoucher"> | Date | string
+    order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
+    relatedVoucher?: XOR<FiscalVoucherNullableScalarRelationFilter, FiscalVoucherWhereInput> | null
+    creditNotes?: FiscalVoucherListRelationFilter
+  }
+
+  export type FiscalVoucherOrderByWithRelationInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    kind?: SortOrder
+    voucherType?: SortOrder
+    idempotencyKey?: SortOrder
+    status?: SortOrder
+    amountInCents?: SortOrder
+    netAmountInCents?: SortOrder
+    vatAmountInCents?: SortOrder
+    buyerDocType?: SortOrder
+    buyerDocNumber?: SortOrder
+    buyerName?: SortOrder
+    buyerTaxCondition?: SortOrder
+    provider?: SortOrder
+    providerVoucherId?: SortOrderInput | SortOrder
+    pointOfSale?: SortOrderInput | SortOrder
+    number?: SortOrderInput | SortOrder
+    cae?: SortOrderInput | SortOrder
+    caeExpiresAt?: SortOrderInput | SortOrder
+    pdfUrl?: SortOrderInput | SortOrder
+    issuedAt?: SortOrderInput | SortOrder
+    emailSentAt?: SortOrderInput | SortOrder
+    attempts?: SortOrder
+    nextAttemptAt?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    relatedVoucherId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    order?: OrderOrderByWithRelationInput
+    relatedVoucher?: FiscalVoucherOrderByWithRelationInput
+    creditNotes?: FiscalVoucherOrderByRelationAggregateInput
+  }
+
+  export type FiscalVoucherWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    idempotencyKey?: string
+    AND?: FiscalVoucherWhereInput | FiscalVoucherWhereInput[]
+    OR?: FiscalVoucherWhereInput[]
+    NOT?: FiscalVoucherWhereInput | FiscalVoucherWhereInput[]
+    orderId?: StringFilter<"FiscalVoucher"> | string
+    kind?: EnumFiscalVoucherKindFilter<"FiscalVoucher"> | $Enums.FiscalVoucherKind
+    voucherType?: StringFilter<"FiscalVoucher"> | string
+    status?: EnumFiscalVoucherStatusFilter<"FiscalVoucher"> | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFilter<"FiscalVoucher"> | number
+    netAmountInCents?: IntFilter<"FiscalVoucher"> | number
+    vatAmountInCents?: IntFilter<"FiscalVoucher"> | number
+    buyerDocType?: StringFilter<"FiscalVoucher"> | string
+    buyerDocNumber?: StringFilter<"FiscalVoucher"> | string
+    buyerName?: StringFilter<"FiscalVoucher"> | string
+    buyerTaxCondition?: EnumTaxConditionFilter<"FiscalVoucher"> | $Enums.TaxCondition
+    provider?: StringFilter<"FiscalVoucher"> | string
+    providerVoucherId?: StringNullableFilter<"FiscalVoucher"> | string | null
+    pointOfSale?: IntNullableFilter<"FiscalVoucher"> | number | null
+    number?: IntNullableFilter<"FiscalVoucher"> | number | null
+    cae?: StringNullableFilter<"FiscalVoucher"> | string | null
+    caeExpiresAt?: DateTimeNullableFilter<"FiscalVoucher"> | Date | string | null
+    pdfUrl?: StringNullableFilter<"FiscalVoucher"> | string | null
+    issuedAt?: DateTimeNullableFilter<"FiscalVoucher"> | Date | string | null
+    emailSentAt?: DateTimeNullableFilter<"FiscalVoucher"> | Date | string | null
+    attempts?: IntFilter<"FiscalVoucher"> | number
+    nextAttemptAt?: DateTimeFilter<"FiscalVoucher"> | Date | string
+    errorMessage?: StringNullableFilter<"FiscalVoucher"> | string | null
+    relatedVoucherId?: StringNullableFilter<"FiscalVoucher"> | string | null
+    createdAt?: DateTimeFilter<"FiscalVoucher"> | Date | string
+    updatedAt?: DateTimeFilter<"FiscalVoucher"> | Date | string
+    order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
+    relatedVoucher?: XOR<FiscalVoucherNullableScalarRelationFilter, FiscalVoucherWhereInput> | null
+    creditNotes?: FiscalVoucherListRelationFilter
+  }, "id" | "idempotencyKey">
+
+  export type FiscalVoucherOrderByWithAggregationInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    kind?: SortOrder
+    voucherType?: SortOrder
+    idempotencyKey?: SortOrder
+    status?: SortOrder
+    amountInCents?: SortOrder
+    netAmountInCents?: SortOrder
+    vatAmountInCents?: SortOrder
+    buyerDocType?: SortOrder
+    buyerDocNumber?: SortOrder
+    buyerName?: SortOrder
+    buyerTaxCondition?: SortOrder
+    provider?: SortOrder
+    providerVoucherId?: SortOrderInput | SortOrder
+    pointOfSale?: SortOrderInput | SortOrder
+    number?: SortOrderInput | SortOrder
+    cae?: SortOrderInput | SortOrder
+    caeExpiresAt?: SortOrderInput | SortOrder
+    pdfUrl?: SortOrderInput | SortOrder
+    issuedAt?: SortOrderInput | SortOrder
+    emailSentAt?: SortOrderInput | SortOrder
+    attempts?: SortOrder
+    nextAttemptAt?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    relatedVoucherId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FiscalVoucherCountOrderByAggregateInput
+    _avg?: FiscalVoucherAvgOrderByAggregateInput
+    _max?: FiscalVoucherMaxOrderByAggregateInput
+    _min?: FiscalVoucherMinOrderByAggregateInput
+    _sum?: FiscalVoucherSumOrderByAggregateInput
+  }
+
+  export type FiscalVoucherScalarWhereWithAggregatesInput = {
+    AND?: FiscalVoucherScalarWhereWithAggregatesInput | FiscalVoucherScalarWhereWithAggregatesInput[]
+    OR?: FiscalVoucherScalarWhereWithAggregatesInput[]
+    NOT?: FiscalVoucherScalarWhereWithAggregatesInput | FiscalVoucherScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FiscalVoucher"> | string
+    orderId?: StringWithAggregatesFilter<"FiscalVoucher"> | string
+    kind?: EnumFiscalVoucherKindWithAggregatesFilter<"FiscalVoucher"> | $Enums.FiscalVoucherKind
+    voucherType?: StringWithAggregatesFilter<"FiscalVoucher"> | string
+    idempotencyKey?: StringWithAggregatesFilter<"FiscalVoucher"> | string
+    status?: EnumFiscalVoucherStatusWithAggregatesFilter<"FiscalVoucher"> | $Enums.FiscalVoucherStatus
+    amountInCents?: IntWithAggregatesFilter<"FiscalVoucher"> | number
+    netAmountInCents?: IntWithAggregatesFilter<"FiscalVoucher"> | number
+    vatAmountInCents?: IntWithAggregatesFilter<"FiscalVoucher"> | number
+    buyerDocType?: StringWithAggregatesFilter<"FiscalVoucher"> | string
+    buyerDocNumber?: StringWithAggregatesFilter<"FiscalVoucher"> | string
+    buyerName?: StringWithAggregatesFilter<"FiscalVoucher"> | string
+    buyerTaxCondition?: EnumTaxConditionWithAggregatesFilter<"FiscalVoucher"> | $Enums.TaxCondition
+    provider?: StringWithAggregatesFilter<"FiscalVoucher"> | string
+    providerVoucherId?: StringNullableWithAggregatesFilter<"FiscalVoucher"> | string | null
+    pointOfSale?: IntNullableWithAggregatesFilter<"FiscalVoucher"> | number | null
+    number?: IntNullableWithAggregatesFilter<"FiscalVoucher"> | number | null
+    cae?: StringNullableWithAggregatesFilter<"FiscalVoucher"> | string | null
+    caeExpiresAt?: DateTimeNullableWithAggregatesFilter<"FiscalVoucher"> | Date | string | null
+    pdfUrl?: StringNullableWithAggregatesFilter<"FiscalVoucher"> | string | null
+    issuedAt?: DateTimeNullableWithAggregatesFilter<"FiscalVoucher"> | Date | string | null
+    emailSentAt?: DateTimeNullableWithAggregatesFilter<"FiscalVoucher"> | Date | string | null
+    attempts?: IntWithAggregatesFilter<"FiscalVoucher"> | number
+    nextAttemptAt?: DateTimeWithAggregatesFilter<"FiscalVoucher"> | Date | string
+    errorMessage?: StringNullableWithAggregatesFilter<"FiscalVoucher"> | string | null
+    relatedVoucherId?: StringNullableWithAggregatesFilter<"FiscalVoucher"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FiscalVoucher"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FiscalVoucher"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -54700,6 +56682,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -54723,6 +56708,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateInput = {
@@ -54732,6 +56718,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -54755,6 +56744,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryUncheckedCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestUncheckedCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUpdateInput = {
@@ -54764,6 +56754,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -54787,6 +56780,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateInput = {
@@ -54796,6 +56790,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -54819,6 +56816,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUncheckedUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUncheckedUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderCreateManyInput = {
@@ -54828,6 +56826,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -54855,6 +56856,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -54880,6 +56884,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -57284,6 +59291,225 @@ export namespace Prisma {
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FiscalVoucherCreateInput = {
+    id?: string
+    kind: $Enums.FiscalVoucherKind
+    voucherType: string
+    idempotencyKey: string
+    status?: $Enums.FiscalVoucherStatus
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: string
+    buyerDocNumber: string
+    buyerName: string
+    buyerTaxCondition: $Enums.TaxCondition
+    provider: string
+    providerVoucherId?: string | null
+    pointOfSale?: number | null
+    number?: number | null
+    cae?: string | null
+    caeExpiresAt?: Date | string | null
+    pdfUrl?: string | null
+    issuedAt?: Date | string | null
+    emailSentAt?: Date | string | null
+    attempts?: number
+    nextAttemptAt?: Date | string
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    order: OrderCreateNestedOneWithoutFiscalVouchersInput
+    relatedVoucher?: FiscalVoucherCreateNestedOneWithoutCreditNotesInput
+    creditNotes?: FiscalVoucherCreateNestedManyWithoutRelatedVoucherInput
+  }
+
+  export type FiscalVoucherUncheckedCreateInput = {
+    id?: string
+    orderId: string
+    kind: $Enums.FiscalVoucherKind
+    voucherType: string
+    idempotencyKey: string
+    status?: $Enums.FiscalVoucherStatus
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: string
+    buyerDocNumber: string
+    buyerName: string
+    buyerTaxCondition: $Enums.TaxCondition
+    provider: string
+    providerVoucherId?: string | null
+    pointOfSale?: number | null
+    number?: number | null
+    cae?: string | null
+    caeExpiresAt?: Date | string | null
+    pdfUrl?: string | null
+    issuedAt?: Date | string | null
+    emailSentAt?: Date | string | null
+    attempts?: number
+    nextAttemptAt?: Date | string
+    errorMessage?: string | null
+    relatedVoucherId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creditNotes?: FiscalVoucherUncheckedCreateNestedManyWithoutRelatedVoucherInput
+  }
+
+  export type FiscalVoucherUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumFiscalVoucherKindFieldUpdateOperationsInput | $Enums.FiscalVoucherKind
+    voucherType?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumFiscalVoucherStatusFieldUpdateOperationsInput | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFieldUpdateOperationsInput | number
+    netAmountInCents?: IntFieldUpdateOperationsInput | number
+    vatAmountInCents?: IntFieldUpdateOperationsInput | number
+    buyerDocType?: StringFieldUpdateOperationsInput | string
+    buyerDocNumber?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    buyerTaxCondition?: EnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition
+    provider?: StringFieldUpdateOperationsInput | string
+    providerVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    pointOfSale?: NullableIntFieldUpdateOperationsInput | number | null
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    cae?: NullableStringFieldUpdateOperationsInput | string | null
+    caeExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: OrderUpdateOneRequiredWithoutFiscalVouchersNestedInput
+    relatedVoucher?: FiscalVoucherUpdateOneWithoutCreditNotesNestedInput
+    creditNotes?: FiscalVoucherUpdateManyWithoutRelatedVoucherNestedInput
+  }
+
+  export type FiscalVoucherUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    kind?: EnumFiscalVoucherKindFieldUpdateOperationsInput | $Enums.FiscalVoucherKind
+    voucherType?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumFiscalVoucherStatusFieldUpdateOperationsInput | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFieldUpdateOperationsInput | number
+    netAmountInCents?: IntFieldUpdateOperationsInput | number
+    vatAmountInCents?: IntFieldUpdateOperationsInput | number
+    buyerDocType?: StringFieldUpdateOperationsInput | string
+    buyerDocNumber?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    buyerTaxCondition?: EnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition
+    provider?: StringFieldUpdateOperationsInput | string
+    providerVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    pointOfSale?: NullableIntFieldUpdateOperationsInput | number | null
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    cae?: NullableStringFieldUpdateOperationsInput | string | null
+    caeExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    relatedVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creditNotes?: FiscalVoucherUncheckedUpdateManyWithoutRelatedVoucherNestedInput
+  }
+
+  export type FiscalVoucherCreateManyInput = {
+    id?: string
+    orderId: string
+    kind: $Enums.FiscalVoucherKind
+    voucherType: string
+    idempotencyKey: string
+    status?: $Enums.FiscalVoucherStatus
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: string
+    buyerDocNumber: string
+    buyerName: string
+    buyerTaxCondition: $Enums.TaxCondition
+    provider: string
+    providerVoucherId?: string | null
+    pointOfSale?: number | null
+    number?: number | null
+    cae?: string | null
+    caeExpiresAt?: Date | string | null
+    pdfUrl?: string | null
+    issuedAt?: Date | string | null
+    emailSentAt?: Date | string | null
+    attempts?: number
+    nextAttemptAt?: Date | string
+    errorMessage?: string | null
+    relatedVoucherId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FiscalVoucherUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumFiscalVoucherKindFieldUpdateOperationsInput | $Enums.FiscalVoucherKind
+    voucherType?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumFiscalVoucherStatusFieldUpdateOperationsInput | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFieldUpdateOperationsInput | number
+    netAmountInCents?: IntFieldUpdateOperationsInput | number
+    vatAmountInCents?: IntFieldUpdateOperationsInput | number
+    buyerDocType?: StringFieldUpdateOperationsInput | string
+    buyerDocNumber?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    buyerTaxCondition?: EnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition
+    provider?: StringFieldUpdateOperationsInput | string
+    providerVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    pointOfSale?: NullableIntFieldUpdateOperationsInput | number | null
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    cae?: NullableStringFieldUpdateOperationsInput | string | null
+    caeExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FiscalVoucherUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    kind?: EnumFiscalVoucherKindFieldUpdateOperationsInput | $Enums.FiscalVoucherKind
+    voucherType?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumFiscalVoucherStatusFieldUpdateOperationsInput | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFieldUpdateOperationsInput | number
+    netAmountInCents?: IntFieldUpdateOperationsInput | number
+    vatAmountInCents?: IntFieldUpdateOperationsInput | number
+    buyerDocType?: StringFieldUpdateOperationsInput | string
+    buyerDocNumber?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    buyerTaxCondition?: EnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition
+    provider?: StringFieldUpdateOperationsInput | string
+    providerVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    pointOfSale?: NullableIntFieldUpdateOperationsInput | number | null
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    cae?: NullableStringFieldUpdateOperationsInput | string | null
+    caeExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    relatedVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -58193,6 +60419,13 @@ export namespace Prisma {
     not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
   }
 
+  export type EnumTaxConditionNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaxCondition | EnumTaxConditionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTaxConditionNullableFilter<$PrismaModel> | $Enums.TaxCondition | null
+  }
+
   export type EnumDeliveryMethodFilter<$PrismaModel = never> = {
     equals?: $Enums.DeliveryMethod | EnumDeliveryMethodFieldRefInput<$PrismaModel>
     in?: $Enums.DeliveryMethod[] | ListEnumDeliveryMethodFieldRefInput<$PrismaModel>
@@ -58234,6 +60467,12 @@ export namespace Prisma {
     none?: CustomerRequestWhereInput
   }
 
+  export type FiscalVoucherListRelationFilter = {
+    every?: FiscalVoucherWhereInput
+    some?: FiscalVoucherWhereInput
+    none?: FiscalVoucherWhereInput
+  }
+
   export type OrderItemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -58250,6 +60489,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type FiscalVoucherOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type OrderCountOrderByAggregateInput = {
     id?: SortOrder
     checkoutRequestId?: SortOrder
@@ -58257,6 +60500,9 @@ export namespace Prisma {
     status?: SortOrder
     contactName?: SortOrder
     customerDocument?: SortOrder
+    customerTaxId?: SortOrder
+    customerLegalName?: SortOrder
+    customerTaxCondition?: SortOrder
     contactEmail?: SortOrder
     contactPhone?: SortOrder
     deliveryMethod?: SortOrder
@@ -58291,6 +60537,9 @@ export namespace Prisma {
     status?: SortOrder
     contactName?: SortOrder
     customerDocument?: SortOrder
+    customerTaxId?: SortOrder
+    customerLegalName?: SortOrder
+    customerTaxCondition?: SortOrder
     contactEmail?: SortOrder
     contactPhone?: SortOrder
     deliveryMethod?: SortOrder
@@ -58318,6 +60567,9 @@ export namespace Prisma {
     status?: SortOrder
     contactName?: SortOrder
     customerDocument?: SortOrder
+    customerTaxId?: SortOrder
+    customerLegalName?: SortOrder
+    customerTaxCondition?: SortOrder
     contactEmail?: SortOrder
     contactPhone?: SortOrder
     deliveryMethod?: SortOrder
@@ -58353,6 +60605,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderStatusFilter<$PrismaModel>
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
+  export type EnumTaxConditionNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaxCondition | EnumTaxConditionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTaxConditionNullableWithAggregatesFilter<$PrismaModel> | $Enums.TaxCondition | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumTaxConditionNullableFilter<$PrismaModel>
+    _max?: NestedEnumTaxConditionNullableFilter<$PrismaModel>
   }
 
   export type EnumDeliveryMethodWithAggregatesFilter<$PrismaModel = never> = {
@@ -60023,6 +62285,173 @@ export namespace Prisma {
     count?: SortOrder
   }
 
+  export type EnumFiscalVoucherKindFilter<$PrismaModel = never> = {
+    equals?: $Enums.FiscalVoucherKind | EnumFiscalVoucherKindFieldRefInput<$PrismaModel>
+    in?: $Enums.FiscalVoucherKind[] | ListEnumFiscalVoucherKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FiscalVoucherKind[] | ListEnumFiscalVoucherKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumFiscalVoucherKindFilter<$PrismaModel> | $Enums.FiscalVoucherKind
+  }
+
+  export type EnumFiscalVoucherStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.FiscalVoucherStatus | EnumFiscalVoucherStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FiscalVoucherStatus[] | ListEnumFiscalVoucherStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FiscalVoucherStatus[] | ListEnumFiscalVoucherStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFiscalVoucherStatusFilter<$PrismaModel> | $Enums.FiscalVoucherStatus
+  }
+
+  export type EnumTaxConditionFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaxCondition | EnumTaxConditionFieldRefInput<$PrismaModel>
+    in?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaxConditionFilter<$PrismaModel> | $Enums.TaxCondition
+  }
+
+  export type FiscalVoucherNullableScalarRelationFilter = {
+    is?: FiscalVoucherWhereInput | null
+    isNot?: FiscalVoucherWhereInput | null
+  }
+
+  export type FiscalVoucherCountOrderByAggregateInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    kind?: SortOrder
+    voucherType?: SortOrder
+    idempotencyKey?: SortOrder
+    status?: SortOrder
+    amountInCents?: SortOrder
+    netAmountInCents?: SortOrder
+    vatAmountInCents?: SortOrder
+    buyerDocType?: SortOrder
+    buyerDocNumber?: SortOrder
+    buyerName?: SortOrder
+    buyerTaxCondition?: SortOrder
+    provider?: SortOrder
+    providerVoucherId?: SortOrder
+    pointOfSale?: SortOrder
+    number?: SortOrder
+    cae?: SortOrder
+    caeExpiresAt?: SortOrder
+    pdfUrl?: SortOrder
+    issuedAt?: SortOrder
+    emailSentAt?: SortOrder
+    attempts?: SortOrder
+    nextAttemptAt?: SortOrder
+    errorMessage?: SortOrder
+    relatedVoucherId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FiscalVoucherAvgOrderByAggregateInput = {
+    amountInCents?: SortOrder
+    netAmountInCents?: SortOrder
+    vatAmountInCents?: SortOrder
+    pointOfSale?: SortOrder
+    number?: SortOrder
+    attempts?: SortOrder
+  }
+
+  export type FiscalVoucherMaxOrderByAggregateInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    kind?: SortOrder
+    voucherType?: SortOrder
+    idempotencyKey?: SortOrder
+    status?: SortOrder
+    amountInCents?: SortOrder
+    netAmountInCents?: SortOrder
+    vatAmountInCents?: SortOrder
+    buyerDocType?: SortOrder
+    buyerDocNumber?: SortOrder
+    buyerName?: SortOrder
+    buyerTaxCondition?: SortOrder
+    provider?: SortOrder
+    providerVoucherId?: SortOrder
+    pointOfSale?: SortOrder
+    number?: SortOrder
+    cae?: SortOrder
+    caeExpiresAt?: SortOrder
+    pdfUrl?: SortOrder
+    issuedAt?: SortOrder
+    emailSentAt?: SortOrder
+    attempts?: SortOrder
+    nextAttemptAt?: SortOrder
+    errorMessage?: SortOrder
+    relatedVoucherId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FiscalVoucherMinOrderByAggregateInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    kind?: SortOrder
+    voucherType?: SortOrder
+    idempotencyKey?: SortOrder
+    status?: SortOrder
+    amountInCents?: SortOrder
+    netAmountInCents?: SortOrder
+    vatAmountInCents?: SortOrder
+    buyerDocType?: SortOrder
+    buyerDocNumber?: SortOrder
+    buyerName?: SortOrder
+    buyerTaxCondition?: SortOrder
+    provider?: SortOrder
+    providerVoucherId?: SortOrder
+    pointOfSale?: SortOrder
+    number?: SortOrder
+    cae?: SortOrder
+    caeExpiresAt?: SortOrder
+    pdfUrl?: SortOrder
+    issuedAt?: SortOrder
+    emailSentAt?: SortOrder
+    attempts?: SortOrder
+    nextAttemptAt?: SortOrder
+    errorMessage?: SortOrder
+    relatedVoucherId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FiscalVoucherSumOrderByAggregateInput = {
+    amountInCents?: SortOrder
+    netAmountInCents?: SortOrder
+    vatAmountInCents?: SortOrder
+    pointOfSale?: SortOrder
+    number?: SortOrder
+    attempts?: SortOrder
+  }
+
+  export type EnumFiscalVoucherKindWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FiscalVoucherKind | EnumFiscalVoucherKindFieldRefInput<$PrismaModel>
+    in?: $Enums.FiscalVoucherKind[] | ListEnumFiscalVoucherKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FiscalVoucherKind[] | ListEnumFiscalVoucherKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumFiscalVoucherKindWithAggregatesFilter<$PrismaModel> | $Enums.FiscalVoucherKind
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFiscalVoucherKindFilter<$PrismaModel>
+    _max?: NestedEnumFiscalVoucherKindFilter<$PrismaModel>
+  }
+
+  export type EnumFiscalVoucherStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FiscalVoucherStatus | EnumFiscalVoucherStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FiscalVoucherStatus[] | ListEnumFiscalVoucherStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FiscalVoucherStatus[] | ListEnumFiscalVoucherStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFiscalVoucherStatusWithAggregatesFilter<$PrismaModel> | $Enums.FiscalVoucherStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFiscalVoucherStatusFilter<$PrismaModel>
+    _max?: NestedEnumFiscalVoucherStatusFilter<$PrismaModel>
+  }
+
+  export type EnumTaxConditionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaxCondition | EnumTaxConditionFieldRefInput<$PrismaModel>
+    in?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaxConditionWithAggregatesFilter<$PrismaModel> | $Enums.TaxCondition
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaxConditionFilter<$PrismaModel>
+    _max?: NestedEnumTaxConditionFilter<$PrismaModel>
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -60888,6 +63317,13 @@ export namespace Prisma {
     connect?: CustomerRequestWhereUniqueInput | CustomerRequestWhereUniqueInput[]
   }
 
+  export type FiscalVoucherCreateNestedManyWithoutOrderInput = {
+    create?: XOR<FiscalVoucherCreateWithoutOrderInput, FiscalVoucherUncheckedCreateWithoutOrderInput> | FiscalVoucherCreateWithoutOrderInput[] | FiscalVoucherUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: FiscalVoucherCreateOrConnectWithoutOrderInput | FiscalVoucherCreateOrConnectWithoutOrderInput[]
+    createMany?: FiscalVoucherCreateManyOrderInputEnvelope
+    connect?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+  }
+
   export type OrderItemUncheckedCreateNestedManyWithoutOrderInput = {
     create?: XOR<OrderItemCreateWithoutOrderInput, OrderItemUncheckedCreateWithoutOrderInput> | OrderItemCreateWithoutOrderInput[] | OrderItemUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: OrderItemCreateOrConnectWithoutOrderInput | OrderItemCreateOrConnectWithoutOrderInput[]
@@ -60923,8 +63359,19 @@ export namespace Prisma {
     connect?: CustomerRequestWhereUniqueInput | CustomerRequestWhereUniqueInput[]
   }
 
+  export type FiscalVoucherUncheckedCreateNestedManyWithoutOrderInput = {
+    create?: XOR<FiscalVoucherCreateWithoutOrderInput, FiscalVoucherUncheckedCreateWithoutOrderInput> | FiscalVoucherCreateWithoutOrderInput[] | FiscalVoucherUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: FiscalVoucherCreateOrConnectWithoutOrderInput | FiscalVoucherCreateOrConnectWithoutOrderInput[]
+    createMany?: FiscalVoucherCreateManyOrderInputEnvelope
+    connect?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+  }
+
   export type EnumOrderStatusFieldUpdateOperationsInput = {
     set?: $Enums.OrderStatus
+  }
+
+  export type NullableEnumTaxConditionFieldUpdateOperationsInput = {
+    set?: $Enums.TaxCondition | null
   }
 
   export type EnumDeliveryMethodFieldUpdateOperationsInput = {
@@ -61021,6 +63468,20 @@ export namespace Prisma {
     deleteMany?: CustomerRequestScalarWhereInput | CustomerRequestScalarWhereInput[]
   }
 
+  export type FiscalVoucherUpdateManyWithoutOrderNestedInput = {
+    create?: XOR<FiscalVoucherCreateWithoutOrderInput, FiscalVoucherUncheckedCreateWithoutOrderInput> | FiscalVoucherCreateWithoutOrderInput[] | FiscalVoucherUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: FiscalVoucherCreateOrConnectWithoutOrderInput | FiscalVoucherCreateOrConnectWithoutOrderInput[]
+    upsert?: FiscalVoucherUpsertWithWhereUniqueWithoutOrderInput | FiscalVoucherUpsertWithWhereUniqueWithoutOrderInput[]
+    createMany?: FiscalVoucherCreateManyOrderInputEnvelope
+    set?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    disconnect?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    delete?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    connect?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    update?: FiscalVoucherUpdateWithWhereUniqueWithoutOrderInput | FiscalVoucherUpdateWithWhereUniqueWithoutOrderInput[]
+    updateMany?: FiscalVoucherUpdateManyWithWhereWithoutOrderInput | FiscalVoucherUpdateManyWithWhereWithoutOrderInput[]
+    deleteMany?: FiscalVoucherScalarWhereInput | FiscalVoucherScalarWhereInput[]
+  }
+
   export type OrderItemUncheckedUpdateManyWithoutOrderNestedInput = {
     create?: XOR<OrderItemCreateWithoutOrderInput, OrderItemUncheckedCreateWithoutOrderInput> | OrderItemCreateWithoutOrderInput[] | OrderItemUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: OrderItemCreateOrConnectWithoutOrderInput | OrderItemCreateOrConnectWithoutOrderInput[]
@@ -61089,6 +63550,20 @@ export namespace Prisma {
     update?: CustomerRequestUpdateWithWhereUniqueWithoutOrderInput | CustomerRequestUpdateWithWhereUniqueWithoutOrderInput[]
     updateMany?: CustomerRequestUpdateManyWithWhereWithoutOrderInput | CustomerRequestUpdateManyWithWhereWithoutOrderInput[]
     deleteMany?: CustomerRequestScalarWhereInput | CustomerRequestScalarWhereInput[]
+  }
+
+  export type FiscalVoucherUncheckedUpdateManyWithoutOrderNestedInput = {
+    create?: XOR<FiscalVoucherCreateWithoutOrderInput, FiscalVoucherUncheckedCreateWithoutOrderInput> | FiscalVoucherCreateWithoutOrderInput[] | FiscalVoucherUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: FiscalVoucherCreateOrConnectWithoutOrderInput | FiscalVoucherCreateOrConnectWithoutOrderInput[]
+    upsert?: FiscalVoucherUpsertWithWhereUniqueWithoutOrderInput | FiscalVoucherUpsertWithWhereUniqueWithoutOrderInput[]
+    createMany?: FiscalVoucherCreateManyOrderInputEnvelope
+    set?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    disconnect?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    delete?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    connect?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    update?: FiscalVoucherUpdateWithWhereUniqueWithoutOrderInput | FiscalVoucherUpdateWithWhereUniqueWithoutOrderInput[]
+    updateMany?: FiscalVoucherUpdateManyWithWhereWithoutOrderInput | FiscalVoucherUpdateManyWithWhereWithoutOrderInput[]
+    deleteMany?: FiscalVoucherScalarWhereInput | FiscalVoucherScalarWhereInput[]
   }
 
   export type EnumProductionItemStatusFieldUpdateOperationsInput = {
@@ -62196,6 +64671,90 @@ export namespace Prisma {
     set?: $Enums.SpecialRequestStatus
   }
 
+  export type OrderCreateNestedOneWithoutFiscalVouchersInput = {
+    create?: XOR<OrderCreateWithoutFiscalVouchersInput, OrderUncheckedCreateWithoutFiscalVouchersInput>
+    connectOrCreate?: OrderCreateOrConnectWithoutFiscalVouchersInput
+    connect?: OrderWhereUniqueInput
+  }
+
+  export type FiscalVoucherCreateNestedOneWithoutCreditNotesInput = {
+    create?: XOR<FiscalVoucherCreateWithoutCreditNotesInput, FiscalVoucherUncheckedCreateWithoutCreditNotesInput>
+    connectOrCreate?: FiscalVoucherCreateOrConnectWithoutCreditNotesInput
+    connect?: FiscalVoucherWhereUniqueInput
+  }
+
+  export type FiscalVoucherCreateNestedManyWithoutRelatedVoucherInput = {
+    create?: XOR<FiscalVoucherCreateWithoutRelatedVoucherInput, FiscalVoucherUncheckedCreateWithoutRelatedVoucherInput> | FiscalVoucherCreateWithoutRelatedVoucherInput[] | FiscalVoucherUncheckedCreateWithoutRelatedVoucherInput[]
+    connectOrCreate?: FiscalVoucherCreateOrConnectWithoutRelatedVoucherInput | FiscalVoucherCreateOrConnectWithoutRelatedVoucherInput[]
+    createMany?: FiscalVoucherCreateManyRelatedVoucherInputEnvelope
+    connect?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+  }
+
+  export type FiscalVoucherUncheckedCreateNestedManyWithoutRelatedVoucherInput = {
+    create?: XOR<FiscalVoucherCreateWithoutRelatedVoucherInput, FiscalVoucherUncheckedCreateWithoutRelatedVoucherInput> | FiscalVoucherCreateWithoutRelatedVoucherInput[] | FiscalVoucherUncheckedCreateWithoutRelatedVoucherInput[]
+    connectOrCreate?: FiscalVoucherCreateOrConnectWithoutRelatedVoucherInput | FiscalVoucherCreateOrConnectWithoutRelatedVoucherInput[]
+    createMany?: FiscalVoucherCreateManyRelatedVoucherInputEnvelope
+    connect?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+  }
+
+  export type EnumFiscalVoucherKindFieldUpdateOperationsInput = {
+    set?: $Enums.FiscalVoucherKind
+  }
+
+  export type EnumFiscalVoucherStatusFieldUpdateOperationsInput = {
+    set?: $Enums.FiscalVoucherStatus
+  }
+
+  export type EnumTaxConditionFieldUpdateOperationsInput = {
+    set?: $Enums.TaxCondition
+  }
+
+  export type OrderUpdateOneRequiredWithoutFiscalVouchersNestedInput = {
+    create?: XOR<OrderCreateWithoutFiscalVouchersInput, OrderUncheckedCreateWithoutFiscalVouchersInput>
+    connectOrCreate?: OrderCreateOrConnectWithoutFiscalVouchersInput
+    upsert?: OrderUpsertWithoutFiscalVouchersInput
+    connect?: OrderWhereUniqueInput
+    update?: XOR<XOR<OrderUpdateToOneWithWhereWithoutFiscalVouchersInput, OrderUpdateWithoutFiscalVouchersInput>, OrderUncheckedUpdateWithoutFiscalVouchersInput>
+  }
+
+  export type FiscalVoucherUpdateOneWithoutCreditNotesNestedInput = {
+    create?: XOR<FiscalVoucherCreateWithoutCreditNotesInput, FiscalVoucherUncheckedCreateWithoutCreditNotesInput>
+    connectOrCreate?: FiscalVoucherCreateOrConnectWithoutCreditNotesInput
+    upsert?: FiscalVoucherUpsertWithoutCreditNotesInput
+    disconnect?: FiscalVoucherWhereInput | boolean
+    delete?: FiscalVoucherWhereInput | boolean
+    connect?: FiscalVoucherWhereUniqueInput
+    update?: XOR<XOR<FiscalVoucherUpdateToOneWithWhereWithoutCreditNotesInput, FiscalVoucherUpdateWithoutCreditNotesInput>, FiscalVoucherUncheckedUpdateWithoutCreditNotesInput>
+  }
+
+  export type FiscalVoucherUpdateManyWithoutRelatedVoucherNestedInput = {
+    create?: XOR<FiscalVoucherCreateWithoutRelatedVoucherInput, FiscalVoucherUncheckedCreateWithoutRelatedVoucherInput> | FiscalVoucherCreateWithoutRelatedVoucherInput[] | FiscalVoucherUncheckedCreateWithoutRelatedVoucherInput[]
+    connectOrCreate?: FiscalVoucherCreateOrConnectWithoutRelatedVoucherInput | FiscalVoucherCreateOrConnectWithoutRelatedVoucherInput[]
+    upsert?: FiscalVoucherUpsertWithWhereUniqueWithoutRelatedVoucherInput | FiscalVoucherUpsertWithWhereUniqueWithoutRelatedVoucherInput[]
+    createMany?: FiscalVoucherCreateManyRelatedVoucherInputEnvelope
+    set?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    disconnect?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    delete?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    connect?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    update?: FiscalVoucherUpdateWithWhereUniqueWithoutRelatedVoucherInput | FiscalVoucherUpdateWithWhereUniqueWithoutRelatedVoucherInput[]
+    updateMany?: FiscalVoucherUpdateManyWithWhereWithoutRelatedVoucherInput | FiscalVoucherUpdateManyWithWhereWithoutRelatedVoucherInput[]
+    deleteMany?: FiscalVoucherScalarWhereInput | FiscalVoucherScalarWhereInput[]
+  }
+
+  export type FiscalVoucherUncheckedUpdateManyWithoutRelatedVoucherNestedInput = {
+    create?: XOR<FiscalVoucherCreateWithoutRelatedVoucherInput, FiscalVoucherUncheckedCreateWithoutRelatedVoucherInput> | FiscalVoucherCreateWithoutRelatedVoucherInput[] | FiscalVoucherUncheckedCreateWithoutRelatedVoucherInput[]
+    connectOrCreate?: FiscalVoucherCreateOrConnectWithoutRelatedVoucherInput | FiscalVoucherCreateOrConnectWithoutRelatedVoucherInput[]
+    upsert?: FiscalVoucherUpsertWithWhereUniqueWithoutRelatedVoucherInput | FiscalVoucherUpsertWithWhereUniqueWithoutRelatedVoucherInput[]
+    createMany?: FiscalVoucherCreateManyRelatedVoucherInputEnvelope
+    set?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    disconnect?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    delete?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    connect?: FiscalVoucherWhereUniqueInput | FiscalVoucherWhereUniqueInput[]
+    update?: FiscalVoucherUpdateWithWhereUniqueWithoutRelatedVoucherInput | FiscalVoucherUpdateWithWhereUniqueWithoutRelatedVoucherInput[]
+    updateMany?: FiscalVoucherUpdateManyWithWhereWithoutRelatedVoucherInput | FiscalVoucherUpdateManyWithWhereWithoutRelatedVoucherInput[]
+    deleteMany?: FiscalVoucherScalarWhereInput | FiscalVoucherScalarWhereInput[]
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -62489,6 +65048,13 @@ export namespace Prisma {
     not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
   }
 
+  export type NestedEnumTaxConditionNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaxCondition | EnumTaxConditionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTaxConditionNullableFilter<$PrismaModel> | $Enums.TaxCondition | null
+  }
+
   export type NestedEnumDeliveryMethodFilter<$PrismaModel = never> = {
     equals?: $Enums.DeliveryMethod | EnumDeliveryMethodFieldRefInput<$PrismaModel>
     in?: $Enums.DeliveryMethod[] | ListEnumDeliveryMethodFieldRefInput<$PrismaModel>
@@ -62504,6 +65070,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderStatusFilter<$PrismaModel>
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTaxConditionNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaxCondition | EnumTaxConditionFieldRefInput<$PrismaModel> | null
+    in?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumTaxConditionNullableWithAggregatesFilter<$PrismaModel> | $Enums.TaxCondition | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumTaxConditionNullableFilter<$PrismaModel>
+    _max?: NestedEnumTaxConditionNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumDeliveryMethodWithAggregatesFilter<$PrismaModel = never> = {
@@ -62811,6 +65387,57 @@ export namespace Prisma {
     _max?: NestedEnumSpecialRequestStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumFiscalVoucherKindFilter<$PrismaModel = never> = {
+    equals?: $Enums.FiscalVoucherKind | EnumFiscalVoucherKindFieldRefInput<$PrismaModel>
+    in?: $Enums.FiscalVoucherKind[] | ListEnumFiscalVoucherKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FiscalVoucherKind[] | ListEnumFiscalVoucherKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumFiscalVoucherKindFilter<$PrismaModel> | $Enums.FiscalVoucherKind
+  }
+
+  export type NestedEnumFiscalVoucherStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.FiscalVoucherStatus | EnumFiscalVoucherStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FiscalVoucherStatus[] | ListEnumFiscalVoucherStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FiscalVoucherStatus[] | ListEnumFiscalVoucherStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFiscalVoucherStatusFilter<$PrismaModel> | $Enums.FiscalVoucherStatus
+  }
+
+  export type NestedEnumTaxConditionFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaxCondition | EnumTaxConditionFieldRefInput<$PrismaModel>
+    in?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaxConditionFilter<$PrismaModel> | $Enums.TaxCondition
+  }
+
+  export type NestedEnumFiscalVoucherKindWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FiscalVoucherKind | EnumFiscalVoucherKindFieldRefInput<$PrismaModel>
+    in?: $Enums.FiscalVoucherKind[] | ListEnumFiscalVoucherKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FiscalVoucherKind[] | ListEnumFiscalVoucherKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumFiscalVoucherKindWithAggregatesFilter<$PrismaModel> | $Enums.FiscalVoucherKind
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFiscalVoucherKindFilter<$PrismaModel>
+    _max?: NestedEnumFiscalVoucherKindFilter<$PrismaModel>
+  }
+
+  export type NestedEnumFiscalVoucherStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FiscalVoucherStatus | EnumFiscalVoucherStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FiscalVoucherStatus[] | ListEnumFiscalVoucherStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FiscalVoucherStatus[] | ListEnumFiscalVoucherStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFiscalVoucherStatusWithAggregatesFilter<$PrismaModel> | $Enums.FiscalVoucherStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFiscalVoucherStatusFilter<$PrismaModel>
+    _max?: NestedEnumFiscalVoucherStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTaxConditionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaxCondition | EnumTaxConditionFieldRefInput<$PrismaModel>
+    in?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaxCondition[] | ListEnumTaxConditionFieldRefInput<$PrismaModel>
+    not?: NestedEnumTaxConditionWithAggregatesFilter<$PrismaModel> | $Enums.TaxCondition
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaxConditionFilter<$PrismaModel>
+    _max?: NestedEnumTaxConditionFilter<$PrismaModel>
+  }
+
   export type AccountCreateWithoutUserInput = {
     id?: string
     type: string
@@ -62900,6 +65527,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -62922,6 +65552,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutUserInput = {
@@ -62931,6 +65562,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -62953,6 +65587,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryUncheckedCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestUncheckedCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutUserInput = {
@@ -63077,6 +65712,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     contactName?: StringFilter<"Order"> | string
     customerDocument?: StringNullableFilter<"Order"> | string | null
+    customerTaxId?: StringNullableFilter<"Order"> | string | null
+    customerLegalName?: StringNullableFilter<"Order"> | string | null
+    customerTaxCondition?: EnumTaxConditionNullableFilter<"Order"> | $Enums.TaxCondition | null
     contactEmail?: StringFilter<"Order"> | string
     contactPhone?: StringFilter<"Order"> | string
     deliveryMethod?: EnumDeliveryMethodFilter<"Order"> | $Enums.DeliveryMethod
@@ -65030,6 +67668,78 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FiscalVoucherCreateWithoutOrderInput = {
+    id?: string
+    kind: $Enums.FiscalVoucherKind
+    voucherType: string
+    idempotencyKey: string
+    status?: $Enums.FiscalVoucherStatus
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: string
+    buyerDocNumber: string
+    buyerName: string
+    buyerTaxCondition: $Enums.TaxCondition
+    provider: string
+    providerVoucherId?: string | null
+    pointOfSale?: number | null
+    number?: number | null
+    cae?: string | null
+    caeExpiresAt?: Date | string | null
+    pdfUrl?: string | null
+    issuedAt?: Date | string | null
+    emailSentAt?: Date | string | null
+    attempts?: number
+    nextAttemptAt?: Date | string
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    relatedVoucher?: FiscalVoucherCreateNestedOneWithoutCreditNotesInput
+    creditNotes?: FiscalVoucherCreateNestedManyWithoutRelatedVoucherInput
+  }
+
+  export type FiscalVoucherUncheckedCreateWithoutOrderInput = {
+    id?: string
+    kind: $Enums.FiscalVoucherKind
+    voucherType: string
+    idempotencyKey: string
+    status?: $Enums.FiscalVoucherStatus
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: string
+    buyerDocNumber: string
+    buyerName: string
+    buyerTaxCondition: $Enums.TaxCondition
+    provider: string
+    providerVoucherId?: string | null
+    pointOfSale?: number | null
+    number?: number | null
+    cae?: string | null
+    caeExpiresAt?: Date | string | null
+    pdfUrl?: string | null
+    issuedAt?: Date | string | null
+    emailSentAt?: Date | string | null
+    attempts?: number
+    nextAttemptAt?: Date | string
+    errorMessage?: string | null
+    relatedVoucherId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creditNotes?: FiscalVoucherUncheckedCreateNestedManyWithoutRelatedVoucherInput
+  }
+
+  export type FiscalVoucherCreateOrConnectWithoutOrderInput = {
+    where: FiscalVoucherWhereUniqueInput
+    create: XOR<FiscalVoucherCreateWithoutOrderInput, FiscalVoucherUncheckedCreateWithoutOrderInput>
+  }
+
+  export type FiscalVoucherCreateManyOrderInputEnvelope = {
+    data: FiscalVoucherCreateManyOrderInput | FiscalVoucherCreateManyOrderInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutOrdersInput = {
     update: XOR<UserUpdateWithoutOrdersInput, UserUncheckedUpdateWithoutOrdersInput>
     create: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
@@ -65284,6 +67994,56 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"CustomerRequest"> | Date | string
   }
 
+  export type FiscalVoucherUpsertWithWhereUniqueWithoutOrderInput = {
+    where: FiscalVoucherWhereUniqueInput
+    update: XOR<FiscalVoucherUpdateWithoutOrderInput, FiscalVoucherUncheckedUpdateWithoutOrderInput>
+    create: XOR<FiscalVoucherCreateWithoutOrderInput, FiscalVoucherUncheckedCreateWithoutOrderInput>
+  }
+
+  export type FiscalVoucherUpdateWithWhereUniqueWithoutOrderInput = {
+    where: FiscalVoucherWhereUniqueInput
+    data: XOR<FiscalVoucherUpdateWithoutOrderInput, FiscalVoucherUncheckedUpdateWithoutOrderInput>
+  }
+
+  export type FiscalVoucherUpdateManyWithWhereWithoutOrderInput = {
+    where: FiscalVoucherScalarWhereInput
+    data: XOR<FiscalVoucherUpdateManyMutationInput, FiscalVoucherUncheckedUpdateManyWithoutOrderInput>
+  }
+
+  export type FiscalVoucherScalarWhereInput = {
+    AND?: FiscalVoucherScalarWhereInput | FiscalVoucherScalarWhereInput[]
+    OR?: FiscalVoucherScalarWhereInput[]
+    NOT?: FiscalVoucherScalarWhereInput | FiscalVoucherScalarWhereInput[]
+    id?: StringFilter<"FiscalVoucher"> | string
+    orderId?: StringFilter<"FiscalVoucher"> | string
+    kind?: EnumFiscalVoucherKindFilter<"FiscalVoucher"> | $Enums.FiscalVoucherKind
+    voucherType?: StringFilter<"FiscalVoucher"> | string
+    idempotencyKey?: StringFilter<"FiscalVoucher"> | string
+    status?: EnumFiscalVoucherStatusFilter<"FiscalVoucher"> | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFilter<"FiscalVoucher"> | number
+    netAmountInCents?: IntFilter<"FiscalVoucher"> | number
+    vatAmountInCents?: IntFilter<"FiscalVoucher"> | number
+    buyerDocType?: StringFilter<"FiscalVoucher"> | string
+    buyerDocNumber?: StringFilter<"FiscalVoucher"> | string
+    buyerName?: StringFilter<"FiscalVoucher"> | string
+    buyerTaxCondition?: EnumTaxConditionFilter<"FiscalVoucher"> | $Enums.TaxCondition
+    provider?: StringFilter<"FiscalVoucher"> | string
+    providerVoucherId?: StringNullableFilter<"FiscalVoucher"> | string | null
+    pointOfSale?: IntNullableFilter<"FiscalVoucher"> | number | null
+    number?: IntNullableFilter<"FiscalVoucher"> | number | null
+    cae?: StringNullableFilter<"FiscalVoucher"> | string | null
+    caeExpiresAt?: DateTimeNullableFilter<"FiscalVoucher"> | Date | string | null
+    pdfUrl?: StringNullableFilter<"FiscalVoucher"> | string | null
+    issuedAt?: DateTimeNullableFilter<"FiscalVoucher"> | Date | string | null
+    emailSentAt?: DateTimeNullableFilter<"FiscalVoucher"> | Date | string | null
+    attempts?: IntFilter<"FiscalVoucher"> | number
+    nextAttemptAt?: DateTimeFilter<"FiscalVoucher"> | Date | string
+    errorMessage?: StringNullableFilter<"FiscalVoucher"> | string | null
+    relatedVoucherId?: StringNullableFilter<"FiscalVoucher"> | string | null
+    createdAt?: DateTimeFilter<"FiscalVoucher"> | Date | string
+    updatedAt?: DateTimeFilter<"FiscalVoucher"> | Date | string
+  }
+
   export type OrderCreateWithoutItemsInput = {
     id?: string
     checkoutRequestId?: string | null
@@ -65291,6 +68051,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -65313,6 +68076,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutItemsInput = {
@@ -65322,6 +68086,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -65344,6 +68111,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryUncheckedCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestUncheckedCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutItemsInput = {
@@ -65451,6 +68219,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -65473,6 +68244,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutItemsInput = {
@@ -65482,6 +68254,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -65504,6 +68279,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUncheckedUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUncheckedUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type CommissionEntryUpsertWithWhereUniqueWithoutOrderItemInput = {
@@ -65557,6 +68333,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -65579,6 +68358,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutStatusHistoryInput = {
@@ -65588,6 +68368,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -65610,6 +68393,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryUncheckedCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestUncheckedCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutStatusHistoryInput = {
@@ -65635,6 +68419,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -65657,6 +68444,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutStatusHistoryInput = {
@@ -65666,6 +68454,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -65688,6 +68479,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUncheckedUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUncheckedUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderCreateWithoutPaymentsInput = {
@@ -65697,6 +68489,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -65719,6 +68514,7 @@ export namespace Prisma {
     statusHistory?: OrderStatusHistoryCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutPaymentsInput = {
@@ -65728,6 +68524,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -65750,6 +68549,7 @@ export namespace Prisma {
     statusHistory?: OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryUncheckedCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestUncheckedCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutPaymentsInput = {
@@ -65889,6 +68689,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -65911,6 +68714,7 @@ export namespace Prisma {
     statusHistory?: OrderStatusHistoryUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutPaymentsInput = {
@@ -65920,6 +68724,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -65942,6 +68749,7 @@ export namespace Prisma {
     statusHistory?: OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUncheckedUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUncheckedUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type CommissionEntryUpsertWithWhereUniqueWithoutPaymentInput = {
@@ -66578,6 +69386,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -66600,6 +69411,7 @@ export namespace Prisma {
     statusHistory?: OrderStatusHistoryCreateNestedManyWithoutOrderInput
     payments?: PaymentCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutCommissionEntriesInput = {
@@ -66609,6 +69421,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -66631,6 +69446,7 @@ export namespace Prisma {
     statusHistory?: OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestUncheckedCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutCommissionEntriesInput = {
@@ -66951,6 +69767,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -66973,6 +69792,7 @@ export namespace Prisma {
     statusHistory?: OrderStatusHistoryUpdateManyWithoutOrderNestedInput
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutCommissionEntriesInput = {
@@ -66982,6 +69802,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -67004,6 +69827,7 @@ export namespace Prisma {
     statusHistory?: OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUncheckedUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderItemUpsertWithoutCommissionEntriesInput = {
@@ -67208,6 +70032,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -67230,6 +70057,7 @@ export namespace Prisma {
     statusHistory?: OrderStatusHistoryCreateNestedManyWithoutOrderInput
     payments?: PaymentCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutCustomerRequestsInput = {
@@ -67239,6 +70067,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -67261,6 +70092,7 @@ export namespace Prisma {
     statusHistory?: OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryUncheckedCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutCustomerRequestsInput = {
@@ -67379,6 +70211,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -67401,6 +70236,7 @@ export namespace Prisma {
     statusHistory?: OrderStatusHistoryUpdateManyWithoutOrderNestedInput
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutCustomerRequestsInput = {
@@ -67410,6 +70246,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -67432,6 +70271,7 @@ export namespace Prisma {
     statusHistory?: OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUncheckedUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type PaymentUpsertWithoutCustomerRequestsInput = {
@@ -68972,6 +71812,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -68994,6 +71837,7 @@ export namespace Prisma {
     payments?: PaymentCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherCreateNestedManyWithoutOrderInput
   }
 
   export type OrderUncheckedCreateWithoutProductionBatchInput = {
@@ -69003,6 +71847,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -69025,6 +71872,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
     commissionEntries?: CommissionEntryUncheckedCreateNestedManyWithoutOrderInput
     customerRequests?: CustomerRequestUncheckedCreateNestedManyWithoutOrderInput
+    fiscalVouchers?: FiscalVoucherUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type OrderCreateOrConnectWithoutProductionBatchInput = {
@@ -69051,6 +71899,390 @@ export namespace Prisma {
   export type OrderUpdateManyWithWhereWithoutProductionBatchInput = {
     where: OrderScalarWhereInput
     data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutProductionBatchInput>
+  }
+
+  export type OrderCreateWithoutFiscalVouchersInput = {
+    id?: string
+    checkoutRequestId?: string | null
+    orderNumber?: number
+    status?: $Enums.OrderStatus
+    contactName: string
+    customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
+    contactEmail: string
+    contactPhone: string
+    deliveryMethod: $Enums.DeliveryMethod
+    shippingAddress?: string | null
+    shippingCity?: string | null
+    shippingPostalCode?: string | null
+    subtotalInCents: number
+    shippingInCents?: number
+    totalInCents: number
+    receiptEmailSentAt?: Date | string | null
+    receiptEmailProviderId?: string | null
+    stockReleasedAt?: Date | string | null
+    deliveredAt?: Date | string | null
+    productionRemovedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutOrdersInput
+    productionBatch?: ProductionBatchCreateNestedOneWithoutOrdersInput
+    items?: OrderItemCreateNestedManyWithoutOrderInput
+    statusHistory?: OrderStatusHistoryCreateNestedManyWithoutOrderInput
+    payments?: PaymentCreateNestedManyWithoutOrderInput
+    commissionEntries?: CommissionEntryCreateNestedManyWithoutOrderInput
+    customerRequests?: CustomerRequestCreateNestedManyWithoutOrderInput
+  }
+
+  export type OrderUncheckedCreateWithoutFiscalVouchersInput = {
+    id?: string
+    checkoutRequestId?: string | null
+    orderNumber?: number
+    status?: $Enums.OrderStatus
+    contactName: string
+    customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
+    contactEmail: string
+    contactPhone: string
+    deliveryMethod: $Enums.DeliveryMethod
+    shippingAddress?: string | null
+    shippingCity?: string | null
+    shippingPostalCode?: string | null
+    subtotalInCents: number
+    shippingInCents?: number
+    totalInCents: number
+    receiptEmailSentAt?: Date | string | null
+    receiptEmailProviderId?: string | null
+    stockReleasedAt?: Date | string | null
+    deliveredAt?: Date | string | null
+    userId?: string | null
+    productionBatchId?: string | null
+    productionRemovedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
+    statusHistory?: OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutOrderInput
+    commissionEntries?: CommissionEntryUncheckedCreateNestedManyWithoutOrderInput
+    customerRequests?: CustomerRequestUncheckedCreateNestedManyWithoutOrderInput
+  }
+
+  export type OrderCreateOrConnectWithoutFiscalVouchersInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutFiscalVouchersInput, OrderUncheckedCreateWithoutFiscalVouchersInput>
+  }
+
+  export type FiscalVoucherCreateWithoutCreditNotesInput = {
+    id?: string
+    kind: $Enums.FiscalVoucherKind
+    voucherType: string
+    idempotencyKey: string
+    status?: $Enums.FiscalVoucherStatus
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: string
+    buyerDocNumber: string
+    buyerName: string
+    buyerTaxCondition: $Enums.TaxCondition
+    provider: string
+    providerVoucherId?: string | null
+    pointOfSale?: number | null
+    number?: number | null
+    cae?: string | null
+    caeExpiresAt?: Date | string | null
+    pdfUrl?: string | null
+    issuedAt?: Date | string | null
+    emailSentAt?: Date | string | null
+    attempts?: number
+    nextAttemptAt?: Date | string
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    order: OrderCreateNestedOneWithoutFiscalVouchersInput
+    relatedVoucher?: FiscalVoucherCreateNestedOneWithoutCreditNotesInput
+  }
+
+  export type FiscalVoucherUncheckedCreateWithoutCreditNotesInput = {
+    id?: string
+    orderId: string
+    kind: $Enums.FiscalVoucherKind
+    voucherType: string
+    idempotencyKey: string
+    status?: $Enums.FiscalVoucherStatus
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: string
+    buyerDocNumber: string
+    buyerName: string
+    buyerTaxCondition: $Enums.TaxCondition
+    provider: string
+    providerVoucherId?: string | null
+    pointOfSale?: number | null
+    number?: number | null
+    cae?: string | null
+    caeExpiresAt?: Date | string | null
+    pdfUrl?: string | null
+    issuedAt?: Date | string | null
+    emailSentAt?: Date | string | null
+    attempts?: number
+    nextAttemptAt?: Date | string
+    errorMessage?: string | null
+    relatedVoucherId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FiscalVoucherCreateOrConnectWithoutCreditNotesInput = {
+    where: FiscalVoucherWhereUniqueInput
+    create: XOR<FiscalVoucherCreateWithoutCreditNotesInput, FiscalVoucherUncheckedCreateWithoutCreditNotesInput>
+  }
+
+  export type FiscalVoucherCreateWithoutRelatedVoucherInput = {
+    id?: string
+    kind: $Enums.FiscalVoucherKind
+    voucherType: string
+    idempotencyKey: string
+    status?: $Enums.FiscalVoucherStatus
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: string
+    buyerDocNumber: string
+    buyerName: string
+    buyerTaxCondition: $Enums.TaxCondition
+    provider: string
+    providerVoucherId?: string | null
+    pointOfSale?: number | null
+    number?: number | null
+    cae?: string | null
+    caeExpiresAt?: Date | string | null
+    pdfUrl?: string | null
+    issuedAt?: Date | string | null
+    emailSentAt?: Date | string | null
+    attempts?: number
+    nextAttemptAt?: Date | string
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    order: OrderCreateNestedOneWithoutFiscalVouchersInput
+    creditNotes?: FiscalVoucherCreateNestedManyWithoutRelatedVoucherInput
+  }
+
+  export type FiscalVoucherUncheckedCreateWithoutRelatedVoucherInput = {
+    id?: string
+    orderId: string
+    kind: $Enums.FiscalVoucherKind
+    voucherType: string
+    idempotencyKey: string
+    status?: $Enums.FiscalVoucherStatus
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: string
+    buyerDocNumber: string
+    buyerName: string
+    buyerTaxCondition: $Enums.TaxCondition
+    provider: string
+    providerVoucherId?: string | null
+    pointOfSale?: number | null
+    number?: number | null
+    cae?: string | null
+    caeExpiresAt?: Date | string | null
+    pdfUrl?: string | null
+    issuedAt?: Date | string | null
+    emailSentAt?: Date | string | null
+    attempts?: number
+    nextAttemptAt?: Date | string
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creditNotes?: FiscalVoucherUncheckedCreateNestedManyWithoutRelatedVoucherInput
+  }
+
+  export type FiscalVoucherCreateOrConnectWithoutRelatedVoucherInput = {
+    where: FiscalVoucherWhereUniqueInput
+    create: XOR<FiscalVoucherCreateWithoutRelatedVoucherInput, FiscalVoucherUncheckedCreateWithoutRelatedVoucherInput>
+  }
+
+  export type FiscalVoucherCreateManyRelatedVoucherInputEnvelope = {
+    data: FiscalVoucherCreateManyRelatedVoucherInput | FiscalVoucherCreateManyRelatedVoucherInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrderUpsertWithoutFiscalVouchersInput = {
+    update: XOR<OrderUpdateWithoutFiscalVouchersInput, OrderUncheckedUpdateWithoutFiscalVouchersInput>
+    create: XOR<OrderCreateWithoutFiscalVouchersInput, OrderUncheckedCreateWithoutFiscalVouchersInput>
+    where?: OrderWhereInput
+  }
+
+  export type OrderUpdateToOneWithWhereWithoutFiscalVouchersInput = {
+    where?: OrderWhereInput
+    data: XOR<OrderUpdateWithoutFiscalVouchersInput, OrderUncheckedUpdateWithoutFiscalVouchersInput>
+  }
+
+  export type OrderUpdateWithoutFiscalVouchersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    checkoutRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    contactName?: StringFieldUpdateOperationsInput | string
+    customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
+    contactEmail?: StringFieldUpdateOperationsInput | string
+    contactPhone?: StringFieldUpdateOperationsInput | string
+    deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
+    shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingCity?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPostalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotalInCents?: IntFieldUpdateOperationsInput | number
+    shippingInCents?: IntFieldUpdateOperationsInput | number
+    totalInCents?: IntFieldUpdateOperationsInput | number
+    receiptEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptEmailProviderId?: NullableStringFieldUpdateOperationsInput | string | null
+    stockReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    productionRemovedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutOrdersNestedInput
+    productionBatch?: ProductionBatchUpdateOneWithoutOrdersNestedInput
+    items?: OrderItemUpdateManyWithoutOrderNestedInput
+    statusHistory?: OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+    payments?: PaymentUpdateManyWithoutOrderNestedInput
+    commissionEntries?: CommissionEntryUpdateManyWithoutOrderNestedInput
+    customerRequests?: CustomerRequestUpdateManyWithoutOrderNestedInput
+  }
+
+  export type OrderUncheckedUpdateWithoutFiscalVouchersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    checkoutRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+    orderNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    contactName?: StringFieldUpdateOperationsInput | string
+    customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
+    contactEmail?: StringFieldUpdateOperationsInput | string
+    contactPhone?: StringFieldUpdateOperationsInput | string
+    deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
+    shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingCity?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingPostalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotalInCents?: IntFieldUpdateOperationsInput | number
+    shippingInCents?: IntFieldUpdateOperationsInput | number
+    totalInCents?: IntFieldUpdateOperationsInput | number
+    receiptEmailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptEmailProviderId?: NullableStringFieldUpdateOperationsInput | string | null
+    stockReleasedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    productionBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    productionRemovedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+    statusHistory?: OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
+    commissionEntries?: CommissionEntryUncheckedUpdateManyWithoutOrderNestedInput
+    customerRequests?: CustomerRequestUncheckedUpdateManyWithoutOrderNestedInput
+  }
+
+  export type FiscalVoucherUpsertWithoutCreditNotesInput = {
+    update: XOR<FiscalVoucherUpdateWithoutCreditNotesInput, FiscalVoucherUncheckedUpdateWithoutCreditNotesInput>
+    create: XOR<FiscalVoucherCreateWithoutCreditNotesInput, FiscalVoucherUncheckedCreateWithoutCreditNotesInput>
+    where?: FiscalVoucherWhereInput
+  }
+
+  export type FiscalVoucherUpdateToOneWithWhereWithoutCreditNotesInput = {
+    where?: FiscalVoucherWhereInput
+    data: XOR<FiscalVoucherUpdateWithoutCreditNotesInput, FiscalVoucherUncheckedUpdateWithoutCreditNotesInput>
+  }
+
+  export type FiscalVoucherUpdateWithoutCreditNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumFiscalVoucherKindFieldUpdateOperationsInput | $Enums.FiscalVoucherKind
+    voucherType?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumFiscalVoucherStatusFieldUpdateOperationsInput | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFieldUpdateOperationsInput | number
+    netAmountInCents?: IntFieldUpdateOperationsInput | number
+    vatAmountInCents?: IntFieldUpdateOperationsInput | number
+    buyerDocType?: StringFieldUpdateOperationsInput | string
+    buyerDocNumber?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    buyerTaxCondition?: EnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition
+    provider?: StringFieldUpdateOperationsInput | string
+    providerVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    pointOfSale?: NullableIntFieldUpdateOperationsInput | number | null
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    cae?: NullableStringFieldUpdateOperationsInput | string | null
+    caeExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: OrderUpdateOneRequiredWithoutFiscalVouchersNestedInput
+    relatedVoucher?: FiscalVoucherUpdateOneWithoutCreditNotesNestedInput
+  }
+
+  export type FiscalVoucherUncheckedUpdateWithoutCreditNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    kind?: EnumFiscalVoucherKindFieldUpdateOperationsInput | $Enums.FiscalVoucherKind
+    voucherType?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumFiscalVoucherStatusFieldUpdateOperationsInput | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFieldUpdateOperationsInput | number
+    netAmountInCents?: IntFieldUpdateOperationsInput | number
+    vatAmountInCents?: IntFieldUpdateOperationsInput | number
+    buyerDocType?: StringFieldUpdateOperationsInput | string
+    buyerDocNumber?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    buyerTaxCondition?: EnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition
+    provider?: StringFieldUpdateOperationsInput | string
+    providerVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    pointOfSale?: NullableIntFieldUpdateOperationsInput | number | null
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    cae?: NullableStringFieldUpdateOperationsInput | string | null
+    caeExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    relatedVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FiscalVoucherUpsertWithWhereUniqueWithoutRelatedVoucherInput = {
+    where: FiscalVoucherWhereUniqueInput
+    update: XOR<FiscalVoucherUpdateWithoutRelatedVoucherInput, FiscalVoucherUncheckedUpdateWithoutRelatedVoucherInput>
+    create: XOR<FiscalVoucherCreateWithoutRelatedVoucherInput, FiscalVoucherUncheckedCreateWithoutRelatedVoucherInput>
+  }
+
+  export type FiscalVoucherUpdateWithWhereUniqueWithoutRelatedVoucherInput = {
+    where: FiscalVoucherWhereUniqueInput
+    data: XOR<FiscalVoucherUpdateWithoutRelatedVoucherInput, FiscalVoucherUncheckedUpdateWithoutRelatedVoucherInput>
+  }
+
+  export type FiscalVoucherUpdateManyWithWhereWithoutRelatedVoucherInput = {
+    where: FiscalVoucherScalarWhereInput
+    data: XOR<FiscalVoucherUpdateManyMutationInput, FiscalVoucherUncheckedUpdateManyWithoutRelatedVoucherInput>
   }
 
   export type AccountCreateManyUserInput = {
@@ -69086,6 +72318,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -69190,6 +72425,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -69212,6 +72450,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutUserInput = {
@@ -69221,6 +72460,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -69243,6 +72485,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUncheckedUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUncheckedUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateManyWithoutUserInput = {
@@ -69252,6 +72495,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -70020,6 +73266,36 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type FiscalVoucherCreateManyOrderInput = {
+    id?: string
+    kind: $Enums.FiscalVoucherKind
+    voucherType: string
+    idempotencyKey: string
+    status?: $Enums.FiscalVoucherStatus
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: string
+    buyerDocNumber: string
+    buyerName: string
+    buyerTaxCondition: $Enums.TaxCondition
+    provider: string
+    providerVoucherId?: string | null
+    pointOfSale?: number | null
+    number?: number | null
+    cae?: string | null
+    caeExpiresAt?: Date | string | null
+    pdfUrl?: string | null
+    issuedAt?: Date | string | null
+    emailSentAt?: Date | string | null
+    attempts?: number
+    nextAttemptAt?: Date | string
+    errorMessage?: string | null
+    relatedVoucherId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type OrderItemUpdateWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
@@ -70347,6 +73623,98 @@ export namespace Prisma {
     reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FiscalVoucherUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumFiscalVoucherKindFieldUpdateOperationsInput | $Enums.FiscalVoucherKind
+    voucherType?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumFiscalVoucherStatusFieldUpdateOperationsInput | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFieldUpdateOperationsInput | number
+    netAmountInCents?: IntFieldUpdateOperationsInput | number
+    vatAmountInCents?: IntFieldUpdateOperationsInput | number
+    buyerDocType?: StringFieldUpdateOperationsInput | string
+    buyerDocNumber?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    buyerTaxCondition?: EnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition
+    provider?: StringFieldUpdateOperationsInput | string
+    providerVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    pointOfSale?: NullableIntFieldUpdateOperationsInput | number | null
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    cae?: NullableStringFieldUpdateOperationsInput | string | null
+    caeExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    relatedVoucher?: FiscalVoucherUpdateOneWithoutCreditNotesNestedInput
+    creditNotes?: FiscalVoucherUpdateManyWithoutRelatedVoucherNestedInput
+  }
+
+  export type FiscalVoucherUncheckedUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumFiscalVoucherKindFieldUpdateOperationsInput | $Enums.FiscalVoucherKind
+    voucherType?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumFiscalVoucherStatusFieldUpdateOperationsInput | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFieldUpdateOperationsInput | number
+    netAmountInCents?: IntFieldUpdateOperationsInput | number
+    vatAmountInCents?: IntFieldUpdateOperationsInput | number
+    buyerDocType?: StringFieldUpdateOperationsInput | string
+    buyerDocNumber?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    buyerTaxCondition?: EnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition
+    provider?: StringFieldUpdateOperationsInput | string
+    providerVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    pointOfSale?: NullableIntFieldUpdateOperationsInput | number | null
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    cae?: NullableStringFieldUpdateOperationsInput | string | null
+    caeExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    relatedVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creditNotes?: FiscalVoucherUncheckedUpdateManyWithoutRelatedVoucherNestedInput
+  }
+
+  export type FiscalVoucherUncheckedUpdateManyWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumFiscalVoucherKindFieldUpdateOperationsInput | $Enums.FiscalVoucherKind
+    voucherType?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumFiscalVoucherStatusFieldUpdateOperationsInput | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFieldUpdateOperationsInput | number
+    netAmountInCents?: IntFieldUpdateOperationsInput | number
+    vatAmountInCents?: IntFieldUpdateOperationsInput | number
+    buyerDocType?: StringFieldUpdateOperationsInput | string
+    buyerDocNumber?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    buyerTaxCondition?: EnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition
+    provider?: StringFieldUpdateOperationsInput | string
+    providerVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    pointOfSale?: NullableIntFieldUpdateOperationsInput | number | null
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    cae?: NullableStringFieldUpdateOperationsInput | string | null
+    caeExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    relatedVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -71152,6 +74520,9 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     contactName: string
     customerDocument?: string | null
+    customerTaxId?: string | null
+    customerLegalName?: string | null
+    customerTaxCondition?: $Enums.TaxCondition | null
     contactEmail: string
     contactPhone: string
     deliveryMethod: $Enums.DeliveryMethod
@@ -71178,6 +74549,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -71200,6 +74574,7 @@ export namespace Prisma {
     payments?: PaymentUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateWithoutProductionBatchInput = {
@@ -71209,6 +74584,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -71231,6 +74609,7 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutOrderNestedInput
     commissionEntries?: CommissionEntryUncheckedUpdateManyWithoutOrderNestedInput
     customerRequests?: CustomerRequestUncheckedUpdateManyWithoutOrderNestedInput
+    fiscalVouchers?: FiscalVoucherUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type OrderUncheckedUpdateManyWithoutProductionBatchInput = {
@@ -71240,6 +74619,9 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     contactName?: StringFieldUpdateOperationsInput | string
     customerDocument?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxId?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLegalName?: NullableStringFieldUpdateOperationsInput | string | null
+    customerTaxCondition?: NullableEnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition | null
     contactEmail?: StringFieldUpdateOperationsInput | string
     contactPhone?: StringFieldUpdateOperationsInput | string
     deliveryMethod?: EnumDeliveryMethodFieldUpdateOperationsInput | $Enums.DeliveryMethod
@@ -71255,6 +74637,128 @@ export namespace Prisma {
     deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     productionRemovedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FiscalVoucherCreateManyRelatedVoucherInput = {
+    id?: string
+    orderId: string
+    kind: $Enums.FiscalVoucherKind
+    voucherType: string
+    idempotencyKey: string
+    status?: $Enums.FiscalVoucherStatus
+    amountInCents: number
+    netAmountInCents: number
+    vatAmountInCents: number
+    buyerDocType: string
+    buyerDocNumber: string
+    buyerName: string
+    buyerTaxCondition: $Enums.TaxCondition
+    provider: string
+    providerVoucherId?: string | null
+    pointOfSale?: number | null
+    number?: number | null
+    cae?: string | null
+    caeExpiresAt?: Date | string | null
+    pdfUrl?: string | null
+    issuedAt?: Date | string | null
+    emailSentAt?: Date | string | null
+    attempts?: number
+    nextAttemptAt?: Date | string
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FiscalVoucherUpdateWithoutRelatedVoucherInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kind?: EnumFiscalVoucherKindFieldUpdateOperationsInput | $Enums.FiscalVoucherKind
+    voucherType?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumFiscalVoucherStatusFieldUpdateOperationsInput | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFieldUpdateOperationsInput | number
+    netAmountInCents?: IntFieldUpdateOperationsInput | number
+    vatAmountInCents?: IntFieldUpdateOperationsInput | number
+    buyerDocType?: StringFieldUpdateOperationsInput | string
+    buyerDocNumber?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    buyerTaxCondition?: EnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition
+    provider?: StringFieldUpdateOperationsInput | string
+    providerVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    pointOfSale?: NullableIntFieldUpdateOperationsInput | number | null
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    cae?: NullableStringFieldUpdateOperationsInput | string | null
+    caeExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: OrderUpdateOneRequiredWithoutFiscalVouchersNestedInput
+    creditNotes?: FiscalVoucherUpdateManyWithoutRelatedVoucherNestedInput
+  }
+
+  export type FiscalVoucherUncheckedUpdateWithoutRelatedVoucherInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    kind?: EnumFiscalVoucherKindFieldUpdateOperationsInput | $Enums.FiscalVoucherKind
+    voucherType?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumFiscalVoucherStatusFieldUpdateOperationsInput | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFieldUpdateOperationsInput | number
+    netAmountInCents?: IntFieldUpdateOperationsInput | number
+    vatAmountInCents?: IntFieldUpdateOperationsInput | number
+    buyerDocType?: StringFieldUpdateOperationsInput | string
+    buyerDocNumber?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    buyerTaxCondition?: EnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition
+    provider?: StringFieldUpdateOperationsInput | string
+    providerVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    pointOfSale?: NullableIntFieldUpdateOperationsInput | number | null
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    cae?: NullableStringFieldUpdateOperationsInput | string | null
+    caeExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creditNotes?: FiscalVoucherUncheckedUpdateManyWithoutRelatedVoucherNestedInput
+  }
+
+  export type FiscalVoucherUncheckedUpdateManyWithoutRelatedVoucherInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    kind?: EnumFiscalVoucherKindFieldUpdateOperationsInput | $Enums.FiscalVoucherKind
+    voucherType?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumFiscalVoucherStatusFieldUpdateOperationsInput | $Enums.FiscalVoucherStatus
+    amountInCents?: IntFieldUpdateOperationsInput | number
+    netAmountInCents?: IntFieldUpdateOperationsInput | number
+    vatAmountInCents?: IntFieldUpdateOperationsInput | number
+    buyerDocType?: StringFieldUpdateOperationsInput | string
+    buyerDocNumber?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    buyerTaxCondition?: EnumTaxConditionFieldUpdateOperationsInput | $Enums.TaxCondition
+    provider?: StringFieldUpdateOperationsInput | string
+    providerVoucherId?: NullableStringFieldUpdateOperationsInput | string | null
+    pointOfSale?: NullableIntFieldUpdateOperationsInput | number | null
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    cae?: NullableStringFieldUpdateOperationsInput | string | null
+    caeExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailSentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    nextAttemptAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

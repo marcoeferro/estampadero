@@ -56,6 +56,7 @@ export async function OrderConfirmationView({
   const order = await api.orders.byId({ id: orderId });
   if (!order) notFound();
   const isPaid = PAID_STATUSES.has(order.status);
+  const vouchers = await api.invoicing.forOrder({ orderId: order.id });
 
   return (
     <div className="bg-paper flex min-h-screen flex-col">
@@ -186,6 +187,25 @@ export async function OrderConfirmationView({
                         ? ` · ${order.payment.installments} cuotas`
                         : " · pago en 1 cuota"}
                     </p>
+                  ) : null}
+                  {vouchers.length ? (
+                    <ul className="mt-3 flex flex-col gap-2">
+                      {vouchers.map((voucher) => (
+                        <li key={voucher.id}>
+                          <a
+                            href={voucher.downloadUrl ?? "#"}
+                            target="_blank"
+                            rel="noopener"
+                            className="text-deep text-sm font-bold underline"
+                          >
+                            Descargar {voucher.label}{" "}
+                            {String(voucher.pointOfSale ?? 0).padStart(5, "0")}-
+                            {String(voucher.number ?? 0).padStart(8, "0")} (
+                            {formatCents(voucher.amountInCents)})
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
                   ) : null}
                 </div>
               ) : null}

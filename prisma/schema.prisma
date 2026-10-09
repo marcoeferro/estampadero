@@ -287,6 +287,10 @@ model Order {
   status            OrderStatus    @default(PENDING_PAYMENT)
   contactName       String
   customerDocument  String?
+  // Datos fiscales del comprador. Sin CUIT se factura a consumidor final.
+  customerTaxId        String?
+  customerLegalName    String?
+  customerTaxCondition TaxCondition?
   contactEmail      String
   contactPhone      String
   deliveryMethod    DeliveryMethod
@@ -319,6 +323,7 @@ model Order {
   payments          Payment[]
   commissionEntries CommissionEntry[]
   customerRequests  CustomerRequest[]
+  fiscalVouchers    FiscalVoucher[]
 
   @@index([status])
   @@index([status, stockReleasedAt, createdAt])
@@ -1005,4 +1010,71 @@ model RateLimitBucket {
 
   @@id([key, windowStart])
   @@index([expiresAt])
+}
+
+enum TaxCondition {
+  CONSUMIDOR_FINAL
+  RESPONSABLE_INSCRIPTO
+  MONOTRIBUTO
+  EXENTO
+}
+
+enum FiscalVoucherKind {
+  INVOICE
+  CREDIT_NOTE
+}
+
+enum FiscalVoucherStatus {
+  PENDING
+  PROCESSING
+  AWAITING_AUTHORIZATION
+  ISSUED
+  FAILED
+}
+
+// Comprobante fiscal (factura o nota de crédito) emitido en ARCA a través del
+// proveedor de facturación. Se reintenta solo hasta quedar emitido.
+model FiscalVoucher {
+  id             String              @id @default(cuid())
+  orderId        String
+  order          Order               @relation(fields: [orderId], references: [id])
+  kind           FiscalVoucherKind
+  voucherType    String
+  idempotencyKey String              @unique
+  status         FiscalVoucherStatus @default(PENDING)
+
+  amountInCents    Int
+  netAmountInCents Int
+  vatAmountInCents Int
+
+  buyerDocType      String
+  buyerDocNumber    String
+  buyerName         String
+  buyerTaxCondition TaxCondition
+
+  provider          String
+  providerVoucherId String?
+  pointOfSale       Int?
+  number            Int?
+  cae               String?
+  caeExpiresAt      DateTime?
+  pdfUrl            String?
+  issuedAt          DateTime?
+  emailSentAt       DateTime?
+
+  attempts      Int      @default(0)
+  nextAttemptAt DateTime @default(now())
+  errorMessage  String?
+
+  relatedVoucherId String?
+  relatedVoucher   FiscalVoucher?  @relation("CreditNoteOf", fields: [relatedVoucherId], references: [id])
+  creditNotes      FiscalVoucher[] @relation("CreditNoteOf")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([status, nextAttemptAt])
+  @@index([providerVoucherId])
+  @@index([createdAt])
 }

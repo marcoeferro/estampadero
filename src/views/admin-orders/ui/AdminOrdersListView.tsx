@@ -14,6 +14,8 @@ import { ConfirmDialog } from "elestampadero/shared/ui/confirm-dialog";
 import { ModernSpinner } from "elestampadero/shared/ui/motion";
 import { api, type RouterOutputs } from "elestampadero/trpc/react";
 
+import { OrderInvoicePanel } from "./OrderInvoicePanel";
+
 const PAGE_SIZE = 5;
 const ORDER_ITEMS_PAGE_SIZE = 4;
 const STATUS_OPTIONS = [
@@ -1295,6 +1297,10 @@ function OrderModalContent({
               ) : null}
             </div>
           ) : null}
+          <OrderInvoicePanel
+            orderId={order.id}
+            isPaid={REFUNDABLE_PAYMENT_STATUSES.has(order.payment?.status ?? "")}
+          />
         </section>
 
         <section className="admin-order-modal__totals">

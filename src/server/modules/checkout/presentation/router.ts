@@ -44,6 +44,13 @@ export const checkoutRouter = createTRPCRouter({
         userId: ctx.session?.user.id ?? null,
         contactName: input.contactName,
         customerDocument: input.customerDocument ?? null,
+        invoiceA: input.requiresInvoiceA
+          ? {
+              taxId: input.customerTaxId!,
+              legalName: input.customerLegalName!,
+              taxCondition: input.customerTaxCondition!,
+            }
+          : null,
         contactEmail: input.contactEmail,
         contactPhone: input.contactPhone,
         deliveryMethod: input.deliveryMethod,
