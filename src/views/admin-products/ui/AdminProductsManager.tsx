@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { colorToHex } from "elestampadero/shared/lib/color-swatch";
@@ -11,40 +11,31 @@ import { ConfirmDialog } from "elestampadero/shared/ui/confirm-dialog";
 import { ModernSpinner } from "elestampadero/shared/ui/motion";
 import { api, type RouterOutputs } from "elestampadero/trpc/react";
 
+import {
+  draftFromProduct as productDraft,
+  emptyProductDraft as emptyDraft,
+  isSameDraft,
+  moveItem,
+  NO_COLOR,
+  nextDraftAfterSave,
+  tabForErrors,
+  toProductPayload,
+  validateProductDraft,
+  type ProductDraft,
+  type ProductDraftErrors,
+  type ProductLine,
+  type ProductStatus,
+} from "../model/product-draft";
+import { ProductQuickEdit } from "./ProductQuickEdit";
+import "./product-editor.css";
+import { VariantMatrixEditor } from "./VariantMatrixEditor";
+
 type Product = RouterOutputs["catalog"]["adminList"][number];
 type CatalogLine = RouterOutputs["catalog"]["lines"][number];
 type ApprovedConventionProduct =
   RouterOutputs["catalog"]["approvedConventionProducts"][number];
 type Club = RouterOutputs["clubs"]["list"][number];
-type ProductLine = "CLUB" | "URBANA" | "TRAINING" | "TRABAJO" | "ESCOLAR";
-type ProductStatus = "DRAFT" | "PUBLISHED" | "OUT_OF_STOCK";
 type ProductEditorTab = "information" | "images" | "variants";
-
-type ImageDraft = { id?: string; url: string; alt: string; color: string };
-type VariantDraft = {
-  id?: string;
-  size: string;
-  color: string;
-  stock: string;
-  sku: string;
-};
-type ProductDraft = {
-  id: string | null;
-  name: string;
-  code: string;
-  description: string;
-  price: string;
-  compareAtPrice: string;
-  line: ProductLine | "";
-  lineId: string;
-  status: ProductStatus;
-  clubId: string;
-  allowsCustomPrint: boolean;
-  isFeatured: boolean;
-  showStock: boolean;
-  images: ImageDraft[];
-  variants: VariantDraft[];
-};
 
 const PAGE_SIZE = 5;
 const LINE_LABELS: Record<ProductLine, string> = {
@@ -73,62 +64,7 @@ const PRODUCT_COLOR_PALETTE = [
   "Beige",
   "Bordo",
 ];
-const UNDEFINED_COLOR = "Sin definir";
-const UNDEFINED_SIZE = "Sin definir";
-
-function emptyDraft(clubId = ""): ProductDraft {
-  return {
-    id: null,
-    name: "",
-    code: "",
-    description: "",
-    price: "",
-    compareAtPrice: "",
-    line: clubId ? "CLUB" : "",
-    lineId: "",
-    status: clubId ? "PUBLISHED" : "DRAFT",
-    clubId,
-    allowsCustomPrint: false,
-    isFeatured: false,
-    showStock: false,
-    images: [],
-    variants: [],
-  };
-}
-
-function productDraft(product: Product): ProductDraft {
-  return {
-    id: product.id,
-    name: product.name,
-    code: product.code,
-    description: product.description ?? "",
-    price: String(product.priceInCents / 100),
-    compareAtPrice:
-      product.compareAtCents === null
-        ? ""
-        : String(product.compareAtCents / 100),
-    line: product.line ?? "",
-    lineId: product.lineId ?? "",
-    status: product.status === "OUT_OF_STOCK" ? "DRAFT" : product.status,
-    clubId: product.club?.id ?? "",
-    allowsCustomPrint: product.allowsCustomPrint,
-    isFeatured: product.isFeatured,
-    showStock: product.showStock,
-    images: product.images.map((image) => ({
-      id: image.id,
-      url: image.url,
-      alt: image.alt ?? "",
-      color: image.color ?? UNDEFINED_COLOR,
-    })),
-    variants: product.variants.map((variant) => ({
-      id: variant.id,
-      size: variant.size,
-      color: variant.color,
-      stock: variant.stock === null ? "" : String(variant.stock),
-      sku: variant.sku,
-    })),
-  };
-}
+const UNDEFINED_COLOR = NO_COLOR;
 
 function statusClass(status: ProductStatus) {
   if (status === "PUBLISHED") return "admin-chip--success";
@@ -172,6 +108,17 @@ export function AdminProductsManager({
   const [section, setSection] = useState<
     "catalog" | "approved" | "lines" | "new"
   >(initialCreateMode ? "new" : "catalog");
+
+  const [quickEditId, setQuickEditId] = useState<string | null>(null);
+  const [listError, setListError] = useState<string | null>(null);
+  const utils = api.useUtils();
+  const duplicateProduct = api.catalog.adminDuplicate.useMutation({
+    onSuccess: async (copy) => {
+      await utils.catalog.adminList.invalidate();
+      setDraft(productDraft(copy));
+    },
+    onError: (mutationError) => setListError(mutationError.message),
+  });
 
   const products = productsQuery.data ?? initialProducts;
   const lines = linesQuery.data ?? initialLines;
@@ -344,6 +291,11 @@ export function AdminProductsManager({
         />
       </div>
 
+      {listError ? (
+        <p className="admin-product-modal__error" role="alert">
+          {listError}
+        </p>
+      ) : null}
       <div className="admin-table-wrap admin-products-table-wrap">
         <table className="admin-table admin-products-table">
           <thead>
@@ -360,8 +312,8 @@ export function AdminProductsManager({
           </thead>
           <tbody>
             {visibleProducts.map((product) => (
+              <Fragment key={product.id}>
               <tr
-                key={product.id}
                 className="admin-product-row"
                 tabIndex={0}
                 onClick={() => setDraft(productDraft(product))}
@@ -427,15 +379,55 @@ export function AdminProductsManager({
                   </span>
                 </td>
                 <td>
-                  <button
-                    type="button"
-                    className="admin-product-edit"
-                    onClick={() => setDraft(productDraft(product))}
+                  <div
+                    className="admin-product-row-actions"
+                    onClick={(event) => event.stopPropagation()}
+                    onKeyDown={(event) => event.stopPropagation()}
                   >
-                    Editar
-                  </button>
+                    <button
+                      type="button"
+                      className="admin-product-edit"
+                      onClick={() => setDraft(productDraft(product))}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-product-edit admin-product-edit--secondary"
+                      aria-expanded={quickEditId === product.id}
+                      onClick={() =>
+                        setQuickEditId((current) =>
+                          current === product.id ? null : product.id,
+                        )
+                      }
+                    >
+                      Edición rápida
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-product-edit admin-product-edit--secondary"
+                      disabled={duplicateProduct.isPending}
+                      onClick={() => {
+                        setListError(null);
+                        duplicateProduct.mutate({ id: product.id });
+                      }}
+                    >
+                      Duplicar
+                    </button>
+                  </div>
                 </td>
               </tr>
+              {quickEditId === product.id ? (
+                <tr className="admin-product-quick-edit-row">
+                  <td colSpan={8}>
+                    <ProductQuickEdit
+                      product={product}
+                      onDone={() => setQuickEditId(null)}
+                    />
+                  </td>
+                </tr>
+              ) : null}
+              </Fragment>
             ))}
             {visibleProducts.length === 0 ? (
               <tr>
@@ -1134,7 +1126,7 @@ function ProductEditorModal({
   embedded?: boolean;
   onClose: () => void;
 }) {
-  const [draft, setDraft] = useState(() => ({
+  const [startingDraft, setStartingDraft] = useState<ProductDraft>(() => ({
     ...initialDraft,
     clubId: clubs.some(
       (club) =>
@@ -1145,43 +1137,132 @@ function ProductEditorModal({
       ? (lockedClubId ?? initialDraft.clubId)
       : "",
   }));
-  const [newSize, setNewSize] = useState("");
-  const [withoutVariantColor, setWithoutVariantColor] = useState(
-    () =>
-      initialDraft.variants.length === 0 ||
-      initialDraft.variants.every(
-        (variant) => !variant.color.trim() || variant.color === UNDEFINED_COLOR,
-      ),
-  );
-  const [withoutVariantStock, setWithoutVariantStock] = useState(
-    () => !initialDraft.showStock,
-  );
+  const [draft, setDraft] = useState<ProductDraft>(startingDraft);
+  const [errors, setErrors] = useState<ProductDraftErrors>({});
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [createAnother, setCreateAnother] = useState(false);
   const [isCommissionConfirmOpen, setIsCommissionConfirmOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<ProductEditorTab>("information");
+  const [draggedImage, setDraggedImage] = useState<number | null>(null);
+  const recoveryKey = `admin-product-draft:${initialDraft.id ?? `new:${lockedClubId ?? ""}`}`;
+  const [recoverable, setRecoverable] = useState<ProductDraft | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const utils = api.useUtils();
 
-  const finishMutation = async () => {
+  function forgetRecovery() {
+    try {
+      window.localStorage.removeItem(recoveryKey);
+    } catch {
+      // El navegador puede bloquear el almacenamiento; no es crítico.
+    }
+  }
+
+  // Ofrece recuperar lo que se estaba cargando si la ventana se cerró sin
+  // guardar.
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(recoveryKey);
+      if (!saved) return;
+      const parsed = JSON.parse(saved) as ProductDraft;
+      if (
+        Array.isArray(parsed.sizes) &&
+        Array.isArray(parsed.variants) &&
+        !isSameDraft(parsed, startingDraft)
+      ) {
+        setRecoverable(parsed);
+      }
+    } catch {
+      forgetRecovery();
+    }
+    // Solo al abrir el editor.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recoveryKey]);
+
+  useEffect(() => {
+    if (recoverable) return;
+    const timer = window.setTimeout(() => {
+      try {
+        if (isSameDraft(draft, startingDraft)) {
+          window.localStorage.removeItem(recoveryKey);
+        } else {
+          window.localStorage.setItem(recoveryKey, JSON.stringify(draft));
+        }
+      } catch {
+        // Sin almacenamiento disponible no hay recuperación.
+      }
+    }, 400);
+    return () => window.clearTimeout(timer);
+  }, [draft, recoverable, recoveryKey, startingDraft]);
+
+  const handleSaved = async () => {
+    forgetRecovery();
     await utils.catalog.adminList.invalidate();
+    if (createAnother) {
+      const next = nextDraftAfterSave(draft);
+      setStartingDraft(next);
+      setDraft(next);
+      setErrors({});
+      setError(null);
+      setActiveTab("information");
+      setIsCommissionConfirmOpen(false);
+      setNotice(
+        `“${draft.name}” se guardó. Seguí con el próximo producto: se mantienen la línea, el socio y la modalidad de venta.`,
+      );
+      return;
+    }
     onClose();
   };
+
+  const handleSaveError = (mutationError: {
+    message: string;
+    data?: {
+      zodError?: {
+        fieldErrors: Record<string, string[] | undefined>;
+        formErrors: string[];
+      } | null;
+    } | null;
+  }) => {
+    setIsCommissionConfirmOpen(false);
+    const fieldErrors = mutationError.data?.zodError?.fieldErrors;
+    if (fieldErrors) {
+      const serverField: Record<string, string> = {
+        priceInCents: "price",
+        compareAtCents: "compareAtPrice",
+      };
+      const nextErrors: ProductDraftErrors = {};
+      for (const [field, messages] of Object.entries(fieldErrors)) {
+        const message = messages?.[0];
+        if (message) nextErrors[serverField[field] ?? field] = message;
+      }
+      setErrors(nextErrors);
+      const tab = tabForErrors(nextErrors);
+      if (tab) setActiveTab(tab);
+      setError(
+        Object.keys(nextErrors).length
+          ? "Revisá los campos marcados."
+          : (mutationError.data?.zodError?.formErrors[0] ??
+              mutationError.message),
+      );
+      return;
+    }
+    setError(mutationError.message);
+  };
+
   const createProduct = api.catalog.adminCreate.useMutation({
-    onSuccess: finishMutation,
-    onError: (mutationError) => {
-      setIsCommissionConfirmOpen(false);
-      setError(mutationError.message);
-    },
+    onSuccess: handleSaved,
+    onError: handleSaveError,
   });
   const updateProduct = api.catalog.adminUpdate.useMutation({
-    onSuccess: finishMutation,
-    onError: (mutationError) => {
-      setIsCommissionConfirmOpen(false);
-      setError(mutationError.message);
-    },
+    onSuccess: handleSaved,
+    onError: handleSaveError,
   });
   const deleteProduct = api.catalog.adminDelete.useMutation({
-    onSuccess: finishMutation,
+    onSuccess: async () => {
+      forgetRecovery();
+      await utils.catalog.adminList.invalidate();
+      onClose();
+    },
     onError: (mutationError) => setError(mutationError.message),
   });
   const isSaving = createProduct.isPending || updateProduct.isPending;
@@ -1206,172 +1287,34 @@ function ProductEditorModal({
     value: ProductDraft[K],
   ) {
     setDraft((current) => ({ ...current, [field]: value }));
+    clearError(field);
   }
 
-  const availableSizes = Array.from(
-    new Set(
-      draft.variants
-        .map((variant) => variant.size.trim())
-        .filter((size) => size && size !== UNDEFINED_SIZE),
-    ),
-  );
-
-  function addSize() {
-    const size = newSize.trim();
-    if (
-      !size ||
-      availableSizes.some(
-        (availableSize) => availableSize.toLowerCase() === size.toLowerCase(),
-      )
-    ) {
-      return;
-    }
-
-    const colors = withoutVariantColor
-      ? [UNDEFINED_COLOR]
-      : Array.from(
-          new Set(
-            draft.variants
-              .map((variant) => variant.color.trim())
-              .filter((color) => color && color !== UNDEFINED_COLOR),
-          ),
-        );
-    const variantsForSize = (colors.length ? colors : [UNDEFINED_COLOR]).map(
-      (color) => ({
-        size,
-        color,
-        stock: "",
-        sku: "",
-      }),
-    );
-    updateField("variants", [...draft.variants, ...variantsForSize]);
-    setNewSize("");
+  function clearError(field: string) {
+    setErrors((current) => {
+      if (!current[field]) return current;
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
   }
 
-  function removeSize(size: string) {
-    updateField(
-      "variants",
-      draft.variants.filter(
-        (variant) => variant.size.trim().toLowerCase() !== size.toLowerCase(),
-      ),
-    );
-  }
-
-  function toggleWithoutVariantColor() {
-    const nextValue = !withoutVariantColor;
-    setWithoutVariantColor(nextValue);
-    if (nextValue) {
-      const variantsBySize = new Map<string, VariantDraft>();
-      for (const variant of draft.variants) {
-        const normalizedSize = variant.size.trim() || UNDEFINED_SIZE;
-        const key = normalizedSize.toLocaleLowerCase("es");
-        const existing = variantsBySize.get(key);
-        if (!existing) {
-          variantsBySize.set(key, {
-            ...variant,
-            size: normalizedSize,
-            color: UNDEFINED_COLOR,
-          });
-          continue;
-        }
-
-        const existingStock = existing.stock.trim()
-          ? Number(existing.stock)
-          : null;
-        const variantStock = variant.stock.trim()
-          ? Number(variant.stock)
-          : null;
-        variantsBySize.set(key, {
-          ...existing,
-          stock:
-            existingStock !== null || variantStock !== null
-              ? String((existingStock ?? 0) + (variantStock ?? 0))
-              : "",
-        });
-      }
-      updateField("variants", Array.from(variantsBySize.values()));
-    }
-  }
-
-  function setWithoutStockMode(withoutStock: boolean) {
-    setWithoutVariantStock(withoutStock);
-    updateField("showStock", !withoutStock);
-    if (withoutStock) {
-      updateField(
-        "variants",
-        draft.variants.map((variant) => ({ ...variant, stock: "" })),
-      );
-    }
-  }
-
-  function toggleWithoutVariantStock() {
-    setWithoutStockMode(!withoutVariantStock);
-  }
-
-  function payload() {
-    return {
-      name: draft.name,
-      code: draft.code,
-      description: draft.description || null,
-      priceInCents: Math.round(Number(draft.price) * 100),
-      compareAtCents: draft.compareAtPrice
-        ? Math.round(Number(draft.compareAtPrice) * 100)
-        : null,
-      line: draft.line || null,
-      lineId: draft.lineId || null,
-      status: draft.status,
-      clubId: draft.clubId || null,
-      allowsCustomPrint: draft.allowsCustomPrint,
-      isFeatured: draft.isFeatured,
-      showStock: draft.showStock,
-      images: draft.images.map((image) => ({
-        ...(image.id ? { id: image.id } : {}),
-        url: image.url,
-        alt: image.alt || null,
-        color:
-          !image.color || image.color === UNDEFINED_COLOR ? null : image.color,
-      })),
-      variants: draft.variants.map((variant) => ({
-        ...(variant.id ? { id: variant.id } : {}),
-        size: variant.size.trim() || UNDEFINED_SIZE,
-        color: variant.color.trim() || UNDEFINED_COLOR,
-        stock:
-          draft.showStock && variant.stock.trim()
-            ? Number(variant.stock)
-            : null,
-        sku: variant.sku || null,
-      })),
-    };
+  function updateImages(images: ProductDraft["images"]) {
+    updateField("images", images);
   }
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    const submitter = (event.nativeEvent as SubmitEvent).submitter;
+    setCreateAnother(submitter?.dataset.createAnother === "true");
     setError(null);
-    if (!draft.name.trim() || !draft.code.trim()) {
-      setActiveTab("information");
-      setError("Completá el nombre y el código del producto.");
-      return;
-    }
-    if (!Number.isFinite(Number(draft.price)) || Number(draft.price) < 0) {
-      setActiveTab("information");
-      setError("Ingresá un precio válido.");
-      return;
-    }
-    if (draft.images.some((image) => !image.url.trim())) {
-      setActiveTab("images");
-      setError("Completá o quitá las imágenes que no tengan archivo o URL.");
-      return;
-    }
-    if (
-      draft.variants.some(
-        (variant) =>
-          variant.stock.trim() &&
-          (!Number.isInteger(Number(variant.stock)) ||
-            Number(variant.stock) < 0),
-      )
-    ) {
-      setActiveTab("variants");
-      setError("El stock debe ser un número entero igual o mayor que cero.");
+    setNotice(null);
+    const nextErrors = validateProductDraft(draft);
+    setErrors(nextErrors);
+    const tab = tabForErrors(nextErrors);
+    if (tab) {
+      setActiveTab(tab);
+      setError("Revisá los campos marcados.");
       return;
     }
     if (draft.clubId) {
@@ -1382,9 +1325,14 @@ function ProductEditorModal({
   }
 
   function saveProduct() {
-    const input = payload();
+    const input = toProductPayload(draft);
     if (draft.id) updateProduct.mutate({ ...input, id: draft.id });
     else createProduct.mutate(input);
+  }
+
+  function closeEditor() {
+    forgetRecovery();
+    onClose();
   }
 
   if (typeof document === "undefined") return null;
@@ -1434,7 +1382,45 @@ function ProductEditorModal({
           ) : null}
         </header>
 
-        <form onSubmit={handleSubmit} className="admin-product-modal__body">
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="admin-product-modal__body"
+        >
+          {recoverable ? (
+            <div className="admin-product-recovery" role="status">
+              <span>
+                Hay datos de este producto que no se llegaron a guardar.
+              </span>
+              <div>
+                <button
+                  type="button"
+                  className="admin-btn admin-btn--primary"
+                  onClick={() => {
+                    setDraft(recoverable);
+                    setRecoverable(null);
+                  }}
+                >
+                  Recuperar
+                </button>
+                <button
+                  type="button"
+                  className="admin-btn"
+                  onClick={() => {
+                    forgetRecovery();
+                    setRecoverable(null);
+                  }}
+                >
+                  Descartar
+                </button>
+              </div>
+            </div>
+          ) : null}
+          {notice ? (
+            <p className="admin-product-notice" role="status">
+              {notice}
+            </p>
+          ) : null}
           <nav
             className="admin-product-tabs"
             role="tablist"
@@ -1446,12 +1432,7 @@ function ProductEditorModal({
               {
                 id: "variants",
                 label: "Variantes",
-                count:
-                  withoutVariantColor && withoutVariantStock
-                    ? draft.variants.length
-                      ? 1
-                      : 0
-                    : draft.variants.length,
+                count: draft.variants.length,
               },
             ].map((tab) => (
               <button
@@ -1500,27 +1481,30 @@ function ProductEditorModal({
                 <span />
               </div>
               <div className="admin-product-form-grid">
-                <Field label="Nombre">
+                <Field label="Nombre" error={errors.name}>
                   <input
                     required
+                    aria-invalid={Boolean(errors.name)}
                     value={draft.name}
                     onChange={(event) =>
                       updateField("name", event.target.value)
                     }
                   />
                 </Field>
-                <Field label="Código">
+                <Field label="Código" error={errors.code}>
                   <input
                     required
+                    aria-invalid={Boolean(errors.code)}
                     value={draft.code}
                     onChange={(event) =>
                       updateField("code", event.target.value)
                     }
                   />
                 </Field>
-                <Field label="Precio ($)">
+                <Field label="Precio ($)" error={errors.price}>
                   <input
                     required
+                    aria-invalid={Boolean(errors.price)}
                     type="number"
                     min="0"
                     step="0.01"
@@ -1530,8 +1514,12 @@ function ProductEditorModal({
                     }
                   />
                 </Field>
-                <Field label="Precio anterior ($)">
+                <Field
+                  label="Precio anterior ($, opcional)"
+                  error={errors.compareAtPrice}
+                >
                   <input
+                    aria-invalid={Boolean(errors.compareAtPrice)}
                     type="number"
                     min="0"
                     step="0.01"
@@ -1647,6 +1635,9 @@ function ProductEditorModal({
                       ))}
                     </div>
                   </details>
+                  {errors.lineId ? (
+                    <small className="admin-field-error">{errors.lineId}</small>
+                  ) : null}
                 </fieldset>
                 <fieldset className="admin-product-partner-select admin-product-visibility-select">
                   <legend>Visibilidad del producto</legend>
@@ -1729,6 +1720,9 @@ function ProductEditorModal({
                       </button>
                     </div>
                   </details>
+                  {errors.status ? (
+                    <small className="admin-field-error">{errors.status}</small>
+                  ) : null}
                 </fieldset>
               </div>
 
@@ -1847,6 +1841,9 @@ function ProductEditorModal({
                       </div>
                     </details>
                   )}
+                  {errors.clubId ? (
+                    <small className="admin-field-error">{errors.clubId}</small>
+                  ) : null}
                 </fieldset>
                 {lockedClubId && selectedClub ? (
                   <div
@@ -1894,53 +1891,10 @@ function ProductEditorModal({
                 </label>
               </div>
 
-              <fieldset className="admin-product-sale-mode">
-                <legend>
-                  <span>Modalidad de venta</span>
-                </legend>
-                <p>
-                  En ambas modalidades, cada compra ingresa al mismo flujo de
-                  producción. Solo cambia el control de inventario.
-                </p>
-                <div>
-                  <label
-                    className={!draft.showStock ? "is-selected" : undefined}
-                  >
-                    <input
-                      type="radio"
-                      name="product-sale-mode"
-                      checked={!draft.showStock}
-                      onChange={() => setWithoutStockMode(true)}
-                    />
-                    <span aria-hidden="true">
-                      <ProductSaleModeIcon mode="on-demand" />
-                    </span>
-                    <strong>Por encargo</strong>
-                    <small>
-                      El pedido va a producción y no descuenta stock.
-                      Recomendado para prendas fabricadas a pedido.
-                    </small>
-                  </label>
-                  <label
-                    className={draft.showStock ? "is-selected" : undefined}
-                  >
-                    <input
-                      type="radio"
-                      name="product-sale-mode"
-                      checked={draft.showStock}
-                      onChange={() => setWithoutStockMode(false)}
-                    />
-                    <span aria-hidden="true">
-                      <ProductSaleModeIcon mode="stock" />
-                    </span>
-                    <strong>Con stock limitado</strong>
-                    <small>
-                      El pedido va a producción, descuenta unidades y bloquea
-                      nuevas compras cuando se agota el stock.
-                    </small>
-                  </label>
-                </div>
-              </fieldset>
+              <p className="admin-product-information-card__next">
+                La modalidad de venta (por encargo o con stock), los talles y
+                los colores se cargan en la pestaña <strong>Variantes</strong>.
+              </p>
             </section>
           ) : null}
 
@@ -1982,14 +1936,40 @@ function ProductEditorModal({
                 />
                 {draft.images.some((image) => image.url) ? (
                   <div className="admin-product-images-overview">
-                    <strong>Todas las imágenes</strong>
+                    <strong>
+                      Orden en la tienda · arrastrá para reordenar. La primera
+                      es la principal.
+                    </strong>
                     <div
                       className="admin-product-images-overview__track"
                       aria-label="Todas las imágenes del producto"
                     >
                       {draft.images.map((image, index) =>
                         image.url ? (
-                          <figure key={image.id ?? `${image.url}-${index}`}>
+                          <figure
+                            key={image.id ?? `${image.url}-${index}`}
+                            draggable
+                            className={
+                              draggedImage === index ? "is-dragging" : undefined
+                            }
+                            onDragStart={() => setDraggedImage(index)}
+                            onDragEnd={() => setDraggedImage(null)}
+                            onDragOver={(event) => event.preventDefault()}
+                            onDrop={(event) => {
+                              event.preventDefault();
+                              if (draggedImage !== null) {
+                                updateImages(
+                                  moveItem(draft.images, draggedImage, index),
+                                );
+                              }
+                              setDraggedImage(null);
+                            }}
+                          >
+                            {index === 0 ? (
+                              <span className="admin-product-image-main">
+                                Principal
+                              </span>
+                            ) : null}
 
                             <img src={image.url} alt={image.alt || ""} />
                             <figcaption>
@@ -2003,6 +1983,11 @@ function ProductEditorModal({
                     </div>
                   </div>
                 ) : null}
+                {errors.images ? (
+                  <p className="admin-field-error" role="alert">
+                    {errors.images}
+                  </p>
+                ) : null}
                 <div className="admin-product-images-editor">
                   {draft.images.map((image, index) => (
                     <div
@@ -2010,7 +1995,46 @@ function ProductEditorModal({
                       className="admin-product-image-row"
                     >
                       <div className="admin-product-image-row__header">
-                        <strong>Imagen {index + 1}</strong>
+                        <strong>
+                          Imagen {index + 1}
+                          {index === 0 ? " · principal" : ""}
+                        </strong>
+                        <div className="admin-product-image-order">
+                          {index > 0 ? (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                updateImages(moveItem(draft.images, index, 0))
+                              }
+                            >
+                              Hacer principal
+                            </button>
+                          ) : null}
+                          <button
+                            type="button"
+                            aria-label={`Subir imagen ${index + 1}`}
+                            disabled={index === 0}
+                            onClick={() =>
+                              updateImages(
+                                moveItem(draft.images, index, index - 1),
+                              )
+                            }
+                          >
+                            ↑
+                          </button>
+                          <button
+                            type="button"
+                            aria-label={`Bajar imagen ${index + 1}`}
+                            disabled={index === draft.images.length - 1}
+                            onClick={() =>
+                              updateImages(
+                                moveItem(draft.images, index, index + 1),
+                              )
+                            }
+                          >
+                            ↓
+                          </button>
+                        </div>
                         <button
                           type="button"
                           className="admin-product-image-remove"
@@ -2101,248 +2125,29 @@ function ProductEditorModal({
               className="admin-product-tab-panel"
             >
               <EditorSection
-                title="Colores, talles y stock"
-                description="Definí si el producto usa color o stock y agregá todos sus talles sin crear productos separados."
-                actionLabel={
-                  withoutVariantColor && withoutVariantStock
-                    ? undefined
-                    : "Agregar variante"
-                }
-                onAdd={
-                  withoutVariantColor && withoutVariantStock
-                    ? undefined
-                    : () =>
-                        updateField("variants", [
-                          ...draft.variants,
-                          {
-                            size: UNDEFINED_SIZE,
-                            color: UNDEFINED_COLOR,
-                            stock: "",
-                            sku: "",
-                          },
-                        ])
-                }
+                title="Talles, colores y stock"
+                description="Definí cómo se vende la prenda y qué talles y colores ofrece. Cada combinación queda en el mismo producto."
               >
-                <div className="admin-product-variant-modes">
-                  <button
-                    type="button"
-                    className={withoutVariantColor ? "is-active" : undefined}
-                    aria-pressed={withoutVariantColor}
-                    onClick={toggleWithoutVariantColor}
-                  >
-                    <span aria-hidden="true">
-                      <ProductVariantModeIcon mode="color" />
-                    </span>
-                    <span>
-                      <strong>Sin color</strong>
-                      <small>Una única prenda sin color asociado.</small>
-                    </span>
-                    <span className="admin-product-variant-mode-check" />
-                  </button>
-                  <button
-                    type="button"
-                    className={withoutVariantStock ? "is-active" : undefined}
-                    aria-pressed={withoutVariantStock}
-                    onClick={toggleWithoutVariantStock}
-                  >
-                    <span aria-hidden="true">
-                      <ProductVariantModeIcon mode="stock" />
-                    </span>
-                    <span>
-                      <strong>Sin stock</strong>
-                      <small>No limita compras; se fabrica por encargo.</small>
-                    </span>
-                    <span className="admin-product-variant-mode-check" />
-                  </button>
-                </div>
-                <div className="admin-product-sizes-manager">
-                  <div>
-                    <strong>Talles del producto</strong>
-                    <small>
-                      {withoutVariantColor && withoutVariantStock
-                        ? "Todos los talles pertenecen a este mismo producto."
-                        : "Cargalos una vez y luego completá los datos de cada variante."}
-                    </small>
-                  </div>
-                  <div className="admin-product-size-add">
-                    <input
-                      aria-label="Nuevo talle"
-                      placeholder="Ej.: S, XL, 42"
-                      value={newSize}
-                      onChange={(event) => setNewSize(event.target.value)}
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter") {
-                          event.preventDefault();
-                          addSize();
+                <VariantMatrixEditor
+                  draft={draft}
+                  errors={errors}
+                  onChange={(next) => {
+                    setDraft(next);
+                    setErrors((current) => {
+                      const remaining: ProductDraftErrors = {};
+                      for (const [key, message] of Object.entries(current)) {
+                        if (
+                          key !== "sizes" &&
+                          key !== "variants" &&
+                          !key.startsWith("stock:")
+                        ) {
+                          remaining[key] = message;
                         }
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={addSize}
-                      disabled={!newSize.trim()}
-                    >
-                      <span aria-hidden="true">+</span> Agregar talle
-                    </button>
-                  </div>
-                  <div
-                    className="admin-product-size-list"
-                    aria-label="Talles cargados"
-                  >
-                    {availableSizes.length ? (
-                      availableSizes.map((size) => (
-                        <span key={size}>
-                          {size}
-                          <button
-                            type="button"
-                            aria-label={`Quitar talle ${size}`}
-                            onClick={() => removeSize(size)}
-                          >
-                            ×
-                          </button>
-                        </span>
-                      ))
-                    ) : (
-                      <small>Todavía no hay talles cargados.</small>
-                    )}
-                  </div>
-                </div>
-                {withoutVariantColor && withoutVariantStock ? (
-                  <div className="admin-product-variant-grouped-summary">
-                    <span aria-hidden="true">
-                      <ProductVariantModeIcon mode="grouped" />
-                    </span>
-                    <div>
-                      <strong>Producto único, sin color y sin stock</strong>
-                      <p>
-                        Los talles se agregan a este mismo producto y las
-                        compras ingresan por encargo.
-                      </p>
-                    </div>
-                    <b>{availableSizes.length} talles</b>
-                  </div>
-                ) : (
-                  <div className="admin-product-variants-editor">
-                    {draft.variants.map((variant, index) => (
-                      <div
-                        key={variant.id ?? index}
-                        className="admin-product-variant-row"
-                      >
-                        {withoutVariantColor ? (
-                          <Field label="Color">
-                            <div className="admin-product-variant-static-value">
-                              <ProductVariantModeIcon mode="color" />
-                              Sin color
-                            </div>
-                          </Field>
-                        ) : (
-                          <ProductColorPicker
-                            label="Color"
-                            value={variant.color}
-                            allowUndefined
-                            onChange={(color) => {
-                              const variants = [...draft.variants];
-                              variants[index] = {
-                                ...variant,
-                                color,
-                              };
-                              updateField("variants", variants);
-                            }}
-                          />
-                        )}
-                        <Field label="Talle">
-                          <select
-                            value={variant.size}
-                            onChange={(event) => {
-                              const variants = [...draft.variants];
-                              variants[index] = {
-                                ...variant,
-                                size: event.target.value,
-                              };
-                              updateField("variants", variants);
-                            }}
-                          >
-                            <option value={UNDEFINED_SIZE}>
-                              Talle sin definir
-                            </option>
-                            {variant.size &&
-                            variant.size !== UNDEFINED_SIZE &&
-                            !availableSizes.includes(variant.size) ? (
-                              <option value={variant.size}>
-                                {variant.size}
-                              </option>
-                            ) : null}
-                            {availableSizes
-                              .filter((size) => size !== UNDEFINED_SIZE)
-                              .map((size) => (
-                                <option key={size} value={size}>
-                                  {size}
-                                </option>
-                              ))}
-                          </select>
-                        </Field>
-                        {withoutVariantStock ? (
-                          <Field label="Stock">
-                            <div className="admin-product-variant-static-value">
-                              <ProductVariantModeIcon mode="stock" />
-                              Sin stock · por encargo
-                            </div>
-                          </Field>
-                        ) : (
-                          <Field label="Stock (opcional)">
-                            <input
-                              type="number"
-                              min="0"
-                              value={variant.stock}
-                              placeholder="Sin definir — por encargo"
-                              onChange={(event) => {
-                                const variants = [...draft.variants];
-                                variants[index] = {
-                                  ...variant,
-                                  stock: event.target.value,
-                                };
-                                updateField("variants", variants);
-                              }}
-                            />
-                            {!variant.stock.trim() ? (
-                              <small className="admin-product-stock-hint">
-                                Sin definir · producto por encargo
-                              </small>
-                            ) : null}
-                          </Field>
-                        )}
-                        <Field label="Código de variante">
-                          <input
-                            placeholder="Automático"
-                            value={variant.sku}
-                            onChange={(event) => {
-                              const variants = [...draft.variants];
-                              variants[index] = {
-                                ...variant,
-                                sku: event.target.value,
-                              };
-                              updateField("variants", variants);
-                            }}
-                          />
-                        </Field>
-                        <button
-                          type="button"
-                          className="admin-product-remove"
-                          onClick={() =>
-                            updateField(
-                              "variants",
-                              draft.variants.filter(
-                                (_, itemIndex) => itemIndex !== index,
-                              ),
-                            )
-                          }
-                        >
-                          Quitar
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                      }
+                      return remaining;
+                    });
+                  }}
+                />
               </EditorSection>
             </section>
           ) : null}
@@ -2376,10 +2181,20 @@ function ProductEditorModal({
               <button
                 type="button"
                 className="admin-btn admin-product-home-button"
-                onClick={onClose}
+                onClick={closeEditor}
               >
                 Cancelar
               </button>
+              {!draft.id ? (
+                <button
+                  type="submit"
+                  data-create-another="true"
+                  className="admin-btn admin-product-home-button"
+                  disabled={isSaving}
+                >
+                  Guardar y crear otro
+                </button>
+              ) : null}
               <button
                 type="submit"
                 className="admin-btn admin-btn--primary admin-product-home-button"
@@ -2424,16 +2239,19 @@ function ProductEditorModal({
 function Field({
   label,
   wide = false,
+  error,
   children,
 }: {
   label: string;
   wide?: boolean;
+  error?: string;
   children: React.ReactNode;
 }) {
   return (
     <label className={wide ? "admin-product-form-grid__wide" : undefined}>
       <span>{label}</span>
       {children}
+      {error ? <small className="admin-field-error">{error}</small> : null}
     </label>
   );
 }
@@ -2686,94 +2504,6 @@ function ProductInformationIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-    </svg>
-  );
-}
-
-function ProductSaleModeIcon({ mode }: { mode: "on-demand" | "stock" }) {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
-      {mode === "on-demand" ? (
-        <path
-          d="M12 3c.5 4.6 3.4 7.5 8 8-4.6.5-7.5 3.4-8 8-.5-4.6-3.4-7.5-8-8 4.6-.5 7.5-3.4 8-8Z"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      ) : (
-        <>
-          <path
-            d="M5 5h14v14H5V5Z"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M9 5v14M15 5v14M5 9h14M5 15h14"
-            stroke="currentColor"
-            strokeWidth="1.4"
-          />
-        </>
-      )}
-    </svg>
-  );
-}
-
-function ProductVariantModeIcon({
-  mode,
-}: {
-  mode: "color" | "stock" | "grouped";
-}) {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
-      {mode === "color" ? (
-        <>
-          <path
-            d="M12 3a9 9 0 1 0 0 18h1.4a1.8 1.8 0 0 0 0-3.6H12a2 2 0 0 1 0-4h3.2A5.8 5.8 0 0 0 21 7.6C19.3 4.8 16 3 12 3Z"
-            stroke="currentColor"
-            strokeWidth="1.7"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M4 4 20 20"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          />
-        </>
-      ) : mode === "stock" ? (
-        <>
-          <path
-            d="M4 7.5 12 3l8 4.5V17l-8 4-8-4V7.5Zm0 0 8 4 8-4M12 21v-9.5"
-            stroke="currentColor"
-            strokeWidth="1.7"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M3.5 3.5 20.5 20.5"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          />
-        </>
-      ) : (
-        <>
-          <path
-            d="M7 5h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"
-            stroke="currentColor"
-            strokeWidth="1.7"
-          />
-          <path
-            d="M8 9h8M8 13h5"
-            stroke="currentColor"
-            strokeWidth="1.7"
-            strokeLinecap="round"
-          />
-        </>
-      )}
     </svg>
   );
 }

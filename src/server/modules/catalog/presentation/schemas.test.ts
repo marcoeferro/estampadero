@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import {
   createAdminProductInputSchema,
   listProductsInputSchema,
+  quickUpdateAdminProductInputSchema,
+  updateAdminProductInputSchema,
 } from "./schemas";
 
 const validProduct = {
@@ -51,6 +53,79 @@ describe("createAdminProductInputSchema", () => {
       ],
     });
     expect(result.success).toBe(false);
+  });
+
+  it("con stock limitado exige la cantidad de cada variante", () => {
+    const result = createAdminProductInputSchema.safeParse({
+      ...validProduct,
+      showStock: true,
+      variants: [
+        { size: "M", color: "Negro", stock: 0, sku: null },
+        { size: "L", color: "Negro", stock: null, sku: null },
+      ],
+    });
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0]?.path).toEqual(["variants", 1, "stock"]);
+  });
+
+  it("por encargo guarda el stock vacío", () => {
+    const result = createAdminProductInputSchema.parse({
+      ...validProduct,
+      showStock: false,
+    });
+    expect(result.variants[0]?.stock).toBeNull();
+  });
+
+  it("no publica productos sin variantes pero permite borradores", () => {
+    expect(
+      createAdminProductInputSchema.safeParse({ ...validProduct, variants: [] })
+        .success,
+    ).toBe(false);
+    expect(
+      createAdminProductInputSchema.safeParse({
+        ...validProduct,
+        status: "DRAFT",
+        variants: [],
+      }).success,
+    ).toBe(true);
+  });
+
+  it("la edición conserva el id y aplica las mismas reglas", () => {
+    const result = updateAdminProductInputSchema.parse({
+      ...validProduct,
+      id: "prod-1",
+      showStock: true,
+    });
+    expect(result.id).toBe("prod-1");
+    expect(result.variants[0]?.stock).toBe(10);
+  });
+});
+
+describe("quickUpdateAdminProductInputSchema", () => {
+  it("acepta precio, visibilidad y stock por variante", () => {
+    expect(
+      quickUpdateAdminProductInputSchema.safeParse({
+        id: "prod-1",
+        priceInCents: 1000,
+        status: "PUBLISHED",
+        variantStocks: [{ id: "v1", stock: 3 }],
+      }).success,
+    ).toBe(true);
+  });
+
+  it("rechaza stock negativo y el estado interno Sin stock", () => {
+    expect(
+      quickUpdateAdminProductInputSchema.safeParse({
+        id: "prod-1",
+        variantStocks: [{ id: "v1", stock: -1 }],
+      }).success,
+    ).toBe(false);
+    expect(
+      quickUpdateAdminProductInputSchema.safeParse({
+        id: "prod-1",
+        status: "OUT_OF_STOCK",
+      }).success,
+    ).toBe(false);
   });
 });
 

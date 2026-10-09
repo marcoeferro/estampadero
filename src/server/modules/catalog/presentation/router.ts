@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import type { Prisma } from "generated/prisma";
+import { ZodError } from "zod";
 
 import {
   adminMutationRateLimit,
@@ -17,9 +18,11 @@ import {
   createAdminProductInputSchema,
   createCatalogLineInputSchema,
   deleteAdminProductInputSchema,
+  duplicateAdminProductInputSchema,
   getProductBySlugInputSchema,
   listProductsInputSchema,
   publishApprovedDesignInputSchema,
+  quickUpdateAdminProductInputSchema,
   updateAdminProductInputSchema,
 } from "./schemas";
 
@@ -39,6 +42,115 @@ async function clubCanSell(
     select: { id: true },
   });
   return club !== null;
+}
+
+/**
+ * Error asociado a un campo del formulario. El formateador de tRPC lo expone
+ * en `zodError.fieldErrors` para que el panel lo muestre junto al campo.
+ */
+function fieldError(field: string, message: string) {
+  return new TRPCError({
+    code: "BAD_REQUEST",
+    message,
+    cause: new ZodError([{ code: "custom", path: [field], message }]),
+  });
+}
+
+function isUniqueConstraintError(error: unknown): error is { meta?: unknown } {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    error.code === "P2002"
+  );
+}
+
+/** Traduce los choques de índices únicos a errores por campo. */
+function translateUniqueError(error: unknown, code: string): never {
+  if (isUniqueConstraintError(error)) {
+    const target = JSON.stringify(error.meta ?? "");
+    if (target.includes("sku")) {
+      throw fieldError(
+        "variants",
+        "Un código de variante ya lo usa otro producto. Cambialo o dejalo vacío para generarlo automáticamente.",
+      );
+    }
+    throw fieldError("code", `Ya existe un producto con el código ${code}.`);
+  }
+  throw error;
+}
+
+async function assertCodeAvailable(
+  db: Pick<Prisma.TransactionClient, "product">,
+  code: string,
+  exceptProductId?: string,
+) {
+  const existing = await db.product.findFirst({
+    where: {
+      code: { equals: code, mode: "insensitive" },
+      ...(exceptProductId ? { id: { not: exceptProductId } } : {}),
+    },
+    select: { id: true },
+  });
+  if (existing) {
+    throw fieldError("code", `Ya existe un producto con el código ${code}.`);
+  }
+}
+
+async function assertProductRelations(
+  db: Pick<Prisma.TransactionClient, "agreement" | "club" | "catalogLine">,
+  input: { clubId: string | null; status: string; lineId?: string | null },
+) {
+  if (input.clubId) {
+    const activeAgreement = await db.agreement.findFirst({
+      where: {
+        clubId: input.clubId,
+        status: "ACTIVE",
+        club: { isActive: true },
+      },
+      select: { id: true },
+    });
+    if (!activeAgreement) {
+      throw fieldError(
+        "clubId",
+        "La organización seleccionada no tiene un convenio activo.",
+      );
+    }
+    if (
+      input.status === "PUBLISHED" &&
+      !(await clubCanSell(db, input.clubId))
+    ) {
+      throw fieldError("status", CLUB_CANNOT_SELL_MESSAGE);
+    }
+  }
+  if (input.lineId) {
+    const customLine = await db.catalogLine.findFirst({
+      where: { id: input.lineId, isActive: true },
+      select: { id: true },
+    });
+    if (!customLine) {
+      throw fieldError("lineId", "La línea seleccionada no está disponible.");
+    }
+  }
+}
+
+async function uniqueCopyCode(
+  db: Pick<Prisma.TransactionClient, "product">,
+  code: string,
+) {
+  const base = `${code}-COPIA`.slice(0, 74);
+  let candidate = base;
+  let suffix = 2;
+  while (
+    await db.product.findFirst({
+      where: { code: { equals: candidate, mode: "insensitive" } },
+      select: { id: true },
+    })
+  ) {
+    candidate = `${base}-${suffix}`;
+    suffix += 1;
+  }
+  return candidate;
 }
 
 const adminProductInclude = {
@@ -277,144 +389,13 @@ export const catalogRouter = createTRPCRouter({
     .input(createAdminProductInputSchema)
     .use(adminMutationRateLimit("catalog.createProduct", { limit: 20 }))
     .mutation(async ({ ctx, input }) => {
-      if (input.clubId) {
-        const activeAgreement = await ctx.db.agreement.findFirst({
-          where: {
-            clubId: input.clubId,
-            status: "ACTIVE",
-            club: { isActive: true },
-          },
-          select: { id: true },
-        });
-        if (!activeAgreement) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message:
-              "La organización seleccionada no tiene un convenio activo.",
-          });
-        }
-        if (
-          input.status === "PUBLISHED" &&
-          !(await clubCanSell(ctx.db, input.clubId))
-        ) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: CLUB_CANNOT_SELL_MESSAGE,
-          });
-        }
-      }
-      if (input.lineId) {
-        const customLine = await ctx.db.catalogLine.findFirst({
-          where: { id: input.lineId, isActive: true },
-          select: { id: true },
-        });
-        if (!customLine) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "La línea seleccionada no está disponible.",
-          });
-        }
-      }
-      const product = await ctx.db.product.create({
-        data: {
-          name: input.name,
-          slug: `${slugify(input.name)}-${slugify(input.code)}`,
-          code: input.code,
-          description: input.description ?? null,
-          priceInCents: input.priceInCents,
-          compareAtCents: input.compareAtCents,
-          line: input.line,
-          lineId: input.lineId ?? null,
-          status: input.status,
-          clubId: input.clubId,
-          allowsCustomPrint: input.allowsCustomPrint,
-          isFeatured: input.isFeatured,
-          showStock: input.showStock,
-          images: {
-            create: input.images.map((image, position) => ({
-              url: image.url,
-              alt: image.alt ?? null,
-              color: image.color ?? null,
-              position,
-            })),
-          },
-          variants: {
-            create: input.variants.map((variant, index) => ({
-              size: variant.size,
-              color: variant.color,
-              stock: variant.stock,
-              sku:
-                variant.sku ??
-                generatedSku(input.code, variant.color, variant.size, index),
-            })),
-          },
-        },
-        include: adminProductInclude,
-      });
-      return toAdminProduct(product);
-    }),
-
-  adminUpdate: adminProcedure
-    .input(updateAdminProductInputSchema)
-    .use(adminMutationRateLimit("catalog.updateProduct", { limit: 40 }))
-    .mutation(async ({ ctx, input }) =>
-      ctx.db.$transaction(async (tx) => {
-        if (input.lineId) {
-          const customLine = await tx.catalogLine.findFirst({
-            where: { id: input.lineId, isActive: true },
-            select: { id: true },
-          });
-          if (!customLine) {
-            throw new TRPCError({
-              code: "BAD_REQUEST",
-              message: "La línea seleccionada no está disponible.",
-            });
-          }
-        }
-        if (input.clubId) {
-          const activeAgreement = await tx.agreement.findFirst({
-            where: {
-              clubId: input.clubId,
-              status: "ACTIVE",
-              club: { isActive: true },
-            },
-            select: { id: true },
-          });
-          if (!activeAgreement) {
-            throw new TRPCError({
-              code: "BAD_REQUEST",
-              message:
-                "La organización seleccionada no tiene un convenio activo.",
-            });
-          }
-          if (
-            input.status === "PUBLISHED" &&
-            !(await clubCanSell(tx, input.clubId))
-          ) {
-            throw new TRPCError({
-              code: "BAD_REQUEST",
-              message: CLUB_CANNOT_SELL_MESSAGE,
-            });
-          }
-        }
-        const current = await tx.product.findUnique({
-          where: { id: input.id },
-          select: {
-            variants: { select: { id: true } },
-            images: { select: { id: true } },
-          },
-        });
-        if (!current) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "El producto ya no existe.",
-          });
-        }
-
-        await tx.product.update({
-          where: { id: input.id },
+      await assertProductRelations(ctx.db, input);
+      await assertCodeAvailable(ctx.db, input.code);
+      const product = await ctx.db.product
+        .create({
           data: {
             name: input.name,
+            slug: `${slugify(input.name)}-${slugify(input.code)}`,
             code: input.code,
             description: input.description ?? null,
             priceInCents: input.priceInCents,
@@ -426,73 +407,260 @@ export const catalogRouter = createTRPCRouter({
             allowsCustomPrint: input.allowsCustomPrint,
             isFeatured: input.isFeatured,
             showStock: input.showStock,
+            images: {
+              create: input.images.map((image, position) => ({
+                url: image.url,
+                alt: image.alt ?? null,
+                color: image.color ?? null,
+                position,
+              })),
+            },
+            variants: {
+              create: input.variants.map((variant, index) => ({
+                size: variant.size,
+                color: variant.color,
+                stock: variant.stock,
+                sku:
+                  variant.sku ??
+                  generatedSku(input.code, variant.color, variant.size, index),
+              })),
+            },
           },
-        });
+          include: adminProductInclude,
+        })
+        .catch((error: unknown) => translateUniqueError(error, input.code));
+      return toAdminProduct(product);
+    }),
 
-        const variantIds = new Set(current.variants.map(({ id }) => id));
-        const keptVariantIds = input.variants.flatMap((variant) =>
-          variant.id && variantIds.has(variant.id) ? [variant.id] : [],
-        );
-        await tx.productVariant.deleteMany({
-          where: {
-            productId: input.id,
-            ...(keptVariantIds.length > 0
-              ? { id: { notIn: keptVariantIds } }
-              : {}),
-          },
-        });
-        for (const [index, variant] of input.variants.entries()) {
-          const data = {
-            size: variant.size,
-            color: variant.color,
-            stock: variant.stock,
-            sku:
-              variant.sku ??
-              generatedSku(input.code, variant.color, variant.size, index),
-          };
-          if (variant.id && variantIds.has(variant.id)) {
-            await tx.productVariant.update({
-              where: { id: variant.id },
-              data,
-            });
-          } else {
-            await tx.productVariant.create({
-              data: { ...data, productId: input.id },
+  adminUpdate: adminProcedure
+    .input(updateAdminProductInputSchema)
+    .use(adminMutationRateLimit("catalog.updateProduct", { limit: 40 }))
+    .mutation(async ({ ctx, input }) =>
+      ctx.db
+        .$transaction(async (tx) => {
+          await assertProductRelations(tx, input);
+          await assertCodeAvailable(tx, input.code, input.id);
+          const current = await tx.product.findUnique({
+            where: { id: input.id },
+            select: {
+              variants: { select: { id: true } },
+              images: { select: { id: true } },
+            },
+          });
+          if (!current) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: "El producto ya no existe.",
             });
           }
-        }
 
-        const imageIds = new Set(current.images.map(({ id }) => id));
-        const keptImageIds = input.images.flatMap((image) =>
-          image.id && imageIds.has(image.id) ? [image.id] : [],
-        );
-        await tx.productImage.deleteMany({
-          where: {
-            productId: input.id,
-            ...(keptImageIds.length > 0 ? { id: { notIn: keptImageIds } } : {}),
-          },
-        });
-        for (const [position, image] of input.images.entries()) {
-          const data = {
-            url: image.url,
-            alt: image.alt ?? null,
-            color: image.color ?? null,
-            position,
-          };
-          if (image.id && imageIds.has(image.id)) {
-            await tx.productImage.update({
-              where: { id: image.id },
-              data,
-            });
-          } else {
-            await tx.productImage.create({
-              data: { ...data, productId: input.id },
-            });
+          await tx.product.update({
+            where: { id: input.id },
+            data: {
+              name: input.name,
+              code: input.code,
+              description: input.description ?? null,
+              priceInCents: input.priceInCents,
+              compareAtCents: input.compareAtCents,
+              line: input.line,
+              lineId: input.lineId ?? null,
+              status: input.status,
+              clubId: input.clubId,
+              allowsCustomPrint: input.allowsCustomPrint,
+              isFeatured: input.isFeatured,
+              showStock: input.showStock,
+            },
+          });
+
+          const variantIds = new Set(current.variants.map(({ id }) => id));
+          const keptVariantIds = input.variants.flatMap((variant) =>
+            variant.id && variantIds.has(variant.id) ? [variant.id] : [],
+          );
+          await tx.productVariant.deleteMany({
+            where: {
+              productId: input.id,
+              ...(keptVariantIds.length > 0
+                ? { id: { notIn: keptVariantIds } }
+                : {}),
+            },
+          });
+          for (const [index, variant] of input.variants.entries()) {
+            const data = {
+              size: variant.size,
+              color: variant.color,
+              stock: variant.stock,
+              sku:
+                variant.sku ??
+                generatedSku(input.code, variant.color, variant.size, index),
+            };
+            if (variant.id && variantIds.has(variant.id)) {
+              await tx.productVariant.update({
+                where: { id: variant.id },
+                data,
+              });
+            } else {
+              await tx.productVariant.create({
+                data: { ...data, productId: input.id },
+              });
+            }
           }
-        }
 
-        const updated = await tx.product.findUniqueOrThrow({
+          const imageIds = new Set(current.images.map(({ id }) => id));
+          const keptImageIds = input.images.flatMap((image) =>
+            image.id && imageIds.has(image.id) ? [image.id] : [],
+          );
+          await tx.productImage.deleteMany({
+            where: {
+              productId: input.id,
+              ...(keptImageIds.length > 0
+                ? { id: { notIn: keptImageIds } }
+                : {}),
+            },
+          });
+          for (const [position, image] of input.images.entries()) {
+            const data = {
+              url: image.url,
+              alt: image.alt ?? null,
+              color: image.color ?? null,
+              position,
+            };
+            if (image.id && imageIds.has(image.id)) {
+              await tx.productImage.update({
+                where: { id: image.id },
+                data,
+              });
+            } else {
+              await tx.productImage.create({
+                data: { ...data, productId: input.id },
+              });
+            }
+          }
+
+          const updated = await tx.product.findUniqueOrThrow({
+            where: { id: input.id },
+            include: adminProductInclude,
+          });
+          return toAdminProduct(updated);
+        })
+        .catch((error: unknown) => translateUniqueError(error, input.code)),
+    ),
+
+  adminDuplicate: adminProcedure
+    .input(duplicateAdminProductInputSchema)
+    .use(adminMutationRateLimit("catalog.duplicateProduct", { limit: 20 }))
+    .mutation(({ ctx, input }) =>
+      ctx.db.$transaction(async (tx) => {
+        const source = await tx.product.findUnique({
           where: { id: input.id },
+          include: {
+            images: { orderBy: { position: "asc" } },
+            variants: true,
+          },
+        });
+        if (!source) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "El producto ya no existe.",
+          });
+        }
+        const code = await uniqueCopyCode(tx, source.code);
+        const name = `${source.name} (copia)`.slice(0, 160);
+        // La copia queda como borrador para revisarla antes de publicarla.
+        const product = await tx.product.create({
+          data: {
+            name,
+            slug: `${slugify(name)}-${slugify(code)}`,
+            code,
+            description: source.description,
+            priceInCents: source.priceInCents,
+            compareAtCents: source.compareAtCents,
+            line: source.line,
+            lineId: source.lineId,
+            status: "DRAFT",
+            clubId: source.clubId,
+            categoryId: source.categoryId,
+            allowsCustomPrint: source.allowsCustomPrint,
+            isFeatured: false,
+            showStock: source.showStock,
+            images: {
+              create: source.images.map((image, position) => ({
+                url: image.url,
+                alt: image.alt,
+                color: image.color,
+                position,
+              })),
+            },
+            variants: {
+              create: source.variants.map((variant, index) => ({
+                size: variant.size,
+                color: variant.color,
+                stock: variant.stock,
+                sku: generatedSku(code, variant.color, variant.size, index),
+              })),
+            },
+          },
+          include: adminProductInclude,
+        });
+        return toAdminProduct(product);
+      }),
+    ),
+
+  adminQuickUpdate: adminProcedure
+    .input(quickUpdateAdminProductInputSchema)
+    .use(adminMutationRateLimit("catalog.quickUpdateProduct", { limit: 120 }))
+    .mutation(({ ctx, input }) =>
+      ctx.db.$transaction(async (tx) => {
+        const current = await tx.product.findUnique({
+          where: { id: input.id },
+          select: {
+            clubId: true,
+            showStock: true,
+            variants: { select: { id: true } },
+          },
+        });
+        if (!current) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "El producto ya no existe.",
+          });
+        }
+        if (input.status === "PUBLISHED") {
+          if (current.variants.length === 0) {
+            throw fieldError(
+              "status",
+              "Para publicar el producto agregá al menos un talle.",
+            );
+          }
+          if (current.clubId && !(await clubCanSell(tx, current.clubId))) {
+            throw fieldError("status", CLUB_CANNOT_SELL_MESSAGE);
+          }
+        }
+        if (input.variantStocks?.length) {
+          if (!current.showStock) {
+            throw fieldError(
+              "variantStocks",
+              "El producto se vende por encargo y no lleva stock.",
+            );
+          }
+          const variantIds = new Set(current.variants.map(({ id }) => id));
+          for (const { id, stock } of input.variantStocks) {
+            if (!variantIds.has(id)) {
+              throw fieldError(
+                "variantStocks",
+                "Una de las variantes ya no existe. Recargá la página.",
+              );
+            }
+            await tx.productVariant.update({ where: { id }, data: { stock } });
+          }
+        }
+        const updated = await tx.product.update({
+          where: { id: input.id },
+          data: {
+            ...(input.priceInCents !== undefined
+              ? { priceInCents: input.priceInCents }
+              : {}),
+            ...(input.status ? { status: input.status } : {}),
+          },
           include: adminProductInclude,
         });
         return toAdminProduct(updated);

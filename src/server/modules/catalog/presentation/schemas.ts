@@ -81,14 +81,60 @@ const adminProductPayloadSchema = z
         });
       }
       combinations.add(combination);
+      if (input.showStock && variant.stock === null) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["variants", index, "stock"],
+          message:
+            "Con stock limitado, cada combinación necesita su cantidad (puede ser 0).",
+        });
+      }
     });
-  });
+    if (input.status === "PUBLISHED" && input.variants.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["variants"],
+        message: "Para publicar el producto agregá al menos un talle.",
+      });
+    }
+  })
+  // Por encargo no se controla inventario: el stock se guarda vacío.
+  .transform((input) =>
+    input.showStock
+      ? input
+      : {
+          ...input,
+          variants: input.variants.map((variant) => ({
+            ...variant,
+            stock: null,
+          })),
+        },
+  );
 
 export const createAdminProductInputSchema = adminProductPayloadSchema;
 
 export const updateAdminProductInputSchema = adminProductPayloadSchema.and(
   z.object({ id: z.string().min(1).max(60) }),
 );
+
+export const duplicateAdminProductInputSchema = z.object({
+  id: z.string().min(1).max(60),
+});
+
+export const quickUpdateAdminProductInputSchema = z.object({
+  id: z.string().min(1).max(60),
+  priceInCents: z.number().int().min(0).max(2_000_000_000).optional(),
+  status: productStatusSchema.exclude(["OUT_OF_STOCK"]).optional(),
+  variantStocks: z
+    .array(
+      z.object({
+        id: z.string().min(1).max(60),
+        stock: z.number().int().min(0).max(1_000_000),
+      }),
+    )
+    .max(100)
+    .optional(),
+});
 
 export const deleteAdminProductInputSchema = z.object({
   id: z.string().min(1).max(60),
