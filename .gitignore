@@ -47,3 +47,5 @@ yarn-error.log*
 
 *.rar
 *.zip
+/generated/prisma/*.tmp*
+/generated/prisma/query_engine-*.node
